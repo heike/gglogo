@@ -34,7 +34,9 @@ splitSequence <- function(dframe, sequences) {
 #' library(ggplot2)
 #' library(biovizBase)
 #' qplot(position,  data=dm3, facets=class~., geom="bar", weight=elinfo, fill=element) + scale_fill_manual(values=getBioColor(type="AA_ALPHABET"))
-calcInformation <- function(dframe, trt, pos, elems, k=4) {
+#' qplot(position,  data=calcInformation(dm2, pos="position", trt=NULL, elems="element", k=21), 
+#' geom="bar", weight=elinfo, fill=element) + scale_fill_manual(values=getBioColor(type="AA_ALPHABET"))
+calcInformation <- function(dframe, trt=NULL, pos, elems, k=4) {
 
   freqs <- ddply(dframe, c(trt, pos, elems), nrow)
   names(freqs)[ncol(freqs)] <- "freq"
