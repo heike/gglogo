@@ -43,3 +43,13 @@ calcInformation <- function(dframe, trt, pos, elems, k=4) {
   freqByPos$elinfo <- with(freqByPos, freq/total*info)
   freqByPos
 }
+
+#' Sequence data
+#' 
+#' @name sequences
+#' @title peptide sequence data
+#' @description available through biovis redesign contest 2013, see http://www.biovis.net/year/2013/info/redesign-contest
+#' published in Wong, B. Nat Methods 7, 889 (2011)
+#' @docType data
+#' @usage data(sequences)
+NULL
