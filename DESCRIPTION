@@ -1,0 +1,15 @@
+Package: gglogo
+Maintainer: Heike Hofmann <hofmann@iastate.edu>
+Author: Heike Hofmann
+Version: 0.9
+License: MIT
+Title: Geom for logo sequence plots
+Imports:
+    ggplot2,
+    plyr,
+    reshape2
+Suggests:
+    biovizBase
+Description: Functions to visualize sequences in (modified) logo plots
+Collate:
+    'logos.r'

@@ -1,0 +1,20 @@
+\name{splitSequence}
+\alias{splitSequence}
+\title{Reshape data set according to elements in sequences}
+\usage{
+  splitSequence(dframe, sequences)
+}
+\arguments{
+  \item{dframe}{data frame of peptide (or any other)
+  sequences and some treatment factors}
+
+  \item{sequences}{character string or index for the
+  character vector of (peptide) sequence}
+}
+\description{
+  prepare data set for plotting in a logo
+}
+\examples{
+dm2 <- splitSequence(pm, "peptide")
+}
+
