@@ -1,2 +1,3 @@
 export(calcInformation)
+export(letterToPolygon)
 export(splitSequence)

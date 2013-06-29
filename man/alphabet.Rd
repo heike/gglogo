@@ -6,7 +6,8 @@
   polygons of all upper case letters
 }
 \details{
-  Alphabet polygon data
+  alphabet polygon data is based on upper case letters from
+  Helvetica.
 }
 \keyword{datasets}
 

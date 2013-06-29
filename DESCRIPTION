@@ -13,3 +13,5 @@ Suggests:
 Description: Functions to visualize sequences in (modified) logo plots
 Collate:
     'logos.r'
+    'text.r'
+    'thin.r'

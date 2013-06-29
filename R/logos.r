@@ -58,7 +58,7 @@ calcInformation <- function(dframe, trt=NULL, pos, elems, k=4) {
 #' @usage data(sequences)
 NULL
 
-#' Alphabet polygon data
+#' alphabet polygon data is based on upper case letters from Helvetica.
 #' 
 #' @name alphabet
 #' @title alphabet polygon data

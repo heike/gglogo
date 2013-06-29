@@ -1,0 +1,17 @@
+\name{simplify_rec}
+\alias{simplify_rec}
+\title{Douglas Pecker algorithm for line thinning}
+\usage{
+  simplify_rec(points, tol = 0.01)
+}
+\arguments{
+  \item{points}{matrix of x and y points}
+
+  \item{tol}{tolerance}
+}
+\description{
+  Implementation of the Douglas-Peucker algorithm for line
+  thinning
+  http://en.wikipedia.org/wiki/Ramer-Douglas-Peucker_algorithm
+}
+
