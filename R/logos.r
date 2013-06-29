@@ -5,12 +5,13 @@
 #' @param sequences character string or index for the character vector of (peptide) sequence
 #' @export
 #' @examples
-#' dm2 <- splitSequence(pm, "peptide")
+#' data(sequences)
+#' dm2 <- splitSequence(sequences, "peptide")
 splitSequence <- function(dframe, sequences) {
   seqs <- as.character(dframe[,sequences])
-#  require(plyr)
+  require(plyr)
   seqVars <-  data.frame(dframe, ldply(seqs, function(x) unlist(strsplit(x, split=""))))
-#  require(reshape2)
+  require(reshape2)
   dm <- melt(seqVars, id.vars=names(dframe))
   names(dm) <- c(names(dframe), "position", "element")
   dm
@@ -28,9 +29,10 @@ splitSequence <- function(dframe, sequences) {
 #' @examples
 #' data(sequences)
 #' dm2 <- splitSequence(sequences, "peptide")
-#' dm2 <- splitSequence(pm, "peptide")
 #' dm3 <- calcInformation(dm2, pos="position", trt="class", elems="element", k=21)
 #' # precursor to a logo plot:
+#' library(ggplot2)
+#' library(biovizBase)
 #' qplot(position,  data=dm3, facets=class~., geom="bar", weight=elinfo, fill=element) + scale_fill_manual(values=getBioColor(type="AA_ALPHABET"))
 calcInformation <- function(dframe, trt, pos, elems, k=4) {
 

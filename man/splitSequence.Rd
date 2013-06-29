@@ -15,6 +15,7 @@
   prepare data set for plotting in a logo
 }
 \examples{
-dm2 <- splitSequence(pm, "peptide")
+data(sequences)
+dm2 <- splitSequence(sequences, "peptide")
 }
 
