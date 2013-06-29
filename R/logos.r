@@ -57,3 +57,12 @@ calcInformation <- function(dframe, trt=NULL, pos, elems, k=4) {
 #' @docType data
 #' @usage data(sequences)
 NULL
+
+#' Alphabet polygon data
+#' 
+#' @name alphabet
+#' @title alphabet polygon data
+#' @description polygons of all upper case letters 
+#' @docType data
+#' @usage data(alphabet)
+NULL
