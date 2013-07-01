@@ -103,11 +103,11 @@ logo <- function(dm) {
 #' dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
 #' library(biovizBase)
 #' cols <- getBioColor(type="AA_ALPHABET")
-#' ggplot(dm3, aes(x=position, y=elinfo, group=element, fill=element)) + geom_logo() + scale_fill_manual(values=cols, guide="none")
+#' ggplot(dm3, aes(x=position, y=elinfo, group=element, fill=element)) + geom_logo() + scale_fill_manual(values=cols)
 #' dm4 <- calcInformation(dm2, pos="position", elems="element", trt="class", k=21)
-#' ggplot(dm4, aes(x=class, y=elinfo, group=interaction(class, element))) + geom_logo() + facet_wrap(~position, ncol=18)
+#' ggplot(dm4, aes(x=class, y=elinfo, group=interaction(class, element), fill=element)) + geom_logo() + facet_wrap(~position, ncol=18)
 #' }
-geom_logo <- function (mapping = NULL, data = NULL, stat = "logo", position = "stack", width = 0.9, 
+geom_logo <- function (mapping = NULL, data = NULL, stat = "logo", position = "identity", width = 0.9, 
                        ...) {
   GeomLogo$new(mapping = mapping, data = data, stat = stat, 
                position = position, width= width, ...)
@@ -164,7 +164,7 @@ GeomLogo <- proto(ggplot2:::Geom, {
   }
   
   default_stat <- function(.) StatLogo
-  default_pos <- function(.) PositionStack
+  default_pos <- function(.) PositionIdentity
   default_aes <- function(.) aes(weight=1, colour="grey20", fill="white", size=0.5, alpha = NA, shape = 16, linetype = "solid")
   required_aes <- c("x", "y", "group")
   
@@ -239,7 +239,7 @@ GeomLogo <- proto(ggplot2:::Geom, {
 #' dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
 #' ggplot(dm3, aes(x=position, y=elinfo, group=interaction(position, element))) + geom_logo()
 
-stat_logo <- function (mapping = NULL, data = NULL, geom = "logo", position = "stack",
+stat_logo <- function (mapping = NULL, data = NULL, geom = "logo", position = "identity",
                        width = 0.9, drop="FALSE", scale = "area", na.rm = FALSE, ...) {
   StatLogo$new(mapping = mapping, data = data, geom = geom, position = position,
                na.rm = na.rm, ...)
@@ -250,15 +250,14 @@ StatLogo <- proto(ggplot2:::Stat, {
   
   calculate_groups <- function(., data, na.rm = FALSE, width = width, ...) {
     print("calculate groups")
- #       browser()
-
+# browser()
     data <- remove_missing(data, na.rm, "y", name = "stat_logo", finite = TRUE)
     data <- data[with(data, order(x, y)),]   
     data <- ddply(data, .(x), transform, 
-                     ymax = cumsum(y))
+                  ymax = cumsum(y))
     data$ymin <- with(data, ymax-y)
     data <- ddply(data, .(x), transform, 
-                     ybase = max(y))
+                  ybase = max(ymin))
     data$ymin <- with(data, ymin-ybase)
     data$ymax <- with(data, ymax-ybase)   
     data$xmin <- with(data, x-width/2)   
@@ -270,7 +269,8 @@ StatLogo <- proto(ggplot2:::Stat, {
   calculate <- function(., data,  scales, binwidth=NULL, origin=NULL, breaks=NULL, width=0.9,
                          na.rm = FALSE, ...) {
     print("calculate for each group")
-#        browser()
+ #       browser()
+
     data
   }
   
