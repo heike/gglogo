@@ -89,6 +89,89 @@ logo <- function(dm) {
     scale_size(range=6*c(0.5, max(dmlabel$freq)), guide="none")   
 }
 
+
+#' Sequence logo plots.
+#'
+#' @section Aesthetics: 
+#' \Sexpr[results=rd,stage=build]{ggplot2:::rd_aesthetics("geom", "logo")}
+#'
+#' @export
+#' @examples
+#' \donttest{
+#' data(sequences)
+#' dm2 <- splitSequence(sequences, "peptide")
+#' dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
+#' library(biovizBase)
+#' cols <- getBioColor(type="AA_ALPHABET")
+#' ggplot(dm3, aes(x=position, y=elinfo, group=element, fill=element)) + geom_logo() + scale_fill_manual(values=cols, guide="none")
+#' dm4 <- calcInformation(dm2, pos="position", elems="element", trt="class", k=21)
+#' ggplot(dm4, aes(x=class, y=elinfo, group=interaction(class, element))) + geom_logo() + facet_wrap(~position, ncol=18)
+#' }
+geom_logo <- function (mapping = NULL, data = NULL, stat = "logo", position = "stack", width = 0.9, 
+                       ...) {
+  GeomLogo$new(mapping = mapping, data = data, stat = stat, 
+               position = position, width= width, ...)
+}
+
+GeomLogo <- proto(ggplot2:::Geom, {
+  objname <- "logo"
+  
+  reparameterise <- function(., df, params) {
+#     print("reparameterise")
+#     browser()
+#     
+#     df$width <- df$width %||% 
+#       params$width %||% (resolution(df$x, FALSE) * 0.9)
+#     
+#     # ymin, ymax, xmin, and xmax define the bounding rectangle for each group
+#     ddply(df, .(group), transform,
+#           ymin = min(y),
+#           ymax = max(y),
+#           xmin = x - width / 2,
+#           xmax = x + width / 2)
+    df
+  }
+  
+  draw <- function(., data = data, scales, coordinates, ...) { 
+            print("draw")
+     #      browser()
+    
+    common <- data.frame(
+      colour = data$colour, 
+      size = data$size, 
+      linetype = data$linetype,
+      fill = alpha(data$fill, data$alpha),  
+      stringsAsFactors = FALSE
+    )
+      
+    
+    ggname(.$my_name(), 
+           gTree(children=gList(
+             GeomRect$draw(data, scales, coordinates, ...)
+           ))
+    )    
+  }
+  
+  guide_geom <- function(.) "polygon"
+  
+  draw_legend <- function(., data, ...)  {
+    data <- aesdefaults(data, .$default_aes(), list(...))
+    
+    with(data, grobTree(
+      rectGrob(gp = gpar(col = colour, fill = alpha(fill, alpha), lty = linetype)),
+      linesGrob(gp = gpar(col = colour, lwd = size * .pt, lineend="butt", lty = linetype))
+    ))
+  }
+  
+  default_stat <- function(.) StatLogo
+  default_pos <- function(.) PositionStack
+  default_aes <- function(.) aes(weight=1, colour="grey20", fill="white", size=0.5, alpha = NA, shape = 16, linetype = "solid")
+  required_aes <- c("x", "y", "group")
+  
+})
+
+
+
 #' calculation of all pieces necessary to plot a logo sequence plot
 #' 
 #' @param df dataframe
@@ -124,27 +207,77 @@ logo <- function(dm) {
 #'                     guides="none") + 
 #'   scale_shape_identity() + 
 #'   scale_size(range=6*c(0.5, max(dmlabel$freq)), guide="none")
-stat_logo <- function(dm) {
-  # assuming a discrete x variable
-  # a numeric y variable
-  # a grouping variable 
-  # any treatment should either go into facetting (handled outside) or as part of discrete x
-  
-  dmlabel <- dm[with(dm, order(class, position, freq)),]
-  
-  dmlabel <- ddply(dmlabel, .(position, class), transform, 
-                   ymax = cumsum(elinfo))
-  dmlabel$y <- with(dmlabel, ymax-elinfo)
-  dmlabel <- ddply(dmlabel, .(position, class), transform, 
-                   y1 = max(y))
-  dmlabel$y <- with(dmlabel, y-y1)
-  dmlabel$ymax <- with(dmlabel, ymax-y1)
-  
-  dmlabel$x <- 0.6
-  dmlabel$xmax <- 1.4
-  dmlabel$x[dmlabel$class=="positive"] <- dmlabel$x[dmlabel$class=="positive"]+1
-  dmlabel$xmax[dmlabel$class=="positive"] <- dmlabel$xmax[dmlabel$class=="positive"]+1
-  dmlabel
+#' combination of boxplot and 1d kernel density estimate along y axis, for logo plot.
+#'
+
+#' @section Aesthetics: 
+#' \Sexpr[results=rd,stage=build]{ggplot2:::rd_aesthetics("stat", "logo")}
+#'
+#' @param scale if "area" (default), all vases have the same area (before trimming
+#'   the tails). If "count", areas are scaled proportionally to the number of
+#'   observations. If "width", all vases have the same maximum width.
+#' @param na.rm If \code{FALSE} (the default), removes missing values with
+#'    a warning. If \code{TRUE} silently removes missing values.
+#'
+#' @return A data frame with additional columns:
+#'   \item{density}{density estimate}
+#'   \item{fivenum}{five number summary for boxplots including a list of outliers if any}
+#'   \item{scaled}{density estimate, scaled to maximum of 1}
+#'   \item{count}{density * number of points - probably useless}
+#'   \item{vasewidth}{density scaled for the vase plot, according to area, counts
+#'                      or to a constant maximum width}
+#'   \item{n}{number of points}
+#'   \item{width}{width of vase bounding box}
+#' @seealso \code{\link{geom_vase}} for examples, and \code{\link{stat_density}}
+#'   for examples with data along the x axis.
+#' @export
+#' @examples
+#' # See geom_logo for examples
+#' # Generate data
+#' data(peptide)
+#' dm2 <- splitSequence(sequences, "peptide")
+#' dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
+#' ggplot(dm3, aes(x=position, y=elinfo, group=interaction(position, element))) + geom_logo()
+
+stat_logo <- function (mapping = NULL, data = NULL, geom = "logo", position = "stack",
+                       width = 0.9, drop="FALSE", scale = "area", na.rm = FALSE, ...) {
+  StatLogo$new(mapping = mapping, data = data, geom = geom, position = position,
+               na.rm = na.rm, ...)
 }
+
+StatLogo <- proto(ggplot2:::Stat, {
+  objname <- "logo"
+  
+  calculate_groups <- function(., data, na.rm = FALSE, width = width, ...) {
+    print("calculate groups")
+ #       browser()
+
+    data <- remove_missing(data, na.rm, "y", name = "stat_logo", finite = TRUE)
+    data <- data[with(data, order(x, y)),]   
+    data <- ddply(data, .(x), transform, 
+                     ymax = cumsum(y))
+    data$ymin <- with(data, ymax-y)
+    data <- ddply(data, .(x), transform, 
+                     ybase = max(y))
+    data$ymin <- with(data, ymin-ybase)
+    data$ymax <- with(data, ymax-ybase)   
+    data$xmin <- with(data, x-width/2)   
+    data$xmax <- with(data, x+width/2)   
+    
+    .super$calculate_groups(., data, na.rm = na.rm, width = width, ...)
+  }
+  
+  calculate <- function(., data,  scales, binwidth=NULL, origin=NULL, breaks=NULL, width=0.9,
+                         na.rm = FALSE, ...) {
+    print("calculate for each group")
+#        browser()
+    data
+  }
+  
+  default_geom <- function(.) GeomLogo
+  required_aes <- c("x", "y", "group")
+  
+})
+
 
 

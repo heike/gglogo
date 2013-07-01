@@ -155,6 +155,8 @@ simplifyPolygon <- function(points, tol=1) {
   points[simplify_rec(points, tol=tol),]
 }
 
+#' Convert an image file to a polygon
+#' 
 #' @param ch letter 
 #' @param fontfamily
 #' @param fontsize

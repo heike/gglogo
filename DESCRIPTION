@@ -6,9 +6,10 @@ License: MIT
 Title: Geom for logo sequence plots
 Depends:
     plyr,
-    reshape2
-Suggests:
+    reshape2,
     ggplot2,
+    proto
+Suggests:
     biovizBase
 Description: Functions to visualize sequences in (modified) logo plots
 Collate:
