@@ -92,9 +92,6 @@ logo <- function(dm) {
 
 #' Sequence logo plots.
 #'
-#' @section Aesthetics: 
-#' \Sexpr[results=rd,stage=build]{ggplot2:::rd_aesthetics("geom", "logo")}
-#'
 #' @export
 #' @examples
 #' \donttest{
@@ -107,7 +104,6 @@ logo <- function(dm) {
 #' dm4 <- calcInformation(dm2, pos="position", elems="element", trt="class", k=21)
 #' ggplot(dm4, aes(x=class, y=elinfo, group=element, label=element, fill=element), alpha=0.8) + geom_logo() + scale_fill_manual(values=scales::alpha(cols, 0.8)) + facet_wrap(~position, ncol=18)
 #' }
-
 
 geom_logo <- function (mapping = NULL, data = NULL, stat = "logo", position = "identity", width = 0.9, alpha=0.9,
                        ...) {
@@ -230,7 +226,6 @@ GeomLogo <- proto(ggplot2:::Geom, {
 #'
 
 #' @section Aesthetics: 
-#' \Sexpr[results=rd,stage=build]{ggplot2:::rd_aesthetics("stat", "logo")}
 #'
 #' @param scale if "area" (default), all vases have the same area (before trimming
 #'   the tails). If "count", areas are scaled proportionally to the number of

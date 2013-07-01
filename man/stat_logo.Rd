@@ -3,7 +3,7 @@
 \title{calculation of all pieces necessary to plot a logo sequence plot}
 \usage{
   stat_logo(mapping = NULL, data = NULL, geom = "logo",
-    position = "stack", width = 0.9, drop = "FALSE",
+    position = "identity", width = 0.9, drop = "FALSE",
     scale = "area", na.rm = FALSE, ...)
 }
 \arguments{
@@ -34,8 +34,7 @@
   sequence plot
 }
 \section{Aesthetics}{
-  \Sexpr[results=rd,stage=build]{ggplot2:::rd_aesthetics("stat",
-  "logo")}
+
 }
 \examples{
 dmlabel <- stat_logo(dm3)

@@ -18,7 +18,7 @@
   Convert an image file to a polygon
 }
 \examples{
-letter <- letterToPolygon("B")
+letter <- letterToPolygon("ö", fontfamily="Garamond")
 print(qplot(x, y, geom="polygon", data = letter, fill=I("black"), order=order, alpha=I(0.8))+coord_equal())
 }
 
