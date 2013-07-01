@@ -103,11 +103,13 @@ logo <- function(dm) {
 #' dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
 #' library(biovizBase)
 #' cols <- getBioColor(type="AA_ALPHABET")
-#' ggplot(dm3, aes(x=position, y=elinfo, group=element, fill=element)) + geom_logo() + scale_fill_manual(values=cols)
+#' ggplot(dm3, aes(x=position, y=elinfo, group=element, label=element, fill=element)) + geom_logo() + scale_fill_manual(values=cols)
 #' dm4 <- calcInformation(dm2, pos="position", elems="element", trt="class", k=21)
-#' ggplot(dm4, aes(x=class, y=elinfo, group=interaction(class, element), fill=element)) + geom_logo() + facet_wrap(~position, ncol=18)
+#' ggplot(dm4, aes(x=class, y=elinfo, group=element, label=element, fill=element), alpha=0.8) + geom_logo() + scale_fill_manual(values=scales::alpha(cols, 0.8)) + facet_wrap(~position, ncol=18)
 #' }
-geom_logo <- function (mapping = NULL, data = NULL, stat = "logo", position = "identity", width = 0.9, 
+
+
+geom_logo <- function (mapping = NULL, data = NULL, stat = "logo", position = "identity", width = 0.9, alpha=0.9,
                        ...) {
   GeomLogo$new(mapping = mapping, data = data, stat = stat, 
                position = position, width= width, ...)
@@ -117,37 +119,54 @@ GeomLogo <- proto(ggplot2:::Geom, {
   objname <- "logo"
   
   reparameterise <- function(., df, params) {
-#     print("reparameterise")
-#     browser()
-#     
-#     df$width <- df$width %||% 
-#       params$width %||% (resolution(df$x, FALSE) * 0.9)
-#     
-#     # ymin, ymax, xmin, and xmax define the bounding rectangle for each group
-#     ddply(df, .(group), transform,
-#           ymin = min(y),
-#           ymax = max(y),
-#           xmin = x - width / 2,
-#           xmax = x + width / 2)
+    #     print("reparameterise")
+    #     browser()
+    #     
+    #     df$width <- df$width %||% 
+    #       params$width %||% (resolution(df$x, FALSE) * 0.9)
+    #     
+    #     # ymin, ymax, xmin, and xmax define the bounding rectangle for each group
+    #     ddply(df, .(group), transform,
+    #           ymin = min(y),
+    #           ymax = max(y),
+    #           xmin = x - width / 2,
+    #           xmax = x + width / 2)
     df
   }
   
   draw <- function(., data = data, scales, coordinates, ...) { 
-            print("draw")
-     #      browser()
+#    print("draw")
     
-    common <- data.frame(
-      colour = data$colour, 
+    common <- unique(data.frame(
+      colour = "black", # data$colour, 
       size = data$size, 
       linetype = data$linetype,
-      fill = alpha(data$fill, data$alpha),  
+      fill = "white", #alpha(data$fill, data$alpha),  
       stringsAsFactors = FALSE
-    )
-      
+    ))
+    letter <- subset(alphabet, group %in% unique(data$label))
+    if (nrow(letter) < 1) {
+      warning(paste("unrecognized letter in alphabet:",unique(data$label), collapse=","))
+      letter <- alphabet[1,]
+    }
+    data$ROWID <- 1:nrow(data)
+    letterpoly <- adply(data, .margins=1, function(x) {
+      letter$x <- scaleTo(letter$x, fromRange=c(0,1), toRange=c(x$xmin, x$xmax))
+      letter$y <- scaleTo(letter$y, toRange=c(x$ymin, x$ymax))
+      letter$group <- interaction(x$ROWID, letter$group)
+      letter
+    })
+#   browser()
+#    row.names(common) <- NULL
+#    letterpoly <- data.frame(letterpoly, common)
+    letterpoly$fill <- alpha("black", 0.75)
+    
+    
     
     ggname(.$my_name(), 
            gTree(children=gList(
-             GeomRect$draw(data, scales, coordinates, ...)
+             GeomRect$draw(data, scales, coordinates, ...),
+             GeomPolygon$draw(letterpoly, scales, coordinates, ...)
            ))
     )    
   }
@@ -165,8 +184,8 @@ GeomLogo <- proto(ggplot2:::Geom, {
   
   default_stat <- function(.) StatLogo
   default_pos <- function(.) PositionIdentity
-  default_aes <- function(.) aes(weight=1, colour="grey20", fill="white", size=0.5, alpha = NA, shape = 16, linetype = "solid")
-  required_aes <- c("x", "y", "group")
+  default_aes <- function(.) aes(weight=1, colour="grey20", fill="white", size=0.1, alpha = NA, shape = 16, linetype = "solid")
+  required_aes <- c("x", "y", "group", "label")
   
 })
 
@@ -249,8 +268,8 @@ StatLogo <- proto(ggplot2:::Stat, {
   objname <- "logo"
   
   calculate_groups <- function(., data, na.rm = FALSE, width = width, ...) {
-    print("calculate groups")
-# browser()
+#    print("calculate groups")
+    # browser()
     data <- remove_missing(data, na.rm, "y", name = "stat_logo", finite = TRUE)
     data <- data[with(data, order(x, y)),]   
     data <- ddply(data, .(x), transform, 
@@ -267,17 +286,18 @@ StatLogo <- proto(ggplot2:::Stat, {
   }
   
   calculate <- function(., data,  scales, binwidth=NULL, origin=NULL, breaks=NULL, width=0.9,
-                         na.rm = FALSE, ...) {
-    print("calculate for each group")
- #       browser()
-
+                        na.rm = FALSE, ...) {
+#    print("calculate for each group")
+    #       browser()
+    
     data
   }
   
   default_geom <- function(.) GeomLogo
-  required_aes <- c("x", "y", "group")
+  required_aes <- c("x", "y", "group", "label")
   
 })
+
 
 
 
