@@ -4,7 +4,7 @@
 \usage{
   stat_logo(mapping = NULL, data = NULL, geom = "logo",
     position = "identity", width = 0.9, drop = "FALSE",
-    scale = "area", na.rm = FALSE, ...)
+    na.rm = FALSE, ...)
 }
 \arguments{
   \item{scale}{if "area" (default), all vases have the same

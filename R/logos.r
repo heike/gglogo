@@ -52,6 +52,7 @@ calcInformation <- function(dframe, trt=NULL, pos, elems, k=4) {
 #' 
 #' @param dframe dataset
 #' @param sequences
+#' @export
 #' @examples
 #' data(sequences)
 #' dm2 <- splitSequence(sequences, "peptide")
@@ -137,8 +138,8 @@ GeomLogo <- proto(ggplot2:::Geom, {
     }
     data$ROWID <- 1:nrow(data)
     letterpoly <- adply(data, .margins=1, function(x) {
-      letter$x <- scaleTo(letter$x, fromRange=c(0,1), toRange=c(x$xmin, x$xmax))
-      letter$y <- scaleTo(letter$y, toRange=c(x$ymin, x$ymax))
+      letter$x <- gglogo:::scaleTo(letter$x, fromRange=c(0,1), toRange=c(x$xmin, x$xmax))
+      letter$y <- gglogo:::scaleTo(letter$y, toRange=c(x$ymin, x$ymax))
       letter$group <- interaction(x$ROWID, letter$group)
       letter
     })
@@ -208,11 +209,12 @@ GeomLogo <- proto(ggplot2:::Geom, {
 #' dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
 #' ggplot(dm3, aes(x=position, y=elinfo, group=interaction(position, element))) + geom_logo()
 stat_logo <- function (mapping = NULL, data = NULL, geom = "logo", position = "identity",
-                       width = 0.9, drop="FALSE", scale = "area", na.rm = FALSE, ...) {
-  StatLogo$new(mapping = mapping, data = data, geom = geom, position = position,
+                       width = 0.9, drop="FALSE", na.rm = FALSE, ...) {
+  StatLogo$new(mapping = mapping, data = data, geom = geom, position = position, width=width, drop=drop, 
                na.rm = na.rm, ...)
 }
 
+#' @export
 StatLogo <- proto(ggplot2:::Stat, {
   objname <- "logo"
   

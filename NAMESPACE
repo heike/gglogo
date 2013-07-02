@@ -1,5 +1,7 @@
+export(StatLogo)
 export(calcInformation)
 export(geom_logo)
 export(letterToPolygon)
+export(logo)
 export(splitSequence)
 export(stat_logo)
