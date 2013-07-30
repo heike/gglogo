@@ -16,3 +16,12 @@ NULL
 #' @docType data
 #' @usage data(alphabet)
 NULL
+
+#' Amino acid properties
+#' 
+#' @name aacids
+#' @title properties of amino acids
+#' @description properties of amino acids: polarity and water affiliation 
+#' @docType data
+#' @usage data(aacids)
+NULL

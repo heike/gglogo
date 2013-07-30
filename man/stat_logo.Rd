@@ -37,7 +37,7 @@
 data(sequences)
 dm2 <- splitSequence(sequences, "peptide")
 dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
-ggplot(dm3, aes(x=position, y=elinfo, group=interaction(position, element))) + geom_logo()
+ggplot(dm3, aes(x=position, y=bits, group=interaction(position, element))) + geom_logo()
 }
 \seealso{
   \code{\link{geom_vase}} for examples, and

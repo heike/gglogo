@@ -14,6 +14,7 @@ splitSequence <- function(dframe, sequences) {
   require(reshape2)
   dm <- melt(seqVars, id.vars=names(dframe))
   names(dm) <- c(names(dframe), "position", "element")
+  levels(dm$position) <- gsub("V"," ", levels(dm$position))
   dm
 }
 
@@ -24,6 +25,7 @@ splitSequence <- function(dframe, sequences) {
 #' @param pos character string of position
 #' @param elems character string of elements
 #' @param k alphabet size: 4 for DNA/RNA sequences, 21 for standard amino acids
+#' @param weight number of times each sequence is observed, defaults to 1 in case no weight is given
 #' @return extended data frame with additional information of shannon info in bits and each elements contribution to the total information
 #' @export
 #' @examples
@@ -33,18 +35,22 @@ splitSequence <- function(dframe, sequences) {
 #' # precursor to a logo plot:
 #' library(ggplot2)
 #' library(biovizBase)
-#' qplot(position,  data=dm3, facets=class~., geom="bar", weight=elinfo, fill=element) + scale_fill_manual(elements=getBioColor(type="AA_ALPHABET"))
-#' qplot(position,  data=calcInformation(dm2, pos="position", trt=NULL, elems="element", k=21), 
-#' geom="bar", weight=elinfo, fill=element) + scale_fill_manual(elements=getBioColor(type="AA_ALPHABET"))
-calcInformation <- function(dframe, trt=NULL, pos, elems, k=4) {
-
-  freqs <- ddply(dframe, c(trt, pos, elems), nrow)
+#' 
+calcInformation <- function(dframe, trt=NULL, pos, elems, k=4, weight = NULL, method="shannon") {
+  if (is.null(weight)) dframe$wt <- 1
+  else dframe$wt <- dframe[,weight]
+  
+  freqs <- ddply(dframe, c(trt, pos, elems), function(x) sum(x$wt))
   names(freqs)[ncol(freqs)] <- "freq"
   freqByPos <- ddply(freqs, c(trt, pos), transform, total=sum(freq))
-  freqByPos <- ddply(freqByPos, c(trt, pos), transform, info=-sum(freq/total*log(freq/total, base=2)))
+  if (method == "shannon") {
+    freqByPos <- ddply(freqByPos, c(trt, pos), transform, info=-sum((freq/total*log(freq/total, base=2))[freq>0]))
+    freqByPos$info <- -log(1/k, base=2) - with(freqByPos, info)
+    freqByPos$bits <- with(freqByPos, freq/total*info)
+  }  
+  if (method == "relative")
+    freqByPos$info <- with(freqByPos, freq/total)
   
-  freqByPos$info <- -log(1/k, base=2) - with(freqByPos, info)
-  freqByPos$elinfo <- with(freqByPos, freq/total*info)
   freqByPos
 }
 
@@ -81,9 +87,9 @@ logo <- function(dm) {
   
   # use Biovisbase for colors
   data(alphabet)
-  dmletter <- merge(subset(dmlabel, elinfo > 0.25), alphabet, by.x="element", by.y="group")
+  dmletter <- merge(subset(dmlabel, bits > 0.25), alphabet, by.x="element", by.y="group")
   
-  base + geom_polygon(aes(x=x.x+x.y-0.1, y=y.x+elinfo*y.y, group=interaction(element,class), order=order), 
+  base + geom_polygon(aes(x=x.x+x.y-0.1, y=y.x+bits*y.y, group=interaction(element,class), order=order), 
                       alpha=0.9, fill="black", data=dmletter, 
                       guides="none") + 
     scale_shape_identity() + 
@@ -101,10 +107,18 @@ logo <- function(dm) {
 #' dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
 #' library(biovizBase)
 #' cols <- getBioColor(type="AA_ALPHABET")
-#' ggplot(dm3, aes(x=position, y=elinfo, group=element, label=element, fill=element)) + geom_logo() + scale_fill_manual(values=cols)
+#' library(RColorBrewer)
+#' cols <- brewer.pal(10,"Paired")[c(1,2,7,8)]
+#' data(aacids)
+#' dm3b <- merge(dm3, aacids, by.x="element", by.y="AA", all.x=T)
+#' ggplot(dm3b, aes(x=position, y=bits, group=element, label=element, fill=interaction(Polarity, Water))) + geom_logo() + scale_fill_manual(values=cols)
 #' dm4 <- calcInformation(dm2, pos="position", elems="element", trt="class", k=21)
-#' ggplot(dm4, aes(x=class, y=elinfo, group=element, label=element, fill=element), alpha=0.8) + geom_logo() + scale_fill_manual(values=scales::alpha(cols, 0.8)) + facet_wrap(~position, ncol=18)
-#' ggplot(dm4, aes(x=position, y=elinfo, group=element, label=element, fill=element), alpha=0.8) + geom_logo() + scale_fill_manual(values=scales::alpha(cols, 0.8)) + facet_wrap(~class, ncol=1) + theme_bw()
+#' cols2 <- scales::alpha(cols, 0.8)
+#' dm5 <- merge(dm4, aacids, by.x="element", by.y="AA", all.x=T)
+#' ggplot(dm4, aes(x=class, y=bits, group=element, label=element, fill=element), alpha=0.8) + geom_logo() + scale_fill_manual(values=cols) + facet_wrap(~position, ncol=18)
+#' ggplot(dm4, aes(x=position, y=bits, group=element, label=element, fill=element), alpha=0.8) + geom_logo() + scale_fill_manual(values=scales::alpha(cols, 0.8)) + facet_wrap(~class, ncol=1) + theme_bw()
+#' ggplot(dm5, aes(x=class, y=bits, group=element, label=element, fill=interaction(Polarity, Water)), alpha=0.8) + geom_logo() + scale_fill_brewer("Amino-acids properties", palette="Paired") + facet_wrap(~position, ncol=18) + theme(legend.position="bottom") + xlab("")
+#' ggplot(dm5, aes(x=class, y=bits, group=element, label=element, fill=interaction(Water, Polarity)), alpha=0.8) + geom_logo() + scale_fill_manual("Amino acids properties", values=cols) + facet_wrap(~position, ncol=18) + theme_bw() + theme(legend.position="bottom") + xlab("") + ylab("Shannon information in bits")
 #' }
 
 geom_logo <- function (mapping = NULL, data = NULL, stat = "logo", position = "identity", width = 0.9, alpha=0.25,
@@ -133,7 +147,7 @@ GeomLogo <- proto(ggplot2:::Geom, {
     data(alphabet)
     letter <- subset(alphabet, group %in% unique(data$label))
     if (nrow(letter) < 1) {
-      warning(paste("unrecognized letter in alphabet:", unique(data$label), collapse=","))
+    #  warning(paste("unrecognized letter in alphabet:", unique(data$label), collapse=","))
       letter <- alphabet[1,]
     }
     data$ROWID <- 1:nrow(data)
@@ -152,7 +166,7 @@ GeomLogo <- proto(ggplot2:::Geom, {
     letterOutline <- letterpoly
     letterOutline$colour <- alpha("black", letterOutline$alpha)
     letterOutline$group <- paste(letterOutline$group, letterOutline$pathGroup, sep=".")
-    
+#    browser()
     ggname(.$my_name(), 
            gTree(children=gList(
              GeomRect$draw(data, scales, coordinates, ...),
@@ -175,7 +189,7 @@ GeomLogo <- proto(ggplot2:::Geom, {
   
   default_stat <- function(.) StatLogo
   default_pos <- function(.) PositionIdentity
-  default_aes <- function(.) aes(weight=1, colour="grey20", fill="white", size=0.1, alpha = NA, shape = 16, linetype = "solid")
+  default_aes <- function(.) aes(weight=1, colour="grey80", fill="white", size=0.1, alpha = NA, shape = 16, linetype = "solid")
   required_aes <- c("x", "y", "group", "label")
   
 })
@@ -207,7 +221,7 @@ GeomLogo <- proto(ggplot2:::Geom, {
 #' data(sequences)
 #' dm2 <- splitSequence(sequences, "peptide")
 #' dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
-#' ggplot(dm3, aes(x=position, y=elinfo, group=interaction(position, element))) + geom_logo()
+#' ggplot(dm3, aes(x=position, y=bits, group=interaction(position, element))) + geom_logo()
 stat_logo <- function (mapping = NULL, data = NULL, geom = "logo", position = "identity",
                        width = 0.9, drop="FALSE", na.rm = FALSE, ...) {
   StatLogo$new(mapping = mapping, data = data, geom = geom, position = position, width=width, drop=drop, 
@@ -220,7 +234,7 @@ StatLogo <- proto(ggplot2:::Stat, {
   
   calculate_groups <- function(., data, na.rm = FALSE, width = width, ...) {
 #    print("calculate groups")
-    # browser()
+#     browser()
     data <- remove_missing(data, na.rm, "y", name = "stat_logo", finite = TRUE)
     data <- data[with(data, order(x, y)),]   
     data <- ddply(data, .(x), transform, 
@@ -229,9 +243,17 @@ StatLogo <- proto(ggplot2:::Stat, {
     data <- ddply(data, .(x), transform, 
                   ybase = max(ymin))
     data$ymin <- with(data, ymin-ybase)
-    data$ymax <- with(data, ymax-ybase)   
-    data$xmin <- with(data, x-width/2)   
-    data$xmax <- with(data, x+width/2)   
+    data$ymax <- with(data, ymax-ybase)
+ #   browser()
+#     xi <- unique(data[,c("x", "width")])
+#     xi$w1 <- cumsum(xi$width)-xi$width 
+#     xi$w2 <- cumsum(xi$width)
+#     xi$w1 <- xi$w1*(max(data$x)-1)/max(xi$w1)
+#     xi$w2 <- xi$w2*(max(data$x)-1)/max(xi$w2)
+#     data$xmin <- with(data, xi$w1[x]+1)   
+#     data$xmax <- with(data, xi$w2[x]+1)   
+     data$xmin <- with(data, x - width/2)   
+     data$xmax <- with(data, x + width/2)   
     
     .super$calculate_groups(., data, na.rm = na.rm, width = width, ...)
   }
@@ -249,6 +271,52 @@ StatLogo <- proto(ggplot2:::Stat, {
   
 })
 
-
-
+#' Cluster sequences according to selected positions 
+#' 
+#' @param sequences, 
+#' @param pos vector of positions for the cluster. If NULL, the whole sequence is used
+#' @param k number of clusters
+#' @return a data frame containing the clustering in vector cl
+#' @examples
+#' dseq <- seqtree(subset(sequences, class=="gram +")$peptide, pos=c(4,7,24,27), k=4)
+#' dm2 <- splitSequence(dseq, "subseq")
+#' dm3 <- calcInformation(dm2, pos="position", trt="cl", elems="element", k=21, weight="Freq")
+#' library(RColorBrewer)
+#' cols <- brewer.pal(10,"Paired")[c(1,2,7,8)]
+#' data(aacids)
+#' dm3b <- merge(dm3, aacids, by.x="element", by.y="AA", all.x=T)
+#' dm3c <- as.data.frame(xtabs(Freq ~cl, data=dm2)/36)
+#' names(dm3c)[2] <- "width"
+#' dm3b <- merge(dm3b, dm3c, by="cl")
+#' dm3b$width <- dm3b$width/max(dm3b$width)
+#' ggplot(dm3b, aes(x=cl, y=bits, group=element, label=element, fill=Polarity)) + theme_bw() + geom_logo(aes(width=width)) + scale_fill_manual(values=cols) + facet_wrap(~position) 
+seqtree <- function(sequences, pos=NULL, k) {
+  extract <- function(sequences, pos){
+    res <- ldply(pos, function(x) substr(sequences, x, x))
+    unlist(llply(res, paste, collapse=""), use.names=FALSE)
+  }
+  seqdist <- function(s1, s2) {
+    x1 <- strsplit(as.character(s1), split="")[[1]]
+    x2 <- strsplit(as.character(s2), split="")[[1]]
+    sum(x1!=x2)/length(x1)
+  }
+  if (!is.null(pos)) subseq <- extract(sequences, pos)
+  else subseq <- sequences
+  
+  dseq <- as.data.frame(table(subseq))
+  dseq <- subset(dseq, Freq > 0)
+  n <- length(dseq$subseq)
+  d <- matrix(rep(0, n^2), ncol=n, nrow=n)
+  for (i in 1:(n-1)) {
+    for (j in (i+1):n) {
+      d[j, i] <- seqdist(dseq$subseq[i], dseq$subseq[j])
+      d[i, j] <- d[j, i]
+    }
+  }
+  d <- as.dist(d)
+  cl <- hclust(d)
+  browser()
+  dseq$cl <- cutree(cl, k=k)
+  dseq
+}
 
