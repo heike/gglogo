@@ -1,0 +1,168 @@
+%\RequirePackage{ifpdf}
+\documentclass[journal]{vgtc}                % final (journal style)
+%\documentclass[review,journal]{vgtc}         % review (journal style)
+
+%\usepackage{natbib}
+\usepackage[compress,square,comma,numbers]{natbib}
+\DeclareRobustCommand{\citeext}[1]{\citeauthor{#1}~\cite{#1}}
+
+\usepackage{mathptmx}
+\usepackage{graphicx}
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{knitr}
+\usepackage{url}
+\usepackage[table]{xcolor}
+
+\renewcommand\floatpagefraction{1}
+
+
+%% declare the category of your paper, only shown in review mode
+\vgtccategory{Research}
+
+%% allow for this line if you want the electronic option to work properly
+%\vgtcinsertpkg
+
+%% Paper title.
+
+\title{Redesigning the traditional logo plots\vspace{-.1in}}
+
+%% indicate IEEE Member or Student Member in form indicated below
+\author{Heike Hofmann and Helga Hofmann-Sieber\vspace{-.5in}}
+\authorfooter{
+%% insert punctuation at end of each item
+%\item
+\vspace{-.1in}\hspace{-.2in}
+ Heike Hofmann is  Professor of Statistics and faculty member in the Human Computer Interaction program at Iowa State University, E-mail: hofmann@iastate.edu.
+%\item
+
+\hspace{-.2in}
+Helga Hofmann-Sieber is PostDoc at the Heinrich-Pette-Institute Leibniz Institute for Experimental Virology in Prof Dr Joachim Hauber's group  for Cell Biology and Virology, Hamburg, Germany, 
+E-mail: helga.hofmann-sieber@hpi.uni-hamburg.de
+\vspace{-.1in}}
+\setlength\parindent{0pt}
+
+\begin{document}
+\maketitle
+{\sc Based} on data provided in form of amino acid sequences, we focused on a re-design of the logo plot that will allow to easily answer the following three questions: 
+\begin{enumerate} \itemsep-.05in
+\item[\bf (i)] {\it How well do the observed sequences conserve the overall pattern?} 
+\item[\bf (ii)] {\it What are the differences between Gram-positive and Gram-negative sequences?} 
+\item[\bf (iii)] {\it Which amino acids are important for Gram-positive sequences, which for Gram-negative?}
+\end{enumerate}
+
+\subsection*{Data and the traditional logo plot} 
+The data for this re-design challenge contains a set of 1809 sequences (923 Gram-negative and 886 Gram-positive sequences) of 36 amino acids each. 
+In a traditional logo sequence plot \citep{logo}, the position of an amino acid in the sequence is plotted on the horizontal axis, while on the vertical axis the amount of preserved information is shown. To measure preservation, Shannon information is used. Shannon information is an entropy measure given in bits, that describes the amount of mixture in each position. 
+Formally, information $I$  in position $p$ is defined as
+\[
+I(p) = -\log_2(1/21) - \sum_{aa} f_{aa} \log_2(f_{aa}),
+\]
+where $f_{aa}$ is the relative frequency with which amino acid $aa$ is observed at the position.
+For 21 amino acids, the maximal information is $-\log_2 (1/21) = 4.39$ bits, which is reached, if only a single amino acid is observed in the position, while perfect diversity (i.e. all 21 amino acids are observed with the same frequency) results in an information of $0$ bits. 
+In the traditional plot, each amino acid is shown in each position by its corresponding letter with its height scaled to reflect the contribution to the position's total information. 
+
+\subsection*{Shortcomings of the traditional logo plot}
+%
+The {\bf color choice} for representing the letters of amino acids is related to water solubility and polarity (e.g. hydrophobic, non-polar amino acids are shown in red) but this is not explicitly stated in a legend. Further, the use of letters to represent amino acids results in shapes of different visual dominance; the letter `I' is much less visually pronounced than for example `W'.\\[-5pt]
+
+{\bf Non identified amino acids} are being ignored in the original plot -- it is of importance to keep track of at least the position  and the frequency of these occurrences, as it might indicate a problem with the sequencing.\\[-5pt]
+
+The plotting of {\bf sequences of subfamilies} in separate logo plots does not facilitate a comparison of them. Researchers are in particular interested in differences in the conservation of amino acids between subfamilies.\\[-5pt]
+
+The {\bf number of sequences} in each of the subfamilies is not shown directly. This influences  the inherent variability. It is therefore important to keep track of these numbers to be able to assess how and whether the size of each subfamily affects conservation.
+%
+\subsection*{Aspects of the redesign}
+% non identified amino acids
+{\bf Boxed-in letters:} the visually most dominant change to the display is the addition of boxes framing each letter. This gives each amino acid visually the same weight, independent of the shape of its corresponding letter. We decided to keep the letters themselves since they incorporate valuable and immediately recognizable information in the display.
+% Construction of the plot
+The height of boxes and letters is still given by the contribution of the amino acids to the total information. 
+The width of boxes is adjusted for the number of sequences in each subfamily, if appropriate. In Figure~\ref{fig:1b} this difference is not immediately visible, as the class sizes are very similar, but in case of very different class sizes a rescaling of the width is extremely helpful.
+
+As information is strictly non-negative, we can make further use of the vertical axis by aligning the bottom of the box for the most frequently observed amino acid along the horizontal axis. This makes the box heights for the top sequence directly comparable.  It also aligns the boxes for the second most frequent amino acid, enabling comparisons of either one of the two highest contributions along a common scale \citep{cleveland:1984}. This reveals a previously unnoticed subgroup in the Gram-positive bacteria.  103 out of the 886 Gram-positive bacteria stabilize their  ADK lid domain in the same way as Gram-negative bacteria using a hydrogen bonding network between residues 4, 7, 9, 24, 27, and 29.\\[-5pt]
+
+
+{\bf Color \& shade:}
+color hues are used to show two main properties of amino acids: polarity and electrical charging. Non-polar amino acids are shown in grey, polar amino acids are divided into positively charged (red), negatively charged (blue) and uncharged (yellow) amino acids. Opposite to the original plot color a legend is included in the graphic. This makes it easier for the reader to identify possible interactions between polar residues at first view.\\[-5pt]
+
+
+
+
+{\bf Non identified amino acids:}
+Another change to the original design is that non-identified amino acids (marked by a `.' in the  sequence) are kept, and shown in the visualization by a framed, but otherwise transparent box. The Shannon information calculated for the collective of non-identified amino acids should not be interpreted as actual information, as non-identified amino acids are not necessarily the same, but the fact, that amino acids are not identified in a position is valuable and should not be ignored. For example,  non-identified amino acids contribute the second largest contingent among the Gram-positive sequences in position 28, and might be an explanation of why these sequences are not conserved as well as  Gram-negative ones.\\[-5pt]
+
+{\bf Juxtaposition of subfamilies:} In order to facilitate comparisons across subfamilies, boxes of amino acids from different families are positioned side-by-side as shown in figure~\ref{fig:1b} to emphasize differences between Gram-positive and Gram-negative sequences. In a further step (not shown) this can be used to show sub-classes or clusters of sequences within a subfamily, which would represent a logical next step of an analysis and allow for an evaluation of how often and in which positions amino acids deviate from the main sequence structure. 
+
+
+
+
+
+\begin{figure*}
+\begin{subfigure}[b]{\linewidth}
+\caption{Sequence logos showing the amino acid usage in the adenylate kinase lid (AKL) domain across all organisms.}\label{fig:1a} 
+<<redesign, results='asis',  echo=FALSE, out.width='\\textwidth', fig.width=9, fig.height=4>>=
+suppressMessages(library(gglogo))
+suppressMessages(library(scales))
+suppressMessages(library(grid))
+data(sequences)
+data(aacids)
+dm2 <- splitSequence(sequences, "peptide")
+library(RColorBrewer)
+cols <- c("grey80", brewer.pal(3,"RdYlBu"))
+
+dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
+dm3b <- merge(dm3, aacids, by.x="element", by.y="AA", all.x=T)
+ggplot(dm3b, aes(x=position, y=bits, group=element, label=element, fill=Polarity), alpha=0.8) + geom_hline(yintercept=-log(1/21, base=2), colour="grey30", size=0.5) + geom_logo() + scale_fill_manual("Polarity", values=cols) +  theme_bw() + theme(legend.position="bottom") + ylab("bits") + theme(plot.margin=unit(c(0,0,0,0), "cm")) + geom_hline(yintercept=0, colour="white", size=0.5) + geom_hline(yintercept=0, colour="grey30", size=0.125) + scale_y_continuous(breaks=c(-1,0,1,2,4), labels=c(1,0,1,2,4))
+@
+\end{subfigure}% 
+\hfill
+
+\begin{subfigure}[b]{\linewidth}
+\caption{Juxtaposition of amino acid usage in the adenylate kinase lid (AKL) domain of Gram-positive and Gram-negative bacteria \hfill}\label{fig:1b} 
+<<redesign-byclass, results='asis', echo=FALSE, out.width='\\textwidth', fig.width=9, fig.height=4.5>>=
+dm4 <- calcInformation(dm2, pos="position", elems="element", trt="class", k=21)
+dm5 <- merge(dm4, aacids, by.x="element", by.y="AA", all.x=T)
+dm4b <- as.data.frame(xtabs(freq ~class, data=dm4)/36)
+names(dm4b)[2] <- "width"
+dm5b <- merge(dm5, dm4b, by="class")
+dm5b$width <- 0.95*dm5b$width/max(dm5b$width)
+levels(dm5b$class) <- c("-", "+")
+
+ggplot(dm5b, aes(x=class, y=bits, group=element, label=element, fill= Polarity), alpha=0.8) + geom_hline(yintercept=-log(1/21, base=2), colour="grey30", size=0.5) + geom_logo(aes(width=width)) + scale_fill_manual("Polarity", values=cols, guide=guide_legend(nrow=2)) + facet_wrap(~position, nrow=2) + theme_bw() + theme(legend.position="none") + xlab("") + ylab("bits")  + theme(plot.margin=unit(c(0,0,0,0), "cm")) + geom_hline(yintercept=0, colour="white", size=0.5) + geom_hline(yintercept=0, colour="grey30", size=0.125) + scale_y_continuous(breaks=c(-1,0,1,2,4), labels=c(1,0,1,2,4))
+@
+\end{subfigure} 
+\caption{ 
+The ADK lid domain structure is universally conserved, but is stabilized in the Gram-negatives by a hydrogen bonding network between residues 4, 7, 9, 24, 27, and 29 (and several other residues in some organisms), while the Gram-positives are stabilized by a bound metal ion, tetrahedrally coordinated by four Cysteine residues at 4, 7, 24 and 27. A percentage of 11.6\% ($\pm 2.2$) Gram-positive bacteria stabilizes their ADK lid domain in the same way as Gram-negative bacteria using a hydrogen bonding network between residues 4, 7, 9, 24, 27, and 29.
+The identities of several other positions (eg 5, 8, 30, 32) are differentially constrained in each subfamily as well, apparently due to steric requirements of the stabilizing residues.
+}\label{fig:1}
+\end{figure*}
+
+\bibliographystyle{natbib}
+% argument is your BibTeX string definitions and bibliography database(s)
+\bibliography{references}
+
+
+\end{document}
+
+% <<fig3>>=
+% dseq <- seqtree(subset(sequences, class=="gram +")$peptide, pos=c(4,7,24,27), k=2)
+% dseq$class <- "gram +"
+% sequences$cl <- 3
+% sequences$Freq <- 1
+% names(sequences)[1] <- "subseq"
+% dseq <- rbind(dseq, sequences)
+% dm2 <- splitSequence(dseq, "subseq")
+% dm3 <- calcInformation(dm2, pos="position", trt="cl", elems="element", k=21, weight="Freq")
+% library(RColorBrewer)
+% cols <- c("grey80", brewer.pal(3,"RdYlBu"))
+% data(aacids)
+% dm3b <- merge(dm3, aacids, by.x="element", by.y="AA", all.x=T)
+% dm3c <- as.data.frame(xtabs(Freq ~cl, data=dm2)/36)
+% names(dm3c)[2] <- "width"
+% dm3b <- merge(dm3b, dm3c, by="cl")
+% dm3b$width <- dm3b$width/max(dm3b$width)
+% ggplot(dm3b, aes(x=cl, y=bits, group=element, label=element, fill=Polarity)) + theme_bw() + geom_logo(aes(width=width)) + scale_fill_manual(values=cols) + facet_wrap(~position) + scale_x_continuous(limits=c(0.5,3.5))
+% @
