@@ -39,6 +39,13 @@ imageToDFrame <- function(letter) {
 }
 
 getOutline <- function(imdf, var, threshold) {
+  stopifnot(c("x", "y") %in% names(imdf))
+  ## define implicit bindings for variables - not necessary though, 
+  ## since all of the variables do exist at this point
+  x <- NA
+  y <- NA
+
+  
   edgesY <- ddply(imdf, .(y), function(dframe) {
     idx <- which(dframe[, var] > threshold)
     dx <- diff(sort(dframe$x[idx])) 
@@ -84,6 +91,11 @@ determineOrder <- function (x, y) {
 }
 
 identifyParts <- function(letterpath, tol = NULL) {
+  stopifnot(c("group") %in% names(letterpath))
+  ## define implicit bindings for variables - not necessary though, 
+  ## since all of the variables do exist at this point
+  group <- NA
+  
   letterpath$d <- 0
   letterpath$d[-1] <- diff(letterpath$x)^2 + diff(letterpath$y)^2
   
@@ -183,12 +195,15 @@ letterToPolygon <- function(ch, fontfamily="Helvetica", fontsize=576, tol=1, dim
   im <- letterObject(ch, fontfamily=fontfamily, fontsize=fontsize, dim=dim)
   imdf <- imageToDFrame(im)
   outline <- getOutline(imdf, threshold=threshold, var=var)
+
   
-  #qplot(x, y, data=outline)
-  
+    
   letterpath <- determineOrder(outline$x, outline$y)
   letterpath <- identifyParts(letterpath, tol=5) # puts group into letterpath
   # thin polygons by part
+  ## define implicit bindings for variables - not necessary though, 
+  ## since all of the variables do exist at this point
+  group <- NA
   letterpath2 <- ddply(letterpath, .(group),  simplifyPolygon, tol=tol)
   lpath2 <- mainPlusIslands(letterpath2)
 #  alphabet <-rbind(alphabet,  data.frame(lpath2, group=ch, region=ch))

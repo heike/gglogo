@@ -41,6 +41,10 @@ calcInformation <- function(dframe, trt=NULL, pos, elems, k=4, weight = NULL, me
   else dframe$wt <- dframe[,weight]
   
   freqs <- ddply(dframe, c(trt, pos, elems), function(x) sum(x$wt))
+## define implicit bindings for variables - not necessary though, since all of the variables do exist
+  freq <- NA
+  total <- NA
+  
   names(freqs)[ncol(freqs)] <- "freq"
   freqByPos <- ddply(freqs, c(trt, pos), transform, total=sum(freq))
   if (method == "shannon") {
@@ -56,44 +60,20 @@ calcInformation <- function(dframe, trt=NULL, pos, elems, k=4, weight = NULL, me
 
 #' Logo plot
 #' 
-#' @param dframe dataset
-#' @param sequences
-#' @export
+#' Simple logo plot of sequences. For more complicated sequence logos, such as with treatment comparisons or subsets see geom_logo.
+#' @param sequences vector of text sequences, for which consensus logo is to be shown
+#' @return ggplot2 object for simple sequence
+#' @export 
 #' @examples
 #' data(sequences)
-#' dm2 <- splitSequence(sequences, "peptide")
-#' dm3 <- calcInformation(dm2, pos="position", trt="class", elems="element", k=21)
-#' logo(dm=stat_logo(dm3))
-#' dm4 <- calcInformation(dm2, pos="position", trt=NULL, elems="element", k=21)
-#' dm4$class <- 1
-#' logo(dm=stat_logo(dm4)) + facet_wrap(~position, ncol=36)
-logo <- function(dm) {  
-  dmlabel <- stat_logo(dm)  
-  require(ggplot2)
-  library(biovizBase)
-  cols <- biovizBase::getBioColor(type="AA_ALPHABET")
-  
-  
-  base <- ggplot(aes(x, y), data=dmlabel) +
-    geom_rect(aes(xmin=x, xmax=xmax, ymin=y, ymax=ymax, colour=element, fill=element)) + 
-    facet_wrap(~position, ncol=12) + 
-    scale_fill_manual(values=cols) + 
-    scale_colour_manual(values=cols) + 
-    theme(legend.position="bottom") + 
-    geom_hline(yintercept=0, colour="grey20") + 
-    geom_hline(yintercept=-log(1/21, base=2), colour="grey20") +
-    scale_x_continuous("", labels=c("negative","positive"), breaks=c(1,2)) +
-    ylab("bits")
-  
-  # use Biovisbase for colors
-  data(alphabet)
-  dmletter <- merge(subset(dmlabel, bits > 0.25), alphabet, by.x="element", by.y="group")
-  
-  base + geom_polygon(aes(x=x.x+x.y-0.1, y=y.x+bits*y.y, group=interaction(element,class), order=order), 
-                      alpha=0.9, fill="black", data=dmletter, 
-                      guides="none") + 
-    scale_shape_identity() + 
-    scale_size(range=6*c(0.5, max(dmlabel$freq)), guide="none")   
+#' library(RColorBrewer)
+#' cols <- rep(brewer.pal(12, name="Paired"),22)
+#' logo(sequences$peptide) + aes(fill=element) + scale_fill_manual(values=cols)
+logo <- function(sequences) {  
+  dframe <- data.frame(seq=sequences)
+  dm2 <- splitSequence(dframe, "seq")
+  dm3 <- calcInformation(dm2, pos="position", elems="element", k=length(unique(dm3$element)))
+  ggplot(dm3, aes(x=position, y=bits, group=element, label=element)) + geom_logo() 
 }
 
 
