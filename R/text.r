@@ -91,7 +91,6 @@ determineOrder <- function (x, y) {
 }
 
 identifyParts <- function(letterpath, tol = NULL) {
-  stopifnot(c("group") %in% names(letterpath))
   ## define implicit bindings for variables - not necessary though, 
   ## since all of the variables do exist at this point
   group <- NA
