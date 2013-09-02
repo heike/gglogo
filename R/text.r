@@ -89,9 +89,17 @@ identifyParts <- function(letterpath, tol = NULL) {
   
   # find different parts:
   #  idx <- which(letterpath$d > quantile(letterpath$d, probs=0.9))
-  if (is.null(tol)) tol <- quantile(letterpath$d, probs=0.9)
+  if (is.null(tol)) {
+    dt <- as.numeric(names(table(letterpath$d)))
+    tol <- dt[min(which(diff(dt)>2))]
+  }
   idx <- which(letterpath$d > tol)
   letterpath$group <- rep(1:(length(idx)+1),  diff(c(1, idx, nrow(letterpath)+1)))
+  dg <- table(letterpath$group)
+  idx <- which(dg < 2)
+  if (length(idx) > 0) {
+    letterpath <- subset(letterpath, !(group %in% idx))
+  }
   letterpath
 }
 
