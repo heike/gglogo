@@ -189,7 +189,7 @@ simplifyPolygon <- function(points, tol=1) {
 #' @param variable one of "red", "green", "blue".
 #' @export
 #' @examples
-#' letter <- letterToPolygon("ö", fontfamily="Garamond")
+#' letter <- letterToPolygon("R", fontfamily="Garamond")
 #' print(qplot(x, y, geom="polygon", data = letter, fill=I("black"), order=order, alpha=I(0.8))+coord_equal())
 letterToPolygon <- function(ch, fontfamily="Helvetica", fontsize=576, tol=1, dim=c(480, 480), threshold=0.5, var="red") {  
   im <- letterObject(ch, fontfamily=fontfamily, fontsize=fontsize, dim=dim)

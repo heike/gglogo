@@ -70,6 +70,10 @@ calcInformation <- function(dframe, trt=NULL, pos, elems, k=4, weight = NULL, me
 #' cols <- rep(brewer.pal(12, name="Paired"),22)
 #' logo(sequences$peptide) + aes(fill=element) + scale_fill_manual(values=cols)
 logo <- function(sequences) {  
+  position <- NA
+  bits <- NA
+  element <- NA
+  
   dframe <- data.frame(seq=sequences)
   dm2 <- splitSequence(dframe, "seq")
   dm3 <- calcInformation(dm2, pos="position", elems="element", k=length(unique(dm3$element)))
