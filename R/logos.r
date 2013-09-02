@@ -126,10 +126,9 @@ GeomLogo <- proto(ggplot2:::Geom, {
     df
   }
   
-  draw <- function(., data = data, scales, coordinates, ...) { 
-#    print("draw")
+  draw <- function(., data = data, scales, coordinates, ...) {     
+    data(alphabet, envir = environment())
     
-    data(alphabet, package="gglogo")
     letter <- subset(alphabet, group %in% unique(data$label))
     if (nrow(letter) < 1) {
     #  warning(paste("unrecognized letter in alphabet:", unique(data$label), collapse=","))
