@@ -14,7 +14,7 @@ letterObject <- function(ch, fontfamily="Helvetica", fontsize=576, dim=c(480, 48
   require(ReadImages)
   require(grid)
   fname <- tempfile(pattern = "file", fileext=".jpg")
-  jpeg(file=fname, width=dim[1], height=dim[2])
+  jpeg(filename=fname, width=dim[1], height=dim[2])
   grid.newpage()
   grid.rect(x = 0, y=0, width=3, height=3,
             gp=gpar(fill="black"), draw = TRUE, vp = NULL)

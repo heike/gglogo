@@ -8,9 +8,12 @@ Depends:
     plyr,
     reshape2,
     ggplot2,
-    proto
+    proto,
+    ReadImages,
+    grid
 Suggests:
-    biovizBase
+    biovizBase,
+    RColorBrewer
 Description: Functions to visualize sequences in (modified) logo plots
 Collate:
     'logos.r'
