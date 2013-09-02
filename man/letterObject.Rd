@@ -3,17 +3,24 @@
 \title{Convert a text element into an R object}
 \usage{
   letterObject(ch, fontfamily = "Helvetica",
-    fontsize = 576)
+    fontsize = 576, dim = c(480, 480))
 }
 \arguments{
   \item{ch}{text to be converted, usually just a single
   letter}
 
-  \item{fontfamily}{}
+  \item{fontfamily}{R has a few default fonts that are
+  always available, such as e.g. Helvetica, Arial, Courier
+  New, and Garamond. Other fonts might be available
+  depending on the platform used.}
 
   \item{fontsize}{by default 576. If the resulting string
   exceeds the boundary of the matrix returned, reduced font
   size}
+
+  \item{dim}{vector of length two specifying width and
+  height (in pixels) of the temporary jpg file created for
+  the letter. Defaults to 480 x 480 pixels.}
 }
 \value{
   three dimensional matrix of dimension 480 x 480 x 3 of

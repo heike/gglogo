@@ -1,18 +1,20 @@
 #' Convert a text element into an R object
 #' 
 #' @param ch text to be converted, usually just a single letter
-#' @param fontfamily 
+#' @param fontfamily R has a few default fonts that are always available, such as e.g. Helvetica, Arial, Courier New, and Garamond. Other fonts might be available depending on the platform used. 
 #' @param fontsize by default 576. If the resulting string exceeds the boundary of the matrix returned, reduced font size
+#' @param dim vector of length two specifying width and height (in pixels) of the temporary jpg file created for the letter. Defaults to 480 x 480 pixels.
 #' @return three dimensional matrix of dimension 480 x 480 x 3 of the pixel values, black background and white letter 
+#' @export
 #' @examples
 #' plot(letterObject("g", fontfamily="Garamond", fontsize=400))
 #' plot(letterObject("q", fontsize=400))
 #' plot(letterObject("B"))
-letterObject <- function(ch, fontfamily="Helvetica", fontsize=576) {
+letterObject <- function(ch, fontfamily="Helvetica", fontsize=576, dim=c(480, 480)) {
   require(ReadImages)
   require(grid)
   fname <- tempfile(pattern = "file", fileext=".jpg")
-  jpeg(file=fname)
+  jpeg(file=fname, width=dim[1], height=dim[2])
   grid.newpage()
   grid.rect(x = 0, y=0, width=3, height=3,
             gp=gpar(fill="black"), draw = TRUE, vp = NULL)
@@ -33,12 +35,12 @@ imageToDFrame <- function(letter) {
   imdf$x <- rep(1:dims[2], length=nrow(imdf)) 
   names(imdf) <- c("y", "red", "green", "blue", "x")
   imdf$y <- -as.numeric(as.character(imdf$y))
-  imdf
+  imdf[,c("x", "y", "red", "green", "blue")]
 }
 
-getOutline <- function(imdf) {
+getOutline <- function(imdf, var, threshold) {
   edgesY <- ddply(imdf, .(y), function(dframe) {
-    idx <- which(dframe$red > 0.5)
+    idx <- which(dframe[, var] > threshold)
     dx <- diff(sort(dframe$x[idx])) 
     nintervals <- sum(dx>1)+1
     jdx <- which(dx > 1)
@@ -48,7 +50,7 @@ getOutline <- function(imdf) {
   })
   
   edgesX <- ddply(imdf, .(x), function(dframe) {
-    idx <- which(dframe$red > 0.5)
+    idx <- which(dframe[, var] > threshold)
     dx <- diff(sort(-dframe$y[idx])) 
     nintervals <- sum(dx>1)+1
     jdx <- which(dx > 1)
@@ -58,7 +60,7 @@ getOutline <- function(imdf) {
   })
   
   outline <- na.omit(unique(rbind(edgesX, edgesY)))
-  outline
+  outline[,c("x", "y", "red", "green", "blue")]
 }
 
 determineOrder <- function (x, y) {
@@ -144,6 +146,7 @@ mainPlusIslands <- function(letterpath) {
   lpath2
 }
 
+
 simplifyPolygon <- function(points, tol=1) {
   # thin out polygon in two steps of Douglas-Pecker:
 #  source("thin.r")
@@ -161,14 +164,17 @@ simplifyPolygon <- function(points, tol=1) {
 #' @param fontfamily
 #' @param fontsize
 #' @param tol tolerance
+#' @param dim vector of length two specifying width and height (in pixels) of the temporary jpg file created for the letter. Defaults to 480 x 480 pixels.
+#' @param threshold
+#' @param variable one of "red", "green", "blue".
 #' @export
 #' @examples
 #' letter <- letterToPolygon("ö", fontfamily="Garamond")
 #' print(qplot(x, y, geom="polygon", data = letter, fill=I("black"), order=order, alpha=I(0.8))+coord_equal())
-letterToPolygon <- function(ch, fontfamily="Helvetica", fontsize=576, tol=1) {  
-  im <- letterObject(ch, fontfamily=fontfamily, fontsize=fontsize)
+letterToPolygon <- function(ch, fontfamily="Helvetica", fontsize=576, tol=1, dim=c(480, 480), threshold=0.5, var="red") {  
+  im <- letterObject(ch, fontfamily=fontfamily, fontsize=fontsize, dim=dim)
   imdf <- imageToDFrame(im)
-  outline <- getOutline(imdf)
+  outline <- getOutline(imdf, threshold=threshold, var=var)
   
   #qplot(x, y, data=outline)
   
