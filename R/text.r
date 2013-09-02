@@ -145,6 +145,8 @@ completePolygon <- function(polygon) {
 }
 
 mainPlusIslands <- function(letterpath) {
+  group <- NA
+  
   # assume that first part is the main with additional islands
   main <- completePolygon(unique(subset(letterpath, group==1)))
   main <- setDirection(main, 1)
@@ -181,12 +183,12 @@ simplifyPolygon <- function(points, tol=1) {
 #' Convert an image file to a polygon
 #' 
 #' @param ch letter 
-#' @param fontfamily
-#' @param fontsize
+#' @param fontfamily R has a few default fonts that are always available, such as e.g. Helvetica, Arial, Courier New, and Garamond. Other fonts might be available depending on the platform used. 
+#' @param fontsize by default 576. If the resulting string exceeds the boundary of the matrix returned, reduced font size
 #' @param tol tolerance
 #' @param dim vector of length two specifying width and height (in pixels) of the temporary jpg file created for the letter. Defaults to 480 x 480 pixels.
-#' @param threshold
-#' @param variable one of "red", "green", "blue".
+#' @param threshold numerical cutoff between 0 and 1
+#' @param var one of "red", "green", "blue".
 #' @export
 #' @examples
 #' letter <- letterToPolygon("R", fontfamily="Garamond")

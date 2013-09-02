@@ -9,9 +9,14 @@
 \arguments{
   \item{ch}{letter}
 
-  \item{fontfamily}{}
+  \item{fontfamily}{R has a few default fonts that are
+  always available, such as e.g. Helvetica, Arial, Courier
+  New, and Garamond. Other fonts might be available
+  depending on the platform used.}
 
-  \item{fontsize}{}
+  \item{fontsize}{by default 576. If the resulting string
+  exceeds the boundary of the matrix returned, reduced font
+  size}
 
   \item{tol}{tolerance}
 
@@ -19,9 +24,9 @@
   height (in pixels) of the temporary jpg file created for
   the letter. Defaults to 480 x 480 pixels.}
 
-  \item{threshold}{}
+  \item{threshold}{numerical cutoff between 0 and 1}
 
-  \item{variable}{one of "red", "green", "blue".}
+  \item{var}{one of "red", "green", "blue".}
 }
 \description{
   Convert an image file to a polygon

@@ -1,25 +1,25 @@
 \name{point_line_dist}
 \alias{point_line_dist}
-\title{Distamce between points and line}
+\title{Distance between point and line}
 \usage{
   point_line_dist(px, py, lx_1, ly_1, lx_2, ly_2)
 }
 \arguments{
-  \item{px}{x coordinate of point}
+  \item{px}{x coordinate of point outside the}
 
   \item{py}{y coordinate of point}
 
-  \item{lx_1,}{}
+  \item{lx_1,}{x coordinate of 1st point spanning a line}
 
-  \item{ly_1,}{}
+  \item{ly_1,}{y coordinate of 1st point spanning a line}
 
-  \item{lx_2,}{}
+  \item{lx_2,}{x coordinate of 2nd point spanning a line}
 
-  \item{ly_2}{x and y coordinates of points spanning a
-  line}
+  \item{ly_2,}{y coordinate of 2nd point spanning a line}
 }
 \description{
-  From
+  Compute distance between point given as (px, py) and line
+  spanned by points (lx1, ly1) and (lx2, ly2). From
   http://mathworld.wolfram.com/Point-LineDistance2-Dimensional.html
 }
 

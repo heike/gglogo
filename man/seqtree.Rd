@@ -5,7 +5,7 @@
   seqtree(sequences, pos = NULL, k)
 }
 \arguments{
-  \item{sequences,}{}
+  \item{sequences,}{vector of sequences}
 
   \item{pos}{vector of positions for the cluster. If NULL,
   the whole sequence is used}

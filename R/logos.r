@@ -26,6 +26,7 @@ splitSequence <- function(dframe, sequences) {
 #' @param elems character string of elements
 #' @param k alphabet size: 4 for DNA/RNA sequences, 21 for standard amino acids
 #' @param weight number of times each sequence is observed, defaults to 1 in case no weight is given
+#' @param method either "shannon" or "frequency" for Shannon information or relative frequency of element by position.
 #' @return extended data frame with additional information of shannon info in bits and each elements contribution to the total information
 #' @export
 #' @examples
@@ -52,7 +53,7 @@ calcInformation <- function(dframe, trt=NULL, pos, elems, k=4, weight = NULL, me
     freqByPos$info <- -log(1/k, base=2) - with(freqByPos, info)
     freqByPos$bits <- with(freqByPos, freq/total*info)
   }  
-  if (method == "relative")
+  if (method == "frequencey")
     freqByPos$info <- with(freqByPos, freq/total)
   
   freqByPos
@@ -83,6 +84,13 @@ logo <- function(sequences) {
 
 #' Sequence logo plots.
 #'
+#' @param mapping The aesthetic mapping, usually constructed with aes or aes_string. Only needs to be set at the layer level if you are overriding the plot defaults.
+#' @param data A layer specific dataset - only needed if you want to override the plot defaults, 
+#' @param stat The statistical transformation to use on the data for this layer, 
+#' @param position The position adjustment to use for overlappling points on this layer, 
+#' @param width maximum width of the letters, defaults to 0.9, 
+#' @param alpha amount of alpha blending used for putting letters on top of rectangle, defaults to 0.25,
+#' @param ... other arguments passed on to layer. This can include aesthetics whose values you want to set, not map. See layer for more details.
 #' @export
 #' @examples
 #' \donttest{
@@ -121,14 +129,7 @@ GeomLogo <- proto(ggplot2:::Geom, {
   draw <- function(., data = data, scales, coordinates, ...) { 
 #    print("draw")
     
-#     common <- unique(data.frame(
-#       colour = data$colour, 
-#       size = data$size, 
-#       linetype = data$linetype,
-#       fill = "white", #alpha(data$fill, data$alpha),  
-#       stringsAsFactors = FALSE
-#     ))
-    data(alphabet)
+    data(alphabet, package="gglogo")
     letter <- subset(alphabet, group %in% unique(data$label))
     if (nrow(letter) < 1) {
     #  warning(paste("unrecognized letter in alphabet:", unique(data$label), collapse=","))
@@ -178,26 +179,17 @@ GeomLogo <- proto(ggplot2:::Geom, {
   
 })
 
-#' calculation of all pieces necessary to plot a logo sequence plot
+#' Calculation of all pieces necessary to plot a logo sequence plot
 #' 
 #'
-#' @param scale if "area" (default), all vases have the same area (before trimming
-#'   the tails). If "count", areas are scaled proportionally to the number of
-#'   observations. If "width", all vases have the same maximum width.
-#' @param na.rm If \code{FALSE} (the default), removes missing values with
-#'    a warning. If \code{TRUE} silently removes missing values.
+#' @param mapping The aesthetic mapping, usually constructed with aes or aes_string. Only needs to be set at the layer level if you are overriding the plot defaults.
+#' @param data A layer specific dataset - only needed if you want to override the plot defaults, 
+#' @param geom The geometric object to use display the data,
+#' @param position The position adjustment to use for overlappling points on this layer, 
+#' @param width maximum width of the letters, defaults to 0.9, 
+#' @param  ... other arguments passed on to layer. This can include aesthetics whose values you want to set, not map. See layer for more details.
 #'
-#' @return A data frame with additional columns:
-#'   \item{density}{density estimate}
-#'   \item{fivenum}{five number summary for boxplots including a list of outliers if any}
-#'   \item{scaled}{density estimate, scaled to maximum of 1}
-#'   \item{count}{density * number of points - probably useless}
-#'   \item{vasewidth}{density scaled for the vase plot, according to area, counts
-#'                      or to a constant maximum width}
-#'   \item{n}{number of points}
-#'   \item{width}{width of vase bounding box}
-#' @seealso \code{\link{geom_vase}} for examples, and \code{\link{stat_density}}
-#'   for examples with data along the x axis.
+#' @return A proto object 
 #' @export
 #' @examples
 #' # See geom_logo for examples
@@ -205,14 +197,17 @@ GeomLogo <- proto(ggplot2:::Geom, {
 #' data(sequences)
 #' dm2 <- splitSequence(sequences, "peptide")
 #' dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
-#' ggplot(dm3, aes(x=position, y=bits, group=interaction(position, element))) + geom_logo()
+#' ggplot(dm3, aes(x=position, y=bits, label=element, group=interaction(position, element))) + geom_logo()
 stat_logo <- function (mapping = NULL, data = NULL, geom = "logo", position = "identity",
-                       width = 0.9, drop="FALSE", na.rm = FALSE, ...) {
-  StatLogo$new(mapping = mapping, data = data, geom = geom, position = position, width=width, drop=drop, 
-               na.rm = na.rm, ...)
+                       width = 0.9,  ...) {
+  StatLogo$new(mapping = mapping, data = data, geom = geom, position = position, width=width, ...)
 }
 
-#' @export
+#' Helper object
+#' 
+#' shouldn't be used by the user, but has to be exported.
+#' @return  proto object
+#' @export 
 StatLogo <- proto(ggplot2:::Stat, {
   objname <- "logo"
   
@@ -228,14 +223,6 @@ StatLogo <- proto(ggplot2:::Stat, {
                   ybase = max(ymin))
     data$ymin <- with(data, ymin-ybase)
     data$ymax <- with(data, ymax-ybase)
- #   browser()
-#     xi <- unique(data[,c("x", "width")])
-#     xi$w1 <- cumsum(xi$width)-xi$width 
-#     xi$w2 <- cumsum(xi$width)
-#     xi$w1 <- xi$w1*(max(data$x)-1)/max(xi$w1)
-#     xi$w2 <- xi$w2*(max(data$x)-1)/max(xi$w2)
-#     data$xmin <- with(data, xi$w1[x]+1)   
-#     data$xmax <- with(data, xi$w2[x]+1)   
      data$xmin <- with(data, x - width/2)   
      data$xmax <- with(data, x + width/2)   
     
@@ -257,7 +244,7 @@ StatLogo <- proto(ggplot2:::Stat, {
 
 #' Cluster sequences according to selected positions 
 #' 
-#' @param sequences, 
+#' @param sequences, vector of sequences
 #' @param pos vector of positions for the cluster. If NULL, the whole sequence is used
 #' @param k number of clusters
 #' @return a data frame containing the clustering in vector cl
@@ -275,6 +262,8 @@ StatLogo <- proto(ggplot2:::Stat, {
 #' dm3b$width <- dm3b$width/max(dm3b$width)
 #' ggplot(dm3b, aes(x=cl, y=bits, group=element, label=element, fill=Polarity)) + theme_bw() + geom_logo(aes(width=width)) + scale_fill_manual(values=cols) + facet_wrap(~position) 
 seqtree <- function(sequences, pos=NULL, k) {
+  Freq <- NA
+  
   extract <- function(sequences, pos){
     res <- ldply(pos, function(x) substr(sequences, x, x))
     unlist(llply(res, paste, collapse=""), use.names=FALSE)

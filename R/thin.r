@@ -21,15 +21,16 @@ simplify_rec <- function(points, tol = 0.01) {
   }  
 }
 
-#' Distamce between points and line
+#' Distance between point and line
 #' 
+#' Compute distance between point given as (px, py) and line spanned by points (lx1, ly1) and (lx2, ly2).
 #' From http://mathworld.wolfram.com/Point-LineDistance2-Dimensional.html
-#' @param px x coordinate of point
-#' @param py y coordinate of point
-#' @param lx_1, 
-#' @param ly_1, 
-#' @param lx_2, 
-#' @param ly_2 x and y coordinates of points spanning a line
+#' @param px x coordinate of  point outside the 
+#' @param py y coordinate of  point
+#' @param lx_1, x  coordinate of 1st point spanning a line
+#' @param ly_1, y  coordinate of 1st point spanning a line
+#' @param lx_2, x  coordinate of 2nd point spanning a line
+#' @param ly_2, y  coordinate of 2nd point spanning a line
 point_line_dist <- function(px, py, lx_1, ly_1, lx_2, ly_2) {
   abs((lx_2 - lx_1) * (ly_1 - py) - (lx_1 - px) * (ly_2 - ly_1)) /
     sqrt((lx_2 - lx_1) ^ 2 + (ly_2 - ly_1) ^ 2)
