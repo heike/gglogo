@@ -5,6 +5,30 @@
   geom_logo(mapping = NULL, data = NULL, stat = "logo",
     position = "identity", width = 0.9, alpha = 0.25, ...)
 }
+\arguments{
+  \item{mapping}{The aesthetic mapping, usually constructed
+  with aes or aes_string. Only needs to be set at the layer
+  level if you are overriding the plot defaults.}
+
+  \item{data}{A layer specific dataset - only needed if you
+  want to override the plot defaults,}
+
+  \item{stat}{The statistical transformation to use on the
+  data for this layer,}
+
+  \item{position}{The position adjustment to use for
+  overlappling points on this layer,}
+
+  \item{width}{maximum width of the letters, defaults to
+  0.9,}
+
+  \item{alpha}{amount of alpha blending used for putting
+  letters on top of rectangle, defaults to 0.25,}
+
+  \item{...}{other arguments passed on to layer. This can
+  include aesthetics whose values you want to set, not map.
+  See layer for more details.}
+}
 \description{
   Sequence logo plots.
 }

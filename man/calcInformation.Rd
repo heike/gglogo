@@ -21,6 +21,10 @@
 
   \item{weight}{number of times each sequence is observed,
   defaults to 1 in case no weight is given}
+
+  \item{method}{either "shannon" or "frequency" for Shannon
+  information or relative frequency of element by
+  position.}
 }
 \value{
   extended data frame with additional information of
