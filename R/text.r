@@ -31,19 +31,45 @@ scaleTo <- function(x, fromRange=range(x), toRange=c(0,1)) {
 
 #' Convert image matrix to a data frame
 #' 
-#' Generates a data frame from an image matrix. 
-#' @param image
-#' @return data frame with variables x, y, red, green, blue XXX need to figure itemization
+#' S3 method to create a data frame from an imagematrix object. 
+#' @param model imagematrix as e.g. returned from read.jpeg (ReadImages)
+#' @param data not used by this method
+#' @param ... not used by this method
+#' @S3method fortify imagematrix
+#' @method fortify imagematrix
+#' @return data frame 
+#' \itemize{
+#' \item x x coordinate in pixels
+#' \item y y coordinate in pixels (usually negative)
+#' \item red number vector in (0,1) describing the amount of red of the pixel in an RGB model
+#' \item green number vector in (0,1) describing the amount of green of the pixel in an RGB model
+#' \item blue number vector in (0,1) describing the amount of blue of the pixel in an RGB model
+#' }
+
 #' @export
-fortify <- function(image) {
-  dims <- dim(image)
-  imdf <- adply(image, .margins=1, function(x) x)
+fortify.imagematrix <- function(model, data, ...) {
+  dims <- dim(model)
+  imdf <- adply(model, .margins=1, function(x) x)
   imdf$x <- rep(1:dims[2], length=nrow(imdf)) 
   names(imdf) <- c("y", "red", "green", "blue", "x")
   imdf$y <- -as.numeric(as.character(imdf$y))
   imdf[,c("x", "y", "red", "green", "blue")]
 }
 
+#' Determine boundary between foreground and background in an image
+#' 
+#' @param imdf dataframe describing a pixellated image in x and y. Has to have columns x, y, and var
+#' @param var dimension along which foreground and background of a shape in the image are well separated. Usually one of 'red', 'green', or 'blue', but could be extended to any other numerical variable.
+#' @param threshold value specifying the cutoff along variable var. Values of var higher than the threshold are considered to belong to the foreground.
+#' @return subset of data frame imdf consisting of just boundary points:
+#' \itemize{
+#' \item x x coordinate in pixels
+#' \item y y coordinate in pixels (usually negative)
+#' \item red number vector in (0,1) describing the amount of red of the pixel in an RGB model
+#' \item green number vector in (0,1) describing the amount of green of the pixel in an RGB model
+#' \item blue number vector in (0,1) describing the amount of blue of the pixel in an RGB model
+#' }
+#' @export
 getOutline <- function(imdf, var="red", threshold=0.5) {
   stopifnot(c("x", "y") %in% names(imdf))
   ## define implicit bindings for variables - not necessary though, 

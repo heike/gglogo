@@ -1,0 +1,28 @@
+\name{fortify.imagematrix}
+\alias{fortify.imagematrix}
+\title{Convert image matrix to a data frame}
+\usage{
+  \method{fortify}{imagematrix} (model, data, ...)
+}
+\arguments{
+  \item{model}{imagematrix as e.g. returned from read.jpeg
+  (ReadImages)}
+
+  \item{data}{not used by this method}
+
+  \item{...}{not used by this method}
+}
+\value{
+  data frame \itemize{ \item x x coordinate in pixels \item
+  y y coordinate in pixels (usually negative) \item red
+  number vector in (0,1) describing the amount of red of
+  the pixel in an RGB model \item green number vector in
+  (0,1) describing the amount of green of the pixel in an
+  RGB model \item blue number vector in (0,1) describing
+  the amount of blue of the pixel in an RGB model }
+}
+\description{
+  S3 method to create a data frame from an imagematrix
+  object.
+}
+
