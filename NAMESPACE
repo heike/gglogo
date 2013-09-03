@@ -1,5 +1,6 @@
 export(StatLogo)
 export(calcInformation)
+export(fortify)
 export(geom_logo)
 export(letterObject)
 export(letterToPolygon)

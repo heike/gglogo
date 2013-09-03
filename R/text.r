@@ -29,16 +29,22 @@ scaleTo <- function(x, fromRange=range(x), toRange=c(0,1)) {
   (x-fromRange[1])/diff(fromRange)*diff(toRange) + toRange[1]
 }
 
-imageToDFrame <- function(letter) {
-  dims <- dim(letter)
-  imdf <- adply(letter, .margins=1, function(x) x)
+#' Convert image matrix to a data frame
+#' 
+#' Generates a data frame from an image matrix. 
+#' @param image
+#' @return data frame with variables x, y, red, green, blue XXX need to figure itemization
+#' @export
+fortify <- function(image) {
+  dims <- dim(image)
+  imdf <- adply(image, .margins=1, function(x) x)
   imdf$x <- rep(1:dims[2], length=nrow(imdf)) 
   names(imdf) <- c("y", "red", "green", "blue", "x")
   imdf$y <- -as.numeric(as.character(imdf$y))
   imdf[,c("x", "y", "red", "green", "blue")]
 }
 
-getOutline <- function(imdf, var, threshold) {
+getOutline <- function(imdf, var="red", threshold=0.5) {
   stopifnot(c("x", "y") %in% names(imdf))
   ## define implicit bindings for variables - not necessary though, 
   ## since all of the variables do exist at this point
@@ -194,7 +200,7 @@ simplifyPolygon <- function(points, tol=1) {
 #' print(qplot(x, y, geom="polygon", data = letter, fill=I("black"), order=order, alpha=I(0.8))+coord_equal())
 letterToPolygon <- function(ch, fontfamily="Helvetica", fontsize=576, tol=1, dim=c(480, 480), threshold=0.5, var="red") {  
   im <- letterObject(ch, fontfamily=fontfamily, fontsize=fontsize, dim=dim)
-  imdf <- imageToDFrame(im)
+  imdf <- fortify(im)
   outline <- getOutline(imdf, threshold=threshold, var=var)
 
   
