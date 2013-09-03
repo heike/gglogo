@@ -1,6 +1,7 @@
 S3method(fortify,imagematrix)
 export(StatLogo)
 export(calcInformation)
+export(determineOrder)
 export(geom_logo)
 export(getOutline)
 export(letterObject)
