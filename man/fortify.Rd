@@ -1,7 +1,10 @@
-\name{fortify.imagematrix}
+\name{fortify}
+\alias{fortify}
 \alias{fortify.imagematrix}
 \title{Convert image matrix to a data frame}
 \usage{
+  fortify(model, data, ...)
+
   \method{fortify}{imagematrix} (model, data, ...)
 }
 \arguments{

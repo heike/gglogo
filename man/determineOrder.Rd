@@ -10,7 +10,7 @@
   \item{y}{y coordinates}
 }
 \value{
-  data frame with elements x, y, and order
+  vector of indices for ordered traversion along border
 }
 \description{
   Greedy algorithm to connect points, with the idea that a

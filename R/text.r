@@ -35,8 +35,6 @@ scaleTo <- function(x, fromRange=range(x), toRange=c(0,1)) {
 #' @param model imagematrix as e.g. returned from read.jpeg (ReadImages)
 #' @param data not used by this method
 #' @param ... not used by this method
-#' @S3method fortify imagematrix
-#' @method fortify imagematrix
 #' @return data frame 
 #' \itemize{
 #' \item x x coordinate in pixels
@@ -45,8 +43,16 @@ scaleTo <- function(x, fromRange=range(x), toRange=c(0,1)) {
 #' \item green number vector in (0,1) describing the amount of green of the pixel in an RGB model
 #' \item blue number vector in (0,1) describing the amount of blue of the pixel in an RGB model
 #' }
-
 #' @export
+
+fortify<-function(model, data, ...){
+  UseMethod("fortify")
+}
+
+#' @rdname fortify
+#' @method fortify imagematrix
+#' @S3method fortify imagematrix
+
 fortify.imagematrix <- function(model, data, ...) {
   dims <- dim(model)
   imdf <- adply(model, .margins=1, function(x) x)
@@ -108,7 +114,7 @@ getOutline <- function(imdf, var="red", threshold=0.5) {
 #' Results depend on the starting point.
 #' @param x x coordinates
 #' @param y y coordinates
-#' @return data frame with elements x, y, and order
+#' @return vector of indices for ordered traversion along border
 #' @export
 determineOrder <- function (x, y) {
   determineNext <- function(now, left) {
@@ -126,15 +132,16 @@ determineOrder <- function (x, y) {
     order <- c(order, now)
     leftover <- leftover[-which(leftover==now)]
   }
-  
-  data.frame(x=x[order], y=y[order], order=1:length(order))
+
+  order(order)
 }
 
 identifyParts <- function(letterpath, tol = NULL) {
   ## define implicit bindings for variables - not necessary though, 
   ## since all of the variables do exist at this point
   group <- NA
-  
+  order <- NA
+  letterpath <- letterpath[order(letterpath$order),]
   letterpath$d <- 0
   letterpath$d[-1] <- diff(letterpath$x)^2 + diff(letterpath$y)^2
   
@@ -239,8 +246,8 @@ letterToPolygon <- function(ch, fontfamily="Helvetica", fontsize=576, tol=1, dim
 
   
     
-  letterpath <- determineOrder(outline$x, outline$y)
-  letterpath <- identifyParts(letterpath, tol=5) # puts group into letterpath
+  outline$order <- determineOrder(outline$x, outline$y)
+  letterpath <- identifyParts(outline, tol=5) # puts group into letterpath
   # thin polygons by part
   ## define implicit bindings for variables - not necessary though, 
   ## since all of the variables do exist at this point
