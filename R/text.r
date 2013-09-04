@@ -136,29 +136,35 @@ determineOrder <- function (x, y) {
   order(order)
 }
 
-identifyParts <- function(letterpath, tol = NULL) {
+#' Identify different parts of a polygon
+#' 
+#' @param data is a data frame with coordinates x, y, and order.
+#' @param tol numerical tolerance for minimal distance between groups. If this value is not specified, a tolerace is derived from the marginal frequencey break down of observed (squared) distances between consecutive points.
+#' @return data frame group variable is added to the input data
+#' @export
+identifyParts <- function(data, tol = NULL) {
   ## define implicit bindings for variables - not necessary though, 
   ## since all of the variables do exist at this point
   group <- NA
   order <- NA
-  letterpath <- letterpath[order(letterpath$order),]
-  letterpath$d <- 0
-  letterpath$d[-1] <- diff(letterpath$x)^2 + diff(letterpath$y)^2
+  data <- data[order(data$order),]
+  data$d <- 0
+  data$d[-1] <- diff(data$x)^2 + diff(data$y)^2
   
   # find different parts:
-  #  idx <- which(letterpath$d > quantile(letterpath$d, probs=0.9))
+  #  idx <- which(data$d > quantile(data$d, probs=0.9))
   if (is.null(tol)) {
-    dt <- as.numeric(names(table(letterpath$d)))
+    dt <- as.numeric(names(table(data$d)))
     tol <- dt[min(which(diff(dt)>2))]
   }
-  idx <- which(letterpath$d > tol)
-  letterpath$group <- rep(1:(length(idx)+1),  diff(c(1, idx, nrow(letterpath)+1)))
-  dg <- table(letterpath$group)
+  idx <- which(data$d > tol)
+  data$group <- rep(1:(length(idx)+1),  diff(c(1, idx, nrow(data)+1)))
+  dg <- table(data$group)
   idx <- which(dg < 2)
   if (length(idx) > 0) {
-    letterpath <- subset(letterpath, !(group %in% idx))
+    data <- subset(data, !(group %in% idx))
   }
-  letterpath
+  data
 }
 
 determineDirection <- function(x,y) {
@@ -214,7 +220,13 @@ mainPlusIslands <- function(letterpath) {
   lpath2
 }
 
-
+#' Douglas-Peucker algorithm adjusted fo polyons
+#' 
+#' Implementation of the Douglas-Peucker algorithm for line thinning
+#' http://en.wikipedia.org/wiki/Ramer-Douglas-Peucker_algorithm
+#' @param points matrix of x and y points
+#' @param tol tolerance
+#' @export
 simplifyPolygon <- function(points, tol=1) {
   # thin out polygon in two steps of Douglas-Pecker:
 #  source("thin.r")

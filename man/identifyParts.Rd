@@ -1,0 +1,23 @@
+\name{identifyParts}
+\alias{identifyParts}
+\title{Identify different parts of a polygon}
+\usage{
+  identifyParts(data, tol = NULL)
+}
+\arguments{
+  \item{data}{is a data frame with coordinates x, y, and
+  order.}
+
+  \item{tol}{numerical tolerance for minimal distance
+  between groups. If this value is not specified, a
+  tolerace is derived from the marginal frequencey break
+  down of observed (squared) distances between consecutive
+  points.}
+}
+\value{
+  data frame group variable is added to the input data
+}
+\description{
+  Identify different parts of a polygon
+}
+
