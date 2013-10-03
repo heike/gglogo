@@ -196,19 +196,25 @@ completePolygon <- function(polygon) {
   polygon
 }
 
-mainPlusIslands <- function(letterpath) {
+
+#' Set the orientation of a polygon
+#' 
+#' @param imdf dataframe describing a pixellated image in x and y. Has to have columns x, y, and group
+#' @return reordered version of data frame imdf consistent with an assumption of group 1 being the main outline and any other groups being cutouts
+#' @export
+mainPlusIslands <- function(imdf) {
   group <- NA
   
   # assume that first part is the main with additional islands
-  main <- completePolygon(unique(subset(letterpath, group==1)))
+  main <- completePolygon(unique(subset(imdf, group==1)))
   main <- setDirection(main, 1)
   main <- main[order(main$order),]
   
   lpath2 <- main
   # now make islands of the small groups
-  if (max(letterpath$group) > 1) {
-    islands <- llply(2:max(letterpath$group), function(i) {
-      l2 <- completePolygon(unique(subset(letterpath, group==i)))
+  if (max(imdf$group) > 1) {
+    islands <- llply(2:max(imdf$group), function(i) {
+      l2 <- completePolygon(unique(subset(imdf, group==i)))
       l2 <- setDirection(l2, -1)
       l2[order(l2$order),]    
     })
