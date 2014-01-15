@@ -53,7 +53,7 @@ calcInformation <- function(dframe, trt=NULL, pos, elems, k=4, weight = NULL, me
     freqByPos$info <- -log(1/k, base=2) - with(freqByPos, info)
     freqByPos$bits <- with(freqByPos, freq/total*info)
   }  
-  if (method == "frequencey")
+  if (method == "frequency")
     freqByPos$info <- with(freqByPos, freq/total)
   
   freqByPos
