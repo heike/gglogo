@@ -4,14 +4,14 @@
 #' @param dframe data frame of peptide (or any other) sequences and some treatment factors
 #' @param sequences character string or index for the character vector of (peptide) sequence
 #' @export
+#' @import plyr
+#' @import reshape2
 #' @examples
 #' data(sequences)
 #' dm2 <- splitSequence(sequences, "peptide")
 splitSequence <- function(dframe, sequences) {
   seqs <- as.character(dframe[,sequences])
-  require(plyr)
   seqVars <-  data.frame(dframe, ldply(seqs, function(x) unlist(strsplit(x, split=""))))
-  require(reshape2)
   dm <- melt(seqVars, id.vars=names(dframe))
   names(dm) <- c(names(dframe), "position", "element")
   levels(dm$position) <- gsub("V"," ", levels(dm$position))
@@ -64,9 +64,11 @@ calcInformation <- function(dframe, trt=NULL, pos, elems, k=4, weight = NULL, me
 #' Simple logo plot of sequences. For more complicated sequence logos, such as with treatment comparisons or subsets see geom_logo.
 #' @param sequences vector of text sequences, for which consensus logo is to be shown
 #' @return ggplot2 object for simple sequence
+#' @import ggplot2
 #' @export 
 #' @examples
 #' data(sequences)
+#' library(ggplot2)
 #' library(RColorBrewer)
 #' cols <- rep(brewer.pal(12, name="Paired"),22)
 #' logo(sequences$peptide) + aes(fill=element) + scale_fill_manual(values=cols)
@@ -103,14 +105,27 @@ logo <- function(sequences) {
 #' cols <- brewer.pal(10,"Paired")[c(1,2,7,8)]
 #' data(aacids)
 #' dm3b <- merge(dm3, aacids, by.x="element", by.y="AA", all.x=T)
-#' ggplot(dm3b, aes(x=position, y=bits, group=element, label=element, fill=interaction(Polarity, Water))) + geom_logo() + scale_fill_manual(values=cols)
+#' ggplot(dm3b, aes(x=position, y=bits, group=element, 
+#'      label=element, fill=interaction(Polarity, Water))) +
+#'      geom_logo() + scale_fill_manual(values=cols)
 #' dm4 <- calcInformation(dm2, pos="position", elems="element", trt="class", k=21)
 #' cols2 <- scales::alpha(cols, 0.8)
 #' dm5 <- merge(dm4, aacids, by.x="element", by.y="AA", all.x=T)
-#' ggplot(dm4, aes(x=class, y=bits, group=element, label=element, fill=element), alpha=0.8) + geom_logo() + scale_fill_manual(values=cols) + facet_wrap(~position, ncol=18)
-#' ggplot(dm4, aes(x=position, y=bits, group=element, label=element, fill=element), alpha=0.8) + geom_logo() + scale_fill_manual(values=scales::alpha(cols, 0.8)) + facet_wrap(~class, ncol=1) + theme_bw()
-#' ggplot(dm5, aes(x=class, y=bits, group=element, label=element, fill=interaction(Polarity, Water)), alpha=0.8) + geom_logo() + scale_fill_brewer("Amino-acids properties", palette="Paired") + facet_wrap(~position, ncol=18) + theme(legend.position="bottom") + xlab("")
-#' ggplot(dm5, aes(x=class, y=bits, group=element, label=element, fill=interaction(Water, Polarity)), alpha=0.8) + geom_logo() + scale_fill_manual("Amino acids properties", values=cols) + facet_wrap(~position, ncol=18) + theme_bw() + theme(legend.position="bottom") + xlab("") + ylab("Shannon information in bits")
+#' ggplot(dm4, aes(x=class, y=bits, group=element, 
+#'      label=element, fill=element), alpha=0.8) + 
+#'      geom_logo() + scale_fill_manual(values=cols) + facet_wrap(~position, ncol=18)
+#' ggplot(dm4, aes(x=position, y=bits, group=element, label=element, fill=element), alpha=0.8) + 
+#'      geom_logo() + scale_fill_manual(values=scales::alpha(cols, 0.8)) + 
+#'      facet_wrap(~class, ncol=1) + theme_bw()
+#' ggplot(dm5, aes(x=class, y=bits, group=element, 
+#'      label=element, fill=interaction(Polarity, Water)), alpha=0.8) + 
+#'      geom_logo() + scale_fill_brewer("Amino-acids properties", palette="Paired") + 
+#'      facet_wrap(~position, ncol=18) + theme(legend.position="bottom") + xlab("")
+#' ggplot(dm5, aes(x=class, y=bits, group=element, 
+#'      label=element, fill=interaction(Water, Polarity)), alpha=0.8) + 
+#'      geom_logo() + scale_fill_manual("Amino acids properties", values=cols) + 
+#'      facet_wrap(~position, ncol=18) + theme_bw() + theme(legend.position="bottom") + 
+#'      xlab("") + ylab("Shannon information in bits")
 #' }
 
 geom_logo <- function (mapping = NULL, data = NULL, stat = "logo", position = "identity", width = 0.9, alpha=0.25,
@@ -119,6 +134,7 @@ geom_logo <- function (mapping = NULL, data = NULL, stat = "logo", position = "i
                position = position, width= width, ...)
 }
 
+#' @import proto
 GeomLogo <- proto(ggplot2:::Geom, {
   objname <- "logo"
   
@@ -194,9 +210,11 @@ GeomLogo <- proto(ggplot2:::Geom, {
 #' # See geom_logo for examples
 #' # Generate data
 #' data(sequences)
+#' library(ggplot2)
 #' dm2 <- splitSequence(sequences, "peptide")
 #' dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
-#' ggplot(dm3, aes(x=position, y=bits, label=element, group=interaction(position, element))) + geom_logo()
+#' ggplot(dm3, aes(x=position, y=bits, label=element, group=interaction(position, element))) + 
+#'      geom_logo()
 stat_logo <- function (mapping = NULL, data = NULL, geom = "logo", position = "identity",
                        width = 0.9,  ...) {
   StatLogo$new(mapping = mapping, data = data, geom = geom, position = position, width=width, ...)

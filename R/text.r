@@ -5,14 +5,14 @@
 #' @param fontsize by default 576. If the resulting string exceeds the boundary of the matrix returned, reduced font size
 #' @param dim vector of length two specifying width and height (in pixels) of the temporary jpg file created for the letter. Defaults to 480 x 480 pixels.
 #' @return three dimensional matrix of dimension 480 x 480 x 3 of the pixel values, black background and white letter 
+#' @importFrom jpeg readJPEG
+#' @import grid
 #' @export
 #' @examples
 #' plot(letterObject("g", fontfamily="Garamond", fontsize=400))
 #' plot(letterObject("q", fontsize=400))
 #' plot(letterObject("B"))
 letterObject <- function(ch, fontfamily="Helvetica", fontsize=576, dim=c(480, 480)) {
-  require(ReadImages)
-  require(grid)
   fname <- tempfile(pattern = "file", fileext=".jpg")
   jpeg(filename=fname, width=dim[1], height=dim[2])
   grid.newpage()
@@ -21,7 +21,7 @@ letterObject <- function(ch, fontfamily="Helvetica", fontsize=576, dim=c(480, 48
   
   grid.text(ch, 0.5,0.5, gp=gpar(fontsize=fontsize, fontfamily=fontfamily, col="white"))
   dev.off()
-  read.jpeg(fname)
+  readJPEG(fname)
 }
 
 scaleTo <- function(x, fromRange=range(x), toRange=c(0,1)) {
@@ -44,16 +44,13 @@ scaleTo <- function(x, fromRange=range(x), toRange=c(0,1)) {
 #' \item blue number vector in (0,1) describing the amount of blue of the pixel in an RGB model
 #' }
 #' @export
-
 fortify<-function(model, data, ...){
   UseMethod("fortify")
 }
 
 #' @rdname fortify
-#' @method fortify imagematrix
-#' @S3method fortify imagematrix
-
-fortify.imagematrix <- function(model, data, ...) {
+#' @export
+fortify.default <- function(model, data, ...) {
   dims <- dim(model)
   imdf <- adply(model, .margins=1, function(x) x)
   imdf$x <- rep(1:dims[2], length=nrow(imdf)) 
@@ -253,16 +250,17 @@ simplifyPolygon <- function(points, tol=1) {
 #' @param dim vector of length two specifying width and height (in pixels) of the temporary jpg file created for the letter. Defaults to 480 x 480 pixels.
 #' @param threshold numerical cutoff between 0 and 1
 #' @param var one of "red", "green", "blue".
+#' @import ggplot2
 #' @export
 #' @examples
-#' letter <- letterToPolygon("R", fontfamily="Garamond")
-#' print(qplot(x, y, geom="polygon", data = letter, fill=I("black"), order=order, alpha=I(0.8))+coord_equal())
+#' library(ggplot2)
+#' letter <- letterToPolygon("R", fontfamily="Helvetica")
+#' qplot(x, y, geom="polygon", data = letter, fill=I("black"), order=order, alpha=I(0.8))+
+#'      coord_equal()
 letterToPolygon <- function(ch, fontfamily="Helvetica", fontsize=576, tol=1, dim=c(480, 480), threshold=0.5, var="red") {  
   im <- letterObject(ch, fontfamily=fontfamily, fontsize=fontsize, dim=dim)
   imdf <- fortify(im)
   outline <- getOutline(imdf, threshold=threshold, var=var)
-
-  
     
   outline$order <- determineOrder(outline$x, outline$y)
   letterpath <- identifyParts(outline, tol=5) # puts group into letterpath
@@ -272,8 +270,6 @@ letterToPolygon <- function(ch, fontfamily="Helvetica", fontsize=576, tol=1, dim
   group <- NA
   letterpath2 <- ddply(letterpath, .(group),  simplifyPolygon, tol=tol)
   lpath2 <- mainPlusIslands(letterpath2)
-#  alphabet <-rbind(alphabet,  data.frame(lpath2, group=ch, region=ch))
-#  print(qplot(x, y, geom="polygon", data = lpath2, group=1, fill=I("black"), order=order, alpha=I(0.8))+coord_equal())
-  #scan()
+
   lpath2
 }

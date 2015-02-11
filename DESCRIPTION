@@ -1,15 +1,15 @@
 Package: gglogo
 Maintainer: Heike Hofmann <hofmann@iastate.edu>
 Author: Heike Hofmann
-Version: 0.9
-License: MIT
+Version: 0.9.1
+License: GPL-3
 Title: Geom for logo sequence plots
-Depends:
+Imports:
     plyr,
     reshape2,
     ggplot2,
     proto,
-    ReadImages,
+    jpeg,
     grid
 Suggests:
     biovizBase,
