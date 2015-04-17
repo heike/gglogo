@@ -10,11 +10,15 @@ Imports:
     ggplot2,
     proto,
     jpeg,
+    scales,
     grid
 Suggests:
     biovizBase,
     RColorBrewer
-Description: Functions to visualize sequences in (modified) logo plots
+Description: Visualize sequences in (modified) logo plots. The design choices
+    used by these logo plots allow sequencing data to be more easily analyzed.
+    Because it is integrated into the ggplot geom framework, these logo plots
+    support native features such as facetting.
 Collate:
     'logos.r'
     'text.r'

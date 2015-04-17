@@ -94,6 +94,7 @@ logo <- function(sequences) {
 #' @param alpha amount of alpha blending used for putting letters on top of rectangle, defaults to 0.25,
 #' @param ... other arguments passed on to layer. This can include aesthetics whose values you want to set, not map. See layer for more details.
 #' @export
+#' @importFrom scales alpha
 #' @examples
 #' \donttest{
 #' data(sequences)
