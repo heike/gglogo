@@ -31,8 +31,8 @@ scaleTo <- function(x, fromRange=range(x), toRange=c(0,1)) {
 
 #' Convert image matrix to a data frame
 #' 
-#' S3 method to create a data frame from an imagematrix object. 
-#' @param model imagematrix as e.g. returned from read.jpeg (ReadImages)
+#' S3 method to create a data frame from a 3d array. 
+#' @param model array as e.g. returned from readJPEG
 #' @param data not used by this method
 #' @param ... not used by this method
 #' @return data frame 
