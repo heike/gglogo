@@ -35,7 +35,7 @@ splitSequence <- function(dframe, sequences) {
 #' dm3 <- calcInformation(dm2, pos="position", trt="class", elems="element", k=21)
 #' # precursor to a logo plot:
 #' library(ggplot2)
-#' library(biovizBase)
+#' # library(biovizBase)
 #' 
 calcInformation <- function(dframe, trt=NULL, pos, elems, k=4, weight = NULL, method="shannon") {
   if (is.null(weight)) dframe$wt <- 1
@@ -100,8 +100,8 @@ logo <- function(sequences) {
 #' data(sequences)
 #' dm2 <- splitSequence(sequences, "peptide")
 #' dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
-#' library(biovizBase)
-#' cols <- getBioColor(type="AA_ALPHABET")
+#' #library(biovizBase)
+#' #cols <- getBioColor(type="AA_ALPHABET")
 #' library(RColorBrewer)
 #' cols <- brewer.pal(10,"Paired")[c(1,2,7,8)]
 #' data(aacids)

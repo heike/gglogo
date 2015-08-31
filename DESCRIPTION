@@ -1,7 +1,7 @@
 Package: gglogo
 Maintainer: Heike Hofmann <hofmann@iastate.edu>
 Author: Heike Hofmann
-Version: 0.9.1
+Version: 0.1.1
 License: GPL-3
 Title: Geom for logo sequence plots
 Imports:
@@ -13,7 +13,6 @@ Imports:
     scales,
     grid
 Suggests:
-    biovizBase,
     RColorBrewer
 Description: Visualize sequences in (modified) logo plots. The design choices
     used by these logo plots allow sequencing data to be more easily analyzed.

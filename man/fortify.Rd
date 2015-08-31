@@ -10,7 +10,7 @@ fortify(model, data, ...)
 \method{fortify}{default}(model, data, ...)
 }
 \arguments{
-\item{model}{imagematrix as e.g. returned from read.jpeg (ReadImages)}
+\item{model}{array as e.g. returned from readJPEG}
 
 \item{data}{not used by this method}
 
@@ -27,6 +27,6 @@ data frame
 }
 }
 \description{
-S3 method to create a data frame from an imagematrix object.
+S3 method to create a data frame from a 3d array.
 }
 

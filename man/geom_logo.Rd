@@ -30,8 +30,8 @@ Sequence logo plots.
 data(sequences)
 dm2 <- splitSequence(sequences, "peptide")
 dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
-library(biovizBase)
-cols <- getBioColor(type="AA_ALPHABET")
+#library(biovizBase)
+#cols <- getBioColor(type="AA_ALPHABET")
 library(RColorBrewer)
 cols <- brewer.pal(10,"Paired")[c(1,2,7,8)]
 data(aacids)
