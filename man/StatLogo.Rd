@@ -4,7 +4,7 @@
 \name{StatLogo}
 \alias{StatLogo}
 \title{Helper object}
-\format{\preformatted{Classes 'proto', 'environment' <environment: 0x119259b48> 
+\format{\preformatted{Classes 'proto', 'environment' <environment: 0x125759d48> 
 }}
 \usage{
 StatLogo
