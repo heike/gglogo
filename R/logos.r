@@ -92,15 +92,14 @@ logo <- function(sequences) {
 StatLogo <- ggproto("StatLogo", Stat,
   setup_data = function(data, params) {
     data <- remove_missing(data, na.rm, "y", name = "stat_logo", finite = TRUE)
-    data <- data[with(data, order(x, y)),]   
-    data <- ddply(data, .(x), transform, 
+    data <- data[with(data, order(group, x, y)),]   
+    data <- ddply(data, .(group, x), transform, 
                   ymax = cumsum(y))
     data$ymin <- with(data, ymax-y)
-    data <- ddply(data, .(x), transform, 
+    data <- ddply(data, .(group, x), transform, 
                   ybase = max(ymin))
     data$ymin <- with(data, ymin-ybase)
     data$ymax <- with(data, ymax-ybase)
-#browser()
     data$xmin <- with(data, x - params$width/2)   
     data$xmax <- with(data, x + params$width/2)
     
@@ -109,7 +108,6 @@ StatLogo <- ggproto("StatLogo", Stat,
   compute_group = function(data, scales, params, na.rm = FALSE, width = 0.9, ...) {
      data
   },
-  
   required_aes = c("x", "y")
 )
 
@@ -224,7 +222,7 @@ GeomLogo <- ggproto("GeomLogo", Geom,
 #' dm5 <- merge(dm4, aacids, by.x="element", by.y="AA", all.x=T)
 #' ggplot(dm4, aes(x=class, y=bits, group=element, 
 #'      label=element, fill=element), alpha=0.8) + 
-#'      geom_logo() + scale_fill_manual(values=cols) + facet_wrap(~position, ncol=18)
+#'      geom_logo() + facet_wrap(~position, ncol=18)  + scale_fill_manual(values=cols)
 #' ggplot(dm4, aes(x=position, y=bits, group=element, label=element, fill=element), alpha=0.8) + 
 #'      geom_logo() + scale_fill_manual(values=alpha(cols, 0.8)) + 
 #'      facet_wrap(~class, ncol=1) + theme_bw()
