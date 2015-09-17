@@ -172,8 +172,8 @@ GeomLogo <- ggproto("GeomLogo", Geom,
       letter$group <- interaction(xx$ROWID, letter$group)
       letter
     })
-    #  browser()
-    
+
+    letterpoly$alpha <- 0.7 # hard re-write
     letterpoly$fill <- alpha("black", 0.7) # alpha(letterpoly$fill, letterpoly$alpha) #"white" 
     letterpoly$colour <- NA #"white"
     letterpoly$size <- 0.5    
