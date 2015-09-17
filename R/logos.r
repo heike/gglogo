@@ -154,21 +154,22 @@ GeomLogo <- ggproto("GeomLogo", Geom,
   
   draw_panel = function(data, panel_scales, coord, ...) {
     data(alphabet, envir = environment())
-#    browser()
+    browser()
     #save(data, file = "testdata.RData")
     #save(panel_scales, file = "panelscales.RData")
     #save(coord, file = "coord.RData")
     
-    letter <- subset(alphabet, group %in% unique(data$label))
-    if (nrow(letter) < 1) {
-      #  warning(paste("unrecognized letter in alphabet:", unique(data$label), collapse=","))
-      letter <- alphabet[1,]
-    }
+    
     data$ROWID <- 1:nrow(data)
-    letterpoly <- adply(data, .margins=1, function(x) {
-      letter$x <- gglogo:::scaleTo(letter$x, fromRange=c(0,1), toRange=c(x$xmin, x$xmax))
-      letter$y <- gglogo:::scaleTo(letter$y, toRange=c(x$ymin, x$ymax))
-      letter$group <- interaction(x$ROWID, letter$group)
+    letterpoly <- adply(data, .margins=1, function(xx) {
+      letter <- subset(alphabet, group %in% unique(xx$label))
+      if (nrow(letter) < 1) {
+        #  warning(paste("unrecognized letter in alphabet:", unique(data$label), collapse=","))
+        letter <- alphabet[1,]
+      }
+      letter$x <- gglogo:::scaleTo(letter$x, fromRange=c(0,1), toRange=c(xx$xmin, xx$xmax))
+      letter$y <- gglogo:::scaleTo(letter$y, toRange=c(xx$ymin, xx$ymax))
+      letter$group <- interaction(xx$ROWID, letter$group)
       letter
     })
     #  browser()
