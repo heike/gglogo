@@ -150,7 +150,7 @@ stat_logo <- function(mapping = NULL, data = NULL, geom = "logo",
 GeomLogo <- ggproto("GeomLogo", Geom,
   required_aes = c("x", "y", "group", "label"),
   default_aes = aes(weight = 1, colour = "grey80", fill = "white", size = 0.1, alpha = 0.25, width = 0.9, shape = 16, linetype = "solid"),
-  draw_key = draw_key_blank,
+  draw_key = draw_key_rect,
   
   draw_panel = function(data, panel_scales, coord, ...) {
     data(alphabet, envir = environment())
@@ -217,7 +217,7 @@ GeomLogo <- ggproto("GeomLogo", Geom,
 #' dm3b <- merge(dm3, aacids, by.x="element", by.y="AA", all.x=T)
 #' ggplot(dm3b, aes(x=position, y=bits, group=element, 
 #'      label=element, fill=interaction(Polarity, Water))) +
-#'      geom_logo() + scale_fill_manual(values=cols)
+#'      geom_logo() + scale_fill_manual(values=brewer.pal(10,"Paired"))
 #' dm4 <- calcInformation(dm2, pos="position", elems="element", trt="class", k=21)
 #' cols2 <- alpha(cols, 0.8)
 #' dm5 <- merge(dm4, aacids, by.x="element", by.y="AA", all.x=T)
