@@ -6,7 +6,9 @@
 #' @param dim vector of length two specifying width and height (in pixels) of the temporary jpg file created for the letter. Defaults to 480 x 480 pixels.
 #' @return three dimensional matrix of dimension 480 x 480 x 3 of the pixel values, black background and white letter 
 #' @importFrom jpeg readJPEG
-#' @import grid
+#' @importFrom grid grid.newpage
+#' @importFrom grid grid.rect
+#' @importFrom grid grid.text
 #' @export
 #' @examples
 #' plot(letterObject("g", fontfamily="Garamond", fontsize=400))

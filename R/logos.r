@@ -135,8 +135,11 @@ geom_logo <- function (mapping = NULL, data = NULL, stat = "logo", position = "i
                position = position, width= width, ...)
 }
 
-#' @import proto
 GeomLogo <- proto(ggplot2:::Geom, {
+  required_aes <- c("x", "y", "group", "label")
+  default_aes <- function(.) aes(weight=1, colour="grey80", fill="white", size=0.1, alpha = NA, shape = 16, linetype = "solid")
+  draw_key = draw_key_blank
+    
   objname <- "logo"
   
   reparameterise <- function(., df, params) {
@@ -190,8 +193,6 @@ GeomLogo <- proto(ggplot2:::Geom, {
   
   default_stat <- function(.) StatLogo
   default_pos <- function(.) PositionIdentity
-  default_aes <- function(.) aes(weight=1, colour="grey80", fill="white", size=0.1, alpha = NA, shape = 16, linetype = "solid")
-  required_aes <- c("x", "y", "group", "label")
   
 })
 
