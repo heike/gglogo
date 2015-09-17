@@ -38,12 +38,12 @@ dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
 #library(biovizBase)
 #cols <- getBioColor(type="AA_ALPHABET")
 library(RColorBrewer)
-cols <- brewer.pal(10,"Paired")[c(1,2,7,8)]
+cols <- brewer.pal(10,"Paired")
 data(aacids)
 dm3b <- merge(dm3, aacids, by.x="element", by.y="AA", all.x=T)
 ggplot(dm3b, aes(x=position, y=bits, group=element,
      label=element, fill=interaction(Polarity, Water))) +
-     geom_logo() + scale_fill_manual(values=brewer.pal(10,"Paired"))
+     geom_logo() + scale_fill_manual(values=cols)
 dm4 <- calcInformation(dm2, pos="position", elems="element", trt="class", k=21)
 cols2 <- alpha(cols, 0.8)
 dm5 <- merge(dm4, aacids, by.x="element", by.y="AA", all.x=T)
