@@ -6,7 +6,9 @@
 #' @param dim vector of length two specifying width and height (in pixels) of the temporary jpg file created for the letter. Defaults to 480 x 480 pixels.
 #' @return three dimensional matrix of dimension 480 x 480 x 3 of the pixel values, black background and white letter 
 #' @importFrom jpeg readJPEG
-#' @import grid
+#' @importFrom grid grid.newpage
+#' @importFrom grid grid.rect
+#' @importFrom grid grid.text
 #' @export
 #' @examples
 #' plot(letterObject("g", fontfamily="Garamond", fontsize=400))
@@ -255,7 +257,7 @@ simplifyPolygon <- function(points, tol=1) {
 #' @examples
 #' library(ggplot2)
 #' letter <- letterToPolygon("R", fontfamily="Helvetica")
-#' qplot(x, y, geom="polygon", data = letter, fill=I("black"), order=order, alpha=I(0.8))+
+#' qplot(x, y, geom="polygon", data = letter, fill=I("black"), alpha=I(0.8))+
 #'      coord_equal()
 letterToPolygon <- function(ch, fontfamily="Helvetica", fontsize=576, tol=1, dim=c(480, 480), threshold=0.5, var="red") {  
   im <- letterObject(ch, fontfamily=fontfamily, fontsize=fontsize, dim=dim)
