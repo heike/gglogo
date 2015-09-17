@@ -154,7 +154,7 @@ GeomLogo <- ggproto("GeomLogo", Geom,
   
   draw_panel = function(data, panel_scales, coord, ...) {
     data(alphabet, envir = environment())
-    browser()
+#    browser()
     #save(data, file = "testdata.RData")
     #save(panel_scales, file = "panelscales.RData")
     #save(coord, file = "coord.RData")
