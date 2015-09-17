@@ -136,7 +136,7 @@ StatLogo <- ggproto("StatLogo", Stat,
 #' dm2 <- splitSequence(sequences, "peptide")
 #' dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
 #' ggplot(dm3, aes(x=position, y=bits, label=element, group=interaction(position, element))) + 
-#'      geom_logo()
+#'      geom_logo(alpha=0.5)
 stat_logo <- function(mapping = NULL, data = NULL, geom = "logo",
                       position = "identity", show.legend = NA, inherit.aes = TRUE, width = 0.9, ...) {
     layer(
@@ -173,11 +173,12 @@ GeomLogo <- ggproto("GeomLogo", Geom,
       letter
     })
 
+    # get alpha in rectangle, not the letters
     letterpoly$alpha <- 0.7 # hard re-write
     letterpoly$fill <- alpha("black", 0.7) # alpha(letterpoly$fill, letterpoly$alpha) #"white" 
     letterpoly$colour <- NA #"white"
     letterpoly$size <- 0.5    
-    
+
     grobTree(
       GeomRect$draw_panel(data, panel_scales, coord),
       GeomPolygon$draw_panel(letterpoly, panel_scales, coord)
@@ -242,6 +243,6 @@ geom_logo <- function (mapping = NULL, data = NULL, stat = "logo", position = "i
     layer(
         geom = GeomLogo, mapping = mapping,  data = data, stat = stat, 
         position = position, show.legend = show.legend, inherit.aes = inherit.aes,
-        params = list(width = width, ...)
+        params = list(width = width, alpha=alpha,  ...)
     )
 }

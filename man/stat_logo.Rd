@@ -39,6 +39,6 @@ library(ggplot2)
 dm2 <- splitSequence(sequences, "peptide")
 dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
 ggplot(dm3, aes(x=position, y=bits, label=element, group=interaction(position, element))) +
-     geom_logo()
+     geom_logo(alpha=0.5)
 }
 
