@@ -5,7 +5,8 @@
 \title{Sequence logo plots.}
 \usage{
 geom_logo(mapping = NULL, data = NULL, stat = "logo",
-  position = "identity", width = 0.9, alpha = 0.25, ...)
+  position = "identity", show.legend = NA, inherit.aes = TRUE,
+  width = 0.9, alpha = 0.25, ...)
 }
 \arguments{
 \item{mapping}{The aesthetic mapping, usually constructed with aes or aes_string. Only needs to be set at the layer level if you are overriding the plot defaults.}
@@ -15,6 +16,10 @@ geom_logo(mapping = NULL, data = NULL, stat = "logo",
 \item{stat}{The statistical transformation to use on the data for this layer,}
 
 \item{position}{The position adjustment to use for overlappling points on this layer,}
+
+\item{show.legend}{Whether to show the legend or not}
+
+\item{inherit.aes}{Whether to inherit the aes or not}
 
 \item{width}{maximum width of the letters, defaults to 0.9,}
 
@@ -40,13 +45,13 @@ ggplot(dm3b, aes(x=position, y=bits, group=element,
      label=element, fill=interaction(Polarity, Water))) +
      geom_logo() + scale_fill_manual(values=cols)
 dm4 <- calcInformation(dm2, pos="position", elems="element", trt="class", k=21)
-cols2 <- scales::alpha(cols, 0.8)
+cols2 <- alpha(cols, 0.8)
 dm5 <- merge(dm4, aacids, by.x="element", by.y="AA", all.x=T)
 ggplot(dm4, aes(x=class, y=bits, group=element,
      label=element, fill=element), alpha=0.8) +
      geom_logo() + scale_fill_manual(values=cols) + facet_wrap(~position, ncol=18)
 ggplot(dm4, aes(x=position, y=bits, group=element, label=element, fill=element), alpha=0.8) +
-     geom_logo() + scale_fill_manual(values=scales::alpha(cols, 0.8)) +
+     geom_logo() + scale_fill_manual(values=alpha(cols, 0.8)) +
      facet_wrap(~class, ncol=1) + theme_bw()
 ggplot(dm5, aes(x=class, y=bits, group=element,
      label=element, fill=interaction(Polarity, Water)), alpha=0.8) +

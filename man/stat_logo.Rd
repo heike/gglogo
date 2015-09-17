@@ -5,7 +5,8 @@
 \title{Calculation of all pieces necessary to plot a logo sequence plot}
 \usage{
 stat_logo(mapping = NULL, data = NULL, geom = "logo",
-  position = "identity", width = 0.9, ...)
+  position = "identity", show.legend = NA, inherit.aes = TRUE,
+  width = 0.9, ...)
 }
 \arguments{
 \item{mapping}{The aesthetic mapping, usually constructed with aes or aes_string. Only needs to be set at the layer level if you are overriding the plot defaults.}
@@ -15,6 +16,10 @@ stat_logo(mapping = NULL, data = NULL, geom = "logo",
 \item{geom}{The geometric object to use display the data,}
 
 \item{position}{The position adjustment to use for overlappling points on this layer,}
+
+\item{show.legend}{Whether to show the legend or not}
+
+\item{inherit.aes}{Whether to inherit the aes or not}
 
 \item{width}{maximum width of the letters, defaults to 0.9,}
 

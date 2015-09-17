@@ -4,7 +4,18 @@
 \name{StatLogo}
 \alias{StatLogo}
 \title{Helper object}
-\format{\preformatted{Classes 'proto', 'environment' <environment: 0x125759d48> 
+\format{\preformatted{Classes 'StatLogo', 'Stat', 'ggproto' <ggproto object: Class StatLogo, Stat>
+    compute_group: function
+    compute_layer: function
+    compute_panel: function
+    default_aes: uneval
+    non_missing_aes: 
+    parameters: function
+    required_aes: x y
+    retransform: TRUE
+    setup_data: function
+    setup_params: function
+    super:  <ggproto object: Class Stat> 
 }}
 \usage{
 StatLogo

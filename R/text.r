@@ -257,7 +257,7 @@ simplifyPolygon <- function(points, tol=1) {
 #' @examples
 #' library(ggplot2)
 #' letter <- letterToPolygon("R", fontfamily="Helvetica")
-#' qplot(x, y, geom="polygon", data = letter, fill=I("black"), order=order, alpha=I(0.8))+
+#' qplot(x, y, geom="polygon", data = letter, fill=I("black"), alpha=I(0.8))+
 #'      coord_equal()
 letterToPolygon <- function(ch, fontfamily="Helvetica", fontsize=576, tol=1, dim=c(480, 480), threshold=0.5, var="red") {  
   im <- letterObject(ch, fontfamily=fontfamily, fontsize=fontsize, dim=dim)
