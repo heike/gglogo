@@ -90,23 +90,27 @@ logo <- function(sequences) {
 #' @export 
 #' 
 StatLogo <- ggproto("StatLogo", Stat,
-                    compute_group = function(data, scales, params, na.rm = FALSE, width = 0.9, ...) {
-                        data <- remove_missing(data, na.rm, "y", name = "stat_logo", finite = TRUE)
-                        data <- data[with(data, order(x, y)),]   
-                        data <- ddply(data, .(x), transform, 
-                                      ymax = cumsum(y))
-                        data$ymin <- with(data, ymax-y)
-                        data <- ddply(data, .(x), transform, 
-                                      ybase = max(ymin))
-                        data$ymin <- with(data, ymin-ybase)
-                        data$ymax <- with(data, ymax-ybase)
-                        data$xmin <- with(data, x - width/2)   
-                        data$xmax <- with(data, x + width/2)
-                        
-                        data
-                    },
-                    
-                    required_aes = c("x", "y")
+  setup_data = function(data, params) {
+    data <- remove_missing(data, na.rm, "y", name = "stat_logo", finite = TRUE)
+    data <- data[with(data, order(x, y)),]   
+    data <- ddply(data, .(x), transform, 
+                  ymax = cumsum(y))
+    data$ymin <- with(data, ymax-y)
+    data <- ddply(data, .(x), transform, 
+                  ybase = max(ymin))
+    data$ymin <- with(data, ymin-ybase)
+    data$ymax <- with(data, ymax-ybase)
+#browser()
+    data$xmin <- with(data, x - params$width/2)   
+    data$xmax <- with(data, x + params$width/2)
+    
+    data
+  },                    
+  compute_group = function(data, scales, params, na.rm = FALSE, width = 0.9, ...) {
+     data
+  },
+  
+  required_aes = c("x", "y")
 )
 
 #' Calculation of all pieces necessary to plot a logo sequence plot
@@ -144,47 +148,47 @@ stat_logo <- function(mapping = NULL, data = NULL, geom = "logo",
 
 #' @importFrom grid grobTree
 GeomLogo <- ggproto("GeomLogo", Geom,
-                    required_aes = c("x", "y", "group", "label"),
-                    default_aes = aes(weight = 1, colour = "grey80", fill = "white", size = 0.1, alpha = 0.25, width = 0.9, shape = 16, linetype = "solid"),
-                    draw_key = draw_key_blank,
-                    
-                    draw_panel = function(data, panel_scales, coord, ...) {
-                        data(alphabet, envir = environment())
-                        
-                        #save(data, file = "testdata.RData")
-                        #save(panel_scales, file = "panelscales.RData")
-                        #save(coord, file = "coord.RData")
-                        
-                        letter <- subset(alphabet, group %in% unique(data$label))
-                        if (nrow(letter) < 1) {
-                            #  warning(paste("unrecognized letter in alphabet:", unique(data$label), collapse=","))
-                            letter <- alphabet[1,]
-                        }
-                        data$ROWID <- 1:nrow(data)
-                        letterpoly <- adply(data, .margins=1, function(x) {
-                            letter$x <- gglogo:::scaleTo(letter$x, fromRange=c(0,1), toRange=c(x$xmin, x$xmax))
-                            letter$y <- gglogo:::scaleTo(letter$y, toRange=c(x$ymin, x$ymax))
-                            letter$group <- interaction(x$ROWID, letter$group)
-                            letter
-                        })
-                        #  browser()
-                        
-                        letterpoly$fill <- alpha("black", 0.7) # alpha(letterpoly$fill, letterpoly$alpha) #"white" 
-                        letterpoly$colour <- NA #"white"
-                        letterpoly$size <- 0.5    
-                        
-                        grobTree(
-                            GeomRect$draw_panel(data, panel_scales, coord),
-                            GeomPolygon$draw_panel(letterpoly, panel_scales, coord)
-                        )
-                    },
-                    
-                    draw_legend = function(data, ...)  {
-                        with(data, grobTree(
-                            rectGrob(gp = gpar(col = colour, fill = alpha(fill, alpha), lty = linetype)),
-                            linesGrob(gp = gpar(col = colour, lwd = size * .pt, lineend="butt", lty = linetype))
-                        ))
-                    }
+  required_aes = c("x", "y", "group", "label"),
+  default_aes = aes(weight = 1, colour = "grey80", fill = "white", size = 0.1, alpha = 0.25, width = 0.9, shape = 16, linetype = "solid"),
+  draw_key = draw_key_blank,
+  
+  draw_panel = function(data, panel_scales, coord, ...) {
+    data(alphabet, envir = environment())
+#    browser()
+    #save(data, file = "testdata.RData")
+    #save(panel_scales, file = "panelscales.RData")
+    #save(coord, file = "coord.RData")
+    
+    letter <- subset(alphabet, group %in% unique(data$label))
+    if (nrow(letter) < 1) {
+      #  warning(paste("unrecognized letter in alphabet:", unique(data$label), collapse=","))
+      letter <- alphabet[1,]
+    }
+    data$ROWID <- 1:nrow(data)
+    letterpoly <- adply(data, .margins=1, function(x) {
+      letter$x <- gglogo:::scaleTo(letter$x, fromRange=c(0,1), toRange=c(x$xmin, x$xmax))
+      letter$y <- gglogo:::scaleTo(letter$y, toRange=c(x$ymin, x$ymax))
+      letter$group <- interaction(x$ROWID, letter$group)
+      letter
+    })
+    #  browser()
+    
+    letterpoly$fill <- alpha("black", 0.7) # alpha(letterpoly$fill, letterpoly$alpha) #"white" 
+    letterpoly$colour <- NA #"white"
+    letterpoly$size <- 0.5    
+    
+    grobTree(
+      GeomRect$draw_panel(data, panel_scales, coord),
+      GeomPolygon$draw_panel(letterpoly, panel_scales, coord)
+    )
+  },
+  
+  draw_legend = function(data, ...)  {
+    with(data, grobTree(
+      rectGrob(gp = gpar(col = colour, fill = alpha(fill, alpha), lty = linetype)),
+      linesGrob(gp = gpar(col = colour, lwd = size * .pt, lineend="butt", lty = linetype))
+    ))
+  }
 )
 
 #' Sequence logo plots.

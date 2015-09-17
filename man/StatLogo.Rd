@@ -6,6 +6,7 @@
 \title{Helper object}
 \format{\preformatted{Classes 'StatLogo', 'Stat', 'ggproto' <ggproto object: Class StatLogo, Stat>
     compute_group: function
+    compute_groups: function
     compute_layer: function
     compute_panel: function
     default_aes: uneval
