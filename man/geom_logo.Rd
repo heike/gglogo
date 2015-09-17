@@ -49,9 +49,9 @@ cols2 <- alpha(cols, 0.8)
 dm5 <- merge(dm4, aacids, by.x="element", by.y="AA", all.x=T)
 ggplot(dm4, aes(x=class, y=bits, group=element,
      label=element, fill=element), alpha=0.8) +
-     geom_logo() + scale_fill_manual(values=cols) + facet_wrap(~position, ncol=18)
+     geom_logo() + facet_wrap(~position, ncol=18)
 ggplot(dm4, aes(x=position, y=bits, group=element, label=element, fill=element), alpha=0.8) +
-     geom_logo() + scale_fill_manual(values=alpha(cols, 0.8)) +
+     geom_logo() + #scale_fill_manual(values=alpha(cols, 0.8)) +
      facet_wrap(~class, ncol=1) + theme_bw()
 ggplot(dm5, aes(x=class, y=bits, group=element,
      label=element, fill=interaction(Polarity, Water)), alpha=0.8) +
@@ -59,7 +59,7 @@ ggplot(dm5, aes(x=class, y=bits, group=element,
      facet_wrap(~position, ncol=18) + theme(legend.position="bottom") + xlab("")
 ggplot(dm5, aes(x=class, y=bits, group=element,
      label=element, fill=interaction(Water, Polarity)), alpha=0.8) +
-     geom_logo() + scale_fill_manual("Amino acids properties", values=cols) +
+     geom_logo() + scale_fill_brewer("Amino acids properties", palette="Paired") +
      facet_wrap(~position, ncol=18) + theme_bw() + theme(legend.position="bottom") +
      xlab("") + ylab("Shannon information in bits")
 }
