@@ -92,11 +92,11 @@ logo <- function(sequences) {
 StatLogo <- ggproto("StatLogo", Stat,
   setup_data = function(data, params) {
     data <- remove_missing(data, na.rm, "y", name = "stat_logo", finite = TRUE)
-    data <- data[with(data, order(group, x, y)),]   
-    data <- ddply(data, .(group, x), transform, 
+    data <- data[with(data, order(PANEL, x, y)),]   
+    data <- ddply(data, .(PANEL, x), transform, 
                   ymax = cumsum(y))
     data$ymin <- with(data, ymax-y)
-    data <- ddply(data, .(group, x), transform, 
+    data <- ddply(data, .(PANEL, x), transform, 
                   ybase = max(ymin))
     data$ymin <- with(data, ymin-ybase)
     data$ymax <- with(data, ymax-ybase)
