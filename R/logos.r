@@ -83,15 +83,13 @@ logo <- function(sequences) {
   ggplot(dm3, aes(x=position, y=bits, group=element, label=element)) + geom_logo() 
 }
 
-#' Helper object
-#' 
-#' shouldn't be used by the user, but has to be exported.
+#' @rdname stat_logo
 #' @return  proto object
 #' @export 
 #' 
 StatLogo <- ggproto("StatLogo", Stat,
   setup_data = function(data, params) {
-    data <- remove_missing(data, na.rm, "y", name = "stat_logo", finite = TRUE)
+    data <- remove_missing(data, na.rm=TRUE, "y", name = "stat_logo", finite = TRUE)
     data <- data[with(data, order(PANEL, x, y)),]   
     data <- ddply(data, .(PANEL, x), transform, 
                   ymax = cumsum(y))
@@ -105,7 +103,7 @@ StatLogo <- ggproto("StatLogo", Stat,
     
     data
   },                    
-  compute_group = function(data, scales, params, na.rm = FALSE, width = 0.9, ...) {
+  compute_group = function(data, scales, params, na.rm = FALSE, width = 0.9) {
      data
   },
   required_aes = c("x", "y")
@@ -136,21 +134,23 @@ StatLogo <- ggproto("StatLogo", Stat,
 #' ggplot(dm3, aes(x=position, y=bits, label=element, group=interaction(position, element))) + 
 #'      geom_logo(alpha=0.5)
 stat_logo <- function(mapping = NULL, data = NULL, geom = "logo",
-                      position = "identity", show.legend = NA, inherit.aes = TRUE, width = 0.9, ...) {
+                      position = "identity", show.legend = NA, inherit.aes = TRUE, width = 0.9, na.rm = TRUE, ...) {
     layer(
         stat = StatLogo, data = data, mapping = mapping, geom = geom, 
         position = position, show.legend = show.legend, inherit.aes = inherit.aes,
-        params = list(width = width, ...)
+        params = list(width = width, height = 0.1, na.rm = na.rm, ...)
     )
 }
 
+#' @rdname geom_logo
+#' @export
 #' @importFrom grid grobTree
 GeomLogo <- ggproto("GeomLogo", Geom,
   required_aes = c("x", "y", "group", "label"),
   default_aes = aes(weight = 1, colour = "grey80", fill = "white", size = 0.1, alpha = 0.25, width = 0.9, shape = 16, linetype = "solid"),
   draw_key = draw_key_rect,
   
-  draw_panel = function(data, panel_scales, coord, ...) {
+  draw_panel = function(data, panel_scales, coord) {
     data(alphabet, envir = environment())
 #    browser()
     #save(data, file = "testdata.RData")
@@ -222,25 +222,26 @@ GeomLogo <- ggproto("GeomLogo", Geom,
 #' dm5 <- merge(dm4, aacids, by.x="element", by.y="AA", all.x=T)
 #' ggplot(dm4, aes(x=class, y=bits, group=element, 
 #'      label=element, fill=element)) + 
-#'      geom_logo(alpha=0.8) + facet_wrap(~position, ncol=18)
+#'      geom_logo() + facet_wrap(~position, ncol=18)
 #' ggplot(dm4, aes(x=position, y=bits, group=element, label=element, fill=element)) + 
-#'      geom_logo(alpha=0.8) + #scale_fill_manual(values=alpha(cols, 0.8)) + 
+#'      geom_logo() + #scale_fill_manual(values=alpha(cols, 0.8)) + 
 #'      facet_wrap(~class, ncol=1) + theme_bw()
 #' ggplot(dm5, aes(x=class, y=bits, group=element, 
 #'      label=element, fill=interaction(Polarity, Water))) + 
-#'      geom_logo(alpha=0.8) + scale_fill_brewer("Amino-acids properties", palette="Paired") + 
+#'      geom_logo() + scale_fill_brewer("Amino-acids properties", palette="Paired") + 
 #'      facet_wrap(~position, ncol=18) + theme(legend.position="bottom") + xlab("")
 #' ggplot(dm5, aes(x=class, y=bits, group=element, 
 #'      label=element, fill=interaction(Water, Polarity))) + 
-#'      geom_logo(alpha=0.8) + scale_fill_brewer("Amino acids properties", palette="Paired") + 
+#'      geom_logo() + scale_fill_brewer("Amino acids properties", palette="Paired") + 
 #'      facet_wrap(~position, ncol=18) + theme_bw() + theme(legend.position="bottom") + 
 #'      xlab("") + ylab("Shannon information in bits")
 #' }
-geom_logo <- function (mapping = NULL, data = NULL, stat = "logo", position = "identity", show.legend = NA, inherit.aes = TRUE, width = 0.9, alpha = 0.25,
-                       ...) {
+geom_logo <- function (mapping = NULL, data = NULL, stat = "logo", position = "identity", 
+                       show.legend = NA, inherit.aes = TRUE, width = 0.9, alpha = 0.6,
+                       na.rm = TRUE, ...) {
     layer(
         geom = GeomLogo, mapping = mapping,  data = data, stat = stat, 
         position = position, show.legend = show.legend, inherit.aes = inherit.aes,
-        params = list(width = width, alpha=alpha,  ...)
+        params = list(width = width, na.rm = na.rm, alpha = alpha,  ...)
     )
 }
