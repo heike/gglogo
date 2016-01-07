@@ -119,6 +119,7 @@ StatLogo <- ggproto("StatLogo", Stat,
 #' @param show.legend Whether to show the legend or not
 #' @param inherit.aes Whether to inherit the aes or not
 #' @param width maximum width of the letters, defaults to 0.9, 
+#' @param na.rm Whether to remove NAs or not
 #' @param  ... other arguments passed on to layer. This can include aesthetics whose values you want to set, not map. See layer for more details.
 #'
 #' @return A proto object 
@@ -201,6 +202,7 @@ GeomLogo <- ggproto("GeomLogo", Geom,
 #' @param inherit.aes Whether to inherit the aes or not
 #' @param width maximum width of the letters, defaults to 0.9, 
 #' @param alpha amount of alpha blending used for putting letters on top of rectangle, defaults to 0.25,
+#' @param na.rm Whether to remove NAs or not
 #' @param ... other arguments passed on to layer. This can include aesthetics whose values you want to set, not map. See layer for more details.
 #' @export
 #' @examples

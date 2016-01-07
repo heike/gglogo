@@ -21,3 +21,4 @@ Collate:
     'text.r'
     'thin.r'
     'data.r'
+RoxygenNote: 5.0.1
