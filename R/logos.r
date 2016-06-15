@@ -25,7 +25,9 @@ ggfortify <- function(data, sequences, treatment = NULL, method = "shannon") {
   if (length(unique(dm2$element))>5) k <- 21
   dm3 <- calcInformation(dm2, pos="position", trt=treatment, elems="element", k=k, method = method)
   data(aacids, envir = environment())
-  dm3 <- merge(dm3, aacids[,-1], by.x="element", by.y="AA")
+  
+  if (k == 21) # add peptide informatio only for peptides
+    dm3 <- merge(dm3, aacids[,-1], by.x="element", by.y="AA")
   dm3
 }
  
