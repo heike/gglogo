@@ -28,11 +28,9 @@ stat_logo(mapping = NULL, data = NULL, geom = "logo",
 
 \item{width}{maximum width of the letters, defaults to 0.9,}
 
-\item{na.rm}{Whether to remove missing values or not}
+\item{na.rm}{Whether to remove NAs or not}
 
 \item{...}{other arguments passed on to layer. This can include aesthetics whose values you want to set, not map. See layer for more details.}
-
-\item{na.rm}{Whether to remove NAs or not}
 }
 \value{
 proto object
@@ -47,10 +45,11 @@ Calculation of all pieces necessary to plot a logo sequence plot
 # Generate data
 data(sequences)
 library(ggplot2)
-dm2 <- splitSequence(sequences, "peptide")
-dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
-ggplot(dm3, aes(x=position, y=bits, label=element, group=interaction(position, element))) + 
-     geom_logo(alpha=0.5)
+
+ggplot(data = ggfortify(sequences, "peptide")) + 
+  geom_logo(aes(x=position, y=bits, label=element, 
+                group=interaction(position, element)), 
+            alpha=0.5)
 }
 \keyword{datasets}
 

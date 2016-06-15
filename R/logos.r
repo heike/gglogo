@@ -20,6 +20,8 @@
 #'   facet_wrap(~position, ncol = 18) + 
 #'   theme(legend.position = "bottom")
 ggfortify <- function(data, sequences, treatment = NULL, method = "shannon") {
+    aacids <- NULL
+    
   dm2 <- splitSequence(data, sequences)
   k <- 4
   if (length(unique(dm2$element))>5) k <- 21
@@ -156,7 +158,6 @@ StatLogo <- ggproto("StatLogo", Stat,
 #' @param geom The geometric object to use display the data,
 #' @param position The position adjustment to use for overlappling points on this layer, 
 #' @param show.legend Whether to show the legend or not
-#' @param na.rm Whether to remove missing values or not
 #' @param inherit.aes Whether to inherit the aes or not
 #' @param width maximum width of the letters, defaults to 0.9, 
 #' @param na.rm Whether to remove NAs or not
@@ -238,7 +239,6 @@ GeomLogo <- ggproto("GeomLogo", Geom,
 #' @param mapping The aesthetic mapping, usually constructed with aes or aes_string. Only needs to be set at the layer level if you are overriding the plot defaults.
 #' @param data A layer specific dataset - only needed if you want to override the plot defaults, 
 #' @param stat The statistical transformation to use on the data for this layer, 
-#' @param na.rm binary value to indicate whether to ignore missing values,
 #' @param position The position adjustment to use for overlappling points on this layer, 
 #' @param show.legend Whether to show the legend or not
 #' @param inherit.aes Whether to inherit the aes or not

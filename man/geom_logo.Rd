@@ -30,47 +30,42 @@ geom_logo(mapping = NULL, data = NULL, stat = "logo",
 
 \item{alpha}{amount of alpha blending used for putting letters on top of rectangle, defaults to 0.25,}
 
-\item{na.rm}{binary value to indicate whether to ignore missing values,}
+\item{na.rm}{Whether to remove NAs or not}
 
 \item{...}{other arguments passed on to layer. This can include aesthetics whose values you want to set, not map. See layer for more details.}
-
-\item{na.rm}{Whether to remove NAs or not}
 }
 \description{
 Sequence logo plots.
 }
 \examples{
 \donttest{
+library(ggplot2)
 data(sequences)
-dm2 <- splitSequence(sequences, "peptide")
-dm3 <- calcInformation(dm2, pos="position", elems="element", k=21)
-#library(biovizBase)
-#cols <- getBioColor(type="AA_ALPHABET")
-library(RColorBrewer)
-cols <- brewer.pal(10,"Paired")
-data(aacids)
-dm3b <- merge(dm3, aacids, by.x="element", by.y="AA", all.x=T)
-ggplot(dm3b, aes(x=position, y=bits, group=element, 
-     label=element, fill=interaction(Polarity, Water))) +
-     geom_logo(alpha=0.6) + scale_fill_brewer(palette="Paired")
-dm4 <- calcInformation(dm2, pos="position", elems="element", trt="class", k=21)
-cols2 <- alpha(cols, 0.8)
-dm5 <- merge(dm4, aacids, by.x="element", by.y="AA", all.x=T)
-ggplot(dm4, aes(x=class, y=bits, group=element, 
+ggplot(data = ggfortify(sequences, "peptide")) +      
+  geom_logo(aes(x=position, y=bits, group=element, 
+     label=element, fill=interaction(Polarity, Water)),
+     alpha = 0.6)  +
+  scale_fill_brewer(palette="Paired") +
+  theme(legend.position = "bottom")
+  
+ggplot(data = ggfortify(sequences, "peptide", treatment = "class")) + 
+  geom_logo(aes(x=class, y=bits, group=element, 
      label=element, fill=element)) + 
-     geom_logo() + facet_wrap(~position, ncol=18)
-ggplot(dm4, aes(x=position, y=bits, group=element, label=element, fill=element)) + 
-     geom_logo() + #scale_fill_manual(values=alpha(cols, 0.8)) + 
-     facet_wrap(~class, ncol=1) + theme_bw()
-ggplot(dm5, aes(x=class, y=bits, group=element, 
-     label=element, fill=interaction(Polarity, Water))) + 
-     geom_logo() + scale_fill_brewer("Amino-acids properties", palette="Paired") + 
-     facet_wrap(~position, ncol=18) + theme(legend.position="bottom") + xlab("")
-ggplot(dm5, aes(x=class, y=bits, group=element, 
-     label=element, fill=interaction(Water, Polarity))) + 
-     geom_logo() + scale_fill_brewer("Amino acids properties", palette="Paired") + 
-     facet_wrap(~position, ncol=18) + theme_bw() + theme(legend.position="bottom") + 
-     xlab("") + ylab("Shannon information in bits")
+  facet_wrap(~position, ncol=18) +
+  theme(legend.position = "bottom")
+  
+ggplot(data = ggfortify(sequences, "peptide", treatment = "class")) + 
+  geom_logo(aes(x=position, y=bits, group=element, label=element, fill=element)) + 
+  facet_wrap(~class, ncol=1) + theme_bw()
+  
+ggplot(data = ggfortify(sequences, "peptide", treatment = "class")) + 
+  geom_logo(aes(x=class, y=bits, group=element, 
+                label=element, fill=interaction(Polarity, Water))) + 
+  scale_fill_brewer("Amino-acids properties", palette="Paired") + 
+  facet_wrap(~position, ncol=18) + 
+  theme(legend.position="bottom") + 
+  xlab("") + ylab("Shannon information in bits")
+  
 }
 }
 \keyword{datasets}
