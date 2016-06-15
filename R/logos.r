@@ -72,7 +72,9 @@ splitSequence <- function(dframe, sequences) {
 calcInformation <- function(dframe, trt=NULL, pos, elems, k=4, weight = NULL, method="shannon") {
   if (is.null(weight)) dframe$wt <- 1
   else dframe$wt <- dframe[,weight]
-  
+  trt <- as.quoted(trt)
+  pos <- as.quoted(pos)
+  elems <- as.quoted(elems)
   freqs <- ddply(dframe, c(trt, pos, elems), function(x) sum(x$wt))
 ## define implicit bindings for variables - not necessary though, since all of the variables do exist
   freq <- NA
