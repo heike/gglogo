@@ -1,11 +1,42 @@
+#' Convert sequence data to a format suitable for logo plots
+#' 
+#' @param data data frame with the sequences
+#' @param sequences variable containing the sequences
+#' @param treatment co-variate(s) used in collecting sequence data
+#' @param method either "shannon" or "frequency" for Shannon information or relative frequency of element by position.
+#' @return data frame with position, element and information value
+#' @import plyr
+#' @export
+#' @examples 
+#' library(ggplot2)
+#' data(sequences)
+#' 
+#' ggplot(data = ggfortify(sequences, "peptide", treatment = "class")) +
+#'   geom_logo(aes(x = class, y = bits, fill = Water, label = element)) + 
+#'   facet_wrap(~position)
+#'   
+#' ggplot(data = ggfortify(sequences, "peptide", treatment = "class")) +
+#'   geom_logo(aes(x = class, y = bits, fill = Polarity, label = element)) + 
+#'   facet_wrap(~position, ncol = 18) + 
+#'   theme(legend.position = "bottom")
+ggfortify <- function(data, sequences, treatment = NULL, method = "shannon") {
+  dm2 <- splitSequence(data, sequences)
+  k <- 4
+  if (length(unique(dm2$element))>5) k <- 21
+  dm3 <- calcInformation(dm2, pos="position", trt=treatment, elems="element", k=k, method = method)
+  data(aacids, envir = environment())
+  dm3 <- merge(dm3, aacids[,-1], by.x="element", by.y="AA")
+  dm3
+}
+ 
 #' Reshape data set according to elements in sequences
 #' 
 #' prepare data set for plotting in a logo
 #' @param dframe data frame of peptide (or any other) sequences and some treatment factors
 #' @param sequences character string or index for the character vector of (peptide) sequence
 #' @export
-#' @import plyr
-#' @import reshape2
+#' @importFrom plyr ldply
+#' @importFrom reshape2 melt
 #' @examples
 #' data(sequences)
 #' dm2 <- splitSequence(sequences, "peptide")
@@ -28,6 +59,7 @@ splitSequence <- function(dframe, sequences) {
 #' @param weight number of times each sequence is observed, defaults to 1 in case no weight is given
 #' @param method either "shannon" or "frequency" for Shannon information or relative frequency of element by position.
 #' @return extended data frame with additional information of shannon info in bits and each elements contribution to the total information
+#' @importFrom plyr ddply
 #' @export
 #' @examples
 #' data(sequences)
@@ -51,7 +83,8 @@ calcInformation <- function(dframe, trt=NULL, pos, elems, k=4, weight = NULL, me
   if (method == "shannon") {
     freqByPos <- ddply(freqByPos, c(trt, pos), transform, info=-sum((freq/total*log(freq/total, base=2))[freq>0]))
     freqByPos$info <- -log(1/k, base=2) - with(freqByPos, info)
-    freqByPos$bits <- with(freqByPos, freq/total*info)
+    freqByPos$bits <- with(freqByPos, freq/total*info) # why bits and not info?
+    freqByPos$info <- freqByPos$bits
   }  
   if (method == "frequency")
     freqByPos$info <- with(freqByPos, freq/total)
@@ -84,11 +117,13 @@ logo <- function(sequences) {
 }
 
 #' @rdname stat_logo
+#' @import plyr 
 #' @return  proto object
 #' @export 
 #' 
 StatLogo <- ggproto("StatLogo", Stat,
   setup_data = function(data, params) {
+    require(plyr)
     data <- remove_missing(data, na.rm=TRUE, "y", name = "stat_logo", finite = TRUE)
     data <- data[with(data, order(PANEL, x, y)),]   
     data <- ddply(data, .(PANEL, x), transform, 
@@ -117,6 +152,7 @@ StatLogo <- ggproto("StatLogo", Stat,
 #' @param geom The geometric object to use display the data,
 #' @param position The position adjustment to use for overlappling points on this layer, 
 #' @param show.legend Whether to show the legend or not
+#' @param na.rm Whether to remove missing values or not
 #' @param inherit.aes Whether to inherit the aes or not
 #' @param width maximum width of the letters, defaults to 0.9, 
 #' @param na.rm Whether to remove NAs or not
@@ -197,6 +233,7 @@ GeomLogo <- ggproto("GeomLogo", Geom,
 #' @param mapping The aesthetic mapping, usually constructed with aes or aes_string. Only needs to be set at the layer level if you are overriding the plot defaults.
 #' @param data A layer specific dataset - only needed if you want to override the plot defaults, 
 #' @param stat The statistical transformation to use on the data for this layer, 
+#' @param na.rm binary value to indicate whether to ignore missing values,
 #' @param position The position adjustment to use for overlappling points on this layer, 
 #' @param show.legend Whether to show the legend or not
 #' @param inherit.aes Whether to inherit the aes or not

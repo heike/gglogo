@@ -28,9 +28,11 @@ stat_logo(mapping = NULL, data = NULL, geom = "logo",
 
 \item{width}{maximum width of the letters, defaults to 0.9,}
 
-\item{na.rm}{Whether to remove NAs or not}
+\item{na.rm}{Whether to remove missing values or not}
 
 \item{...}{other arguments passed on to layer. This can include aesthetics whose values you want to set, not map. See layer for more details.}
+
+\item{na.rm}{Whether to remove NAs or not}
 }
 \value{
 proto object

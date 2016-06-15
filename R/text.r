@@ -6,6 +6,7 @@
 #' @param dim vector of length two specifying width and height (in pixels) of the temporary jpg file created for the letter. Defaults to 480 x 480 pixels.
 #' @return three dimensional matrix of dimension 480 x 480 x 3 of the pixel values, black background and white letter 
 #' @importFrom jpeg readJPEG
+#' @importFrom grDevices dev.off jpeg
 #' @importFrom grid grid.newpage
 #' @importFrom grid grid.rect
 #' @importFrom grid grid.text
@@ -74,6 +75,7 @@ fortify.default <- function(model, data, ...) {
 #' \item green number vector in (0,1) describing the amount of green of the pixel in an RGB model
 #' \item blue number vector in (0,1) describing the amount of blue of the pixel in an RGB model
 #' }
+#' @importFrom stats na.omit
 #' @export
 getOutline <- function(imdf, var="red", threshold=0.5) {
   stopifnot(c("x", "y") %in% names(imdf))

@@ -30,9 +30,11 @@ geom_logo(mapping = NULL, data = NULL, stat = "logo",
 
 \item{alpha}{amount of alpha blending used for putting letters on top of rectangle, defaults to 0.25,}
 
-\item{na.rm}{Whether to remove NAs or not}
+\item{na.rm}{binary value to indicate whether to ignore missing values,}
 
 \item{...}{other arguments passed on to layer. This can include aesthetics whose values you want to set, not map. See layer for more details.}
+
+\item{na.rm}{Whether to remove NAs or not}
 }
 \description{
 Sequence logo plots.

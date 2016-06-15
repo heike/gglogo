@@ -21,8 +21,8 @@ seqtree <- function(sequences, pos=NULL, k) {
   Freq <- NA
   
   extract <- function(sequences, pos){
-    res <- ldply(pos, function(x) substr(sequences, x, x))
-    unlist(llply(res, paste, collapse=""), use.names=FALSE)
+    res <- plyr::ldply(pos, function(x) substr(sequences, x, x))
+    unlist(plyr::llply(res, paste, collapse=""), use.names=FALSE)
   }
   seqdist <- function(s1, s2) {
     x1 <- strsplit(as.character(s1), split="")[[1]]

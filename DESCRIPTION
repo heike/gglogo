@@ -1,15 +1,17 @@
 Package: gglogo
 Maintainer: Heike Hofmann <hofmann@iastate.edu>
-Author: Heike Hofmann
+Author: Heike Hofmann, Eric Hare
 Version: 0.1.2
 License: GPL-3
 Title: Geom for logo sequence plots
+Depends:
+    R (>= 2.14)
 Imports:
-    plyr,
-    reshape2,
-    ggplot2 (>= 1.0.1.9003),
+    ggplot2 (>= 2.0.0),
+    grid,
     jpeg,
-    grid
+    plyr,
+    reshape2
 Suggests:
     RColorBrewer
 Description: Visualize sequences in (modified) logo plots. The design choices
@@ -22,3 +24,4 @@ Collate:
     'thin.r'
     'data.r'
 RoxygenNote: 5.0.1
+LazyData: true
