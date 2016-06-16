@@ -4,6 +4,7 @@
 #' @param sequences variable containing the sequences
 #' @param treatment co-variate(s) used in collecting sequence data
 #' @param method either "shannon" or "frequency" for Shannon information or relative frequency of element by position.
+#' @param weight numeric variable of weights
 #' @return data frame with position, element and information value
 #' @import plyr
 #' @export
@@ -19,13 +20,12 @@
 #'   geom_logo(aes(x = class, y = bits, fill = Polarity, label = element)) + 
 #'   facet_wrap(~position, ncol = 18) + 
 #'   theme(legend.position = "bottom")
-ggfortify <- function(data, sequences, treatment = NULL, method = "shannon") {
+ggfortify <- function(data, sequences, treatment = NULL, weight = NULL, method = "shannon") {
     aacids <- NULL
-    
   dm2 <- splitSequence(data, sequences)
   k <- 4
   if (length(unique(dm2$element))>5) k <- 21
-  dm3 <- calcInformation(dm2, pos="position", trt=treatment, elems="element", k=k, method = method)
+  dm3 <- calcInformation(dm2, pos="position", trt=treatment, weight = weight, elems="element", k=k, method = method)
   data(aacids, envir = environment())
   
   if (k == 21) # add peptide informatio only for peptides
