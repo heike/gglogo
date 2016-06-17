@@ -8,9 +8,11 @@
 data(alphabet)
 }
 \description{
-polygons of all upper case letters
+polygons of upper and lower case letters and digits 0-9
 }
 \details{
-alphabet polygon data is based on upper case letters from Helvetica.
+alphabet polygon data
+
+The alphabet polygon data is based on the font Helvetica. Upper and lower case letters are included as well as digits.
 }
 
