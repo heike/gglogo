@@ -29,7 +29,7 @@ ggfortify <- function(data, sequences, treatment = NULL, weight = NULL, method =
   data(aacids, envir = environment())
   
   if (k == 21) # add peptide informatio only for peptides
-    dm3 <- merge(dm3, aacids[,-1], by.x="element", by.y="AA")
+    dm3 <- merge(dm3, aacids[,-1], by.x="element", by.y="AA", all.x = TRUE)
   dm3
 }
  
@@ -205,7 +205,7 @@ GeomLogo <- ggproto("GeomLogo", Geom,
     letterpoly <- adply(data, .margins=1, function(xx) {
       letter <- subset(alphabet, group %in% unique(xx$label))
       if (nrow(letter) < 1) {
-        #  warning(paste("unrecognized letter in alphabet:", unique(data$label), collapse=","))
+          warning(paste("unrecognized letter in alphabet:", paste(unique(data$label), collapse=",")))
         letter <- alphabet[1,]
       }
       letter$x <- gglogo:::scaleTo(letter$x, fromRange=c(0,1), toRange=c(xx$xmin, xx$xmax))
