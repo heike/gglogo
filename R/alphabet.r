@@ -8,6 +8,7 @@
 #' @return data set compatible to work with geom_logo
 #' @importFrom magrittr %>%
 #' @importFrom purrr map_df
+#' @importFrom dplyr group_by
 #' @export
 #' @examples
 #' new_alphabet <- createPolygons(c(letters, LETTERS, 0:9), font="Garamond")
