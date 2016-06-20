@@ -4,16 +4,19 @@
 \alias{createPolygons}
 \title{Create a data set of polygons for a set of letters from a specified fontfamily}
 \usage{
-createPolygons(letters, fontfamily, fontsize = 400, dim = c(720, 720))
+createPolygons(letters, font, fontsize = 400, dim = c(720, 720),
+  scale = TRUE)
 }
 \arguments{
 \item{letters}{set of characters for which polygons are to be created}
 
-\item{fontfamily}{character describing the name of a font - use fonts() from package extrafont to check on available fonts}
+\item{font}{character describing the name of a font - use fonts() from package extrafont to check on available fonts}
 
-\item{fontsize}{size of letter to be created - larger means larger resolution}
+\item{fontsize}{size of letter to be created - larger means higher resolution, but also bigger result sets}
 
 \item{dim}{dimensions of the box in which the created letter is supposed to fit}
+
+\item{scale}{scale the values along the y axis to use result in geom_logo}
 }
 \value{
 data set compatible to work with geom_logo
@@ -22,8 +25,8 @@ data set compatible to work with geom_logo
 Create a data set of polygons for a set of letters from a specified fontfamily
 }
 \examples{
-new_alphabet <- createPolygons(c(letters, LETTERS, 0:9), fontfamily="Garamond")
+new_alphabet <- createPolygons(c(letters, LETTERS, 0:9), font="Garamond")
 # check that all letters and digits are nicely shaped:
-qplot(x,y, geom="polygon", data=new_alphabet, facets=~region)
+qplot(x,y, geom="polygon", data=new_alphabet, facets=~group)
 }
 
