@@ -23,5 +23,6 @@ Collate:
     'text.r'
     'thin.r'
     'data.r'
+    'alphabet.r'
 RoxygenNote: 5.0.1
 LazyData: true
