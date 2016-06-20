@@ -11,10 +11,10 @@ Imports:
     grid,
     jpeg,
     plyr,
-    reshape2,
     dplyr,
     magrittr,
     purrr
+    reshape2
 Suggests:
     RColorBrewer
 Description: Visualize sequences in (modified) logo plots. The design choices

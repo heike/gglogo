@@ -10,7 +10,7 @@ NULL
 
 #' alphabet polygon data
 #' 
-#'  The alphabet polygon data is based on the font Helvetica. Upper and lower case letters are included as well as digits.
+#' The alphabet polygon data is based on the font Helvetica. Upper and lower case letters are included as well as digits.
 #' 
 #' @name alphabet
 #' @title alphabet polygon data
