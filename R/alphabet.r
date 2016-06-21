@@ -13,8 +13,11 @@
 #' @examples
 #' new_alphabet <- createPolygons(c(letters, LETTERS, 0:9), font="Garamond")
 #' # check that all letters and digits are nicely shaped:
+#' library(ggplot2)
 #' qplot(x,y, geom="polygon", data=new_alphabet, facets=~group)
 createPolygons <- function(letters, font, fontsize = 400, dim = c(720, 720), scale = FALSE) {
+    region <- group <- x <- y <- NULL
+    
   scale_01 <- function(x) {
     (x - min(x, na.rm=TRUE))/diff(range(x, na.rm=TRUE))
   }

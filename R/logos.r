@@ -129,7 +129,6 @@ logo <- function(sequences) {
 #' 
 StatLogo <- ggproto("StatLogo", Stat,
   setup_data = function(data, params) {
-    require(plyr)
     data <- remove_missing(data, na.rm=TRUE, "y", name = "stat_logo", finite = TRUE)
     data <- data[with(data, order(PANEL, x, y)),]   
     data <- ddply(data, .(PANEL, x), transform, 

@@ -27,6 +27,7 @@ Create a data set of polygons for a set of letters from a specified fontfamily
 \examples{
 new_alphabet <- createPolygons(c(letters, LETTERS, 0:9), font="Garamond")
 # check that all letters and digits are nicely shaped:
+library(ggplot2)
 qplot(x,y, geom="polygon", data=new_alphabet, facets=~group)
 }
 
