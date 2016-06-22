@@ -13,7 +13,7 @@ Imports:
     plyr,
     dplyr,
     magrittr,
-    purrr
+    purrr,
     reshape2
 Suggests:
     RColorBrewer

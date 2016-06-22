@@ -192,8 +192,8 @@ GeomLogo <- ggproto("GeomLogo", Geom,
   default_aes = aes(weight = 1, colour = "grey80", fill = "white", size = 0.1, alpha = 0.25, width = 0.9, shape = 16, linetype = "solid"),
   draw_key = draw_key_rect,
   
-  draw_panel = function(data, panel_scales, coord) {
-    data(alphabet, envir = environment())
+  draw_panel = function(data, panel_scales, coord, alphabet = NULL) {
+    if (is.null(alphabet)) data(alphabet, envir = environment())
 #    browser()
     #save(data, file = "testdata.RData")
     #save(panel_scales, file = "panelscales.RData")
@@ -243,6 +243,7 @@ GeomLogo <- ggproto("GeomLogo", Geom,
 #' @param inherit.aes Whether to inherit the aes or not
 #' @param width maximum width of the letters, defaults to 0.9, 
 #' @param alpha amount of alpha blending used for putting letters on top of rectangle, defaults to 0.25,
+#' @param alphabet Specifies which alphabet is used in rendering the logo. If NULL, the default alphabet set is used (based on Helvetica). Use output from `createPolygons` to generate alphabet polygons for a different font.
 #' @param na.rm Whether to remove NAs or not
 #' @param ... other arguments passed on to layer. This can include aesthetics whose values you want to set, not map. See layer for more details.
 #' @export
@@ -278,10 +279,10 @@ GeomLogo <- ggproto("GeomLogo", Geom,
 #' }
 geom_logo <- function (mapping = NULL, data = NULL, stat = "logo", position = "identity", 
                        show.legend = NA, inherit.aes = TRUE, width = 0.9, alpha = 0.6,
-                       na.rm = TRUE, ...) {
+                       na.rm = TRUE, alphabet=NULL, ...) {
     layer(
         geom = GeomLogo, mapping = mapping,  data = data, stat = stat, 
         position = position, show.legend = show.legend, inherit.aes = inherit.aes,
-        params = list(width = width, na.rm = na.rm, alpha = alpha,  ...)
+        params = list(width = width, na.rm = na.rm, alpha = alpha,  alphabet=alphabet, ...)
     )
 }

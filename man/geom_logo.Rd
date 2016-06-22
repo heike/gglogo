@@ -11,7 +11,7 @@ GeomLogo
 
 geom_logo(mapping = NULL, data = NULL, stat = "logo",
   position = "identity", show.legend = NA, inherit.aes = TRUE,
-  width = 0.9, alpha = 0.6, na.rm = TRUE, ...)
+  width = 0.9, alpha = 0.6, na.rm = TRUE, alphabet = NULL, ...)
 }
 \arguments{
 \item{mapping}{The aesthetic mapping, usually constructed with aes or aes_string. Only needs to be set at the layer level if you are overriding the plot defaults.}
@@ -31,6 +31,8 @@ geom_logo(mapping = NULL, data = NULL, stat = "logo",
 \item{alpha}{amount of alpha blending used for putting letters on top of rectangle, defaults to 0.25,}
 
 \item{na.rm}{Whether to remove NAs or not}
+
+\item{alphabet}{Specifies which alphabet is used in rendering the logo. If NULL, the default alphabet set is used (based on Helvetica). Use output from `createPolygons` to generate alphabet polygons for a different font.}
 
 \item{...}{other arguments passed on to layer. This can include aesthetics whose values you want to set, not map. See layer for more details.}
 }
