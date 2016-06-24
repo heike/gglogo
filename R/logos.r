@@ -129,18 +129,15 @@ logo <- function(sequences) {
 #' 
 StatLogo <- ggproto("StatLogo", Stat,
   setup_data = function(data, params) {
+  #  cat("setup_data in stat logo\n")
+    
     data <- remove_missing(data, na.rm=TRUE, "y", name = "stat_logo", finite = TRUE)
     data <- data[with(data, order(PANEL, x, y)),]   
-    data <- ddply(data, .(PANEL, x), transform, 
-                  ymax = cumsum(y))
-    data$ymin <- with(data, ymax-y)
-    data <- ddply(data, .(PANEL, x), transform, 
-                  ybase = max(ymin))
-    data$ymin <- with(data, ymin-ybase)
-    data$ymax <- with(data, ymax-ybase)
     data$xmin <- with(data, x - params$width/2)   
     data$xmax <- with(data, x + params$width/2)
-    
+    data$ymin <- 0
+    data$ymax <- data$y
+
     data
   },                    
   compute_group = function(data, scales, params, na.rm = FALSE, width = 0.9) {
@@ -176,7 +173,7 @@ StatLogo <- ggproto("StatLogo", Stat,
 #'                 group=interaction(position, element)), 
 #'             alpha=0.5)
 stat_logo <- function(mapping = NULL, data = NULL, geom = "logo",
-                      position = "identity", show.legend = NA, inherit.aes = TRUE, width = 0.9, na.rm = TRUE, ...) {
+                      position = "logo", show.legend = NA, inherit.aes = TRUE, width = 0.9, na.rm = TRUE, ...) {
     layer(
         stat = StatLogo, data = data, mapping = mapping, geom = geom, 
         position = position, show.legend = show.legend, inherit.aes = inherit.aes,
@@ -203,10 +200,10 @@ GeomLogo <- ggproto("GeomLogo", Geom,
     data$ROWID <- 1:nrow(data)
     letterpoly <- adply(data, .margins=1, function(xx) {
       letter <- subset(alphabet, group %in% unique(xx$label))
-      if (nrow(letter) < 1) {
-          warning(paste("unrecognized letter in alphabet:", paste(unique(data$label), collapse=",")))
-        letter <- alphabet[1,]
-      }
+       if (nrow(letter) < 1) {
+      #     warning(paste("unrecognized letter in alphabet:", paste(unique(data$label), collapse=",")))
+         letter <- alphabet[1,]
+       }
       letter$x <- gglogo:::scaleTo(letter$x, fromRange=c(0,1), toRange=c(xx$xmin, xx$xmax))
       letter$y <- gglogo:::scaleTo(letter$y, toRange=c(xx$ymin, xx$ymax))
       letter$group <- interaction(xx$ROWID, letter$group)
@@ -277,7 +274,7 @@ GeomLogo <- ggproto("GeomLogo", Geom,
 #'   xlab("") + ylab("Shannon information in bits")
 #'   
 #' }
-geom_logo <- function (mapping = NULL, data = NULL, stat = "logo", position = "identity", 
+geom_logo <- function (mapping = NULL, data = NULL, stat = "logo", position = "logo", 
                        show.legend = NA, inherit.aes = TRUE, width = 0.9, alpha = 0.6,
                        na.rm = TRUE, alphabet=NULL, ...) {
     layer(
