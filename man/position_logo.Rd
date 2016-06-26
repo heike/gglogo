@@ -19,6 +19,7 @@ position_classic()
 height.
 }
 \examples{
+library(ggplot2)
 data(sequences)
 
 # to make the most of comparisons, largest letters ar aligned along their minimum to
