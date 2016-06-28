@@ -248,7 +248,7 @@ GeomLogo <- ggproto("GeomLogo", Geom,
 #' @param inherit.aes Whether to inherit the aes or not
 #' @param width maximum width of the letters, defaults to 0.9, 
 #' @param alpha amount of alpha blending used for putting letters on top of rectangle, defaults to 0.25,
-#' @param alphabet Specifies which alphabet is used in rendering the logo. If NULL, the default alphabet set is used (based on Helvetica). Use output from `createPolygons` to generate alphabet polygons for a different font.
+#' @param alphabet Specifies which alphabet is used in rendering the logo. alphabet can be a dataframe (output from createPolygons), a character specifying a font or NULL. If NULL, the default alphabet set is used (based on Helvetica). Use output from `createPolygons` to generate alphabet polygons for a different font.
 #' @param na.rm Whether to remove NAs or not
 #' @param ... other arguments passed on to layer. This can include aesthetics whose values you want to set, not map. See layer for more details.
 #' @export

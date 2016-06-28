@@ -32,7 +32,7 @@ geom_logo(mapping = NULL, data = NULL, stat = "logo", position = "logo",
 
 \item{na.rm}{Whether to remove NAs or not}
 
-\item{alphabet}{Specifies which alphabet is used in rendering the logo. If NULL, the default alphabet set is used (based on Helvetica). Use output from `createPolygons` to generate alphabet polygons for a different font.}
+\item{alphabet}{Specifies which alphabet is used in rendering the logo. alphabet can be a dataframe (output from createPolygons), a character specifying a font or NULL. If NULL, the default alphabet set is used (based on Helvetica). Use output from `createPolygons` to generate alphabet polygons for a different font.}
 
 \item{...}{other arguments passed on to layer. This can include aesthetics whose values you want to set, not map. See layer for more details.}
 }
