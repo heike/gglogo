@@ -1,0 +1,5 @@
+"resultset_hash","context","desc","type","width","height","dpi","err","hash","order","expr","errmsg"
+"125794ba4cfa5c55d135f4fa76cccac0","logos","first plot","pdf",4,4,NA,"ok","df6f6f703807005eab6c84276d72d65c",1,"",""
+"125794ba4cfa5c55d135f4fa76cccac0","logos","facet by position","pdf",4,4,NA,"ok","342f3928f2112fd6203609cd7dce143b",2,"",""
+"125794ba4cfa5c55d135f4fa76cccac0","logos","facet by class","pdf",4,4,NA,"ok","05b691aa06455abf9296d0de22d9711a",3,"",""
+"125794ba4cfa5c55d135f4fa76cccac0","logos","facet by position, adjust color & label","pdf",4,4,NA,"ok","3c15800e22281d16a3975a605ab46287",4,"",""
