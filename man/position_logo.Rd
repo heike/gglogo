@@ -19,6 +19,7 @@ position_classic()
 height.
 }
 \examples{
+\donttest{
 library(ggplot2)
 data(sequences)
 
@@ -32,6 +33,7 @@ ggplot(data = ggfortify(sequences, "peptide", treatment = "class")) +
 ggplot(data = ggfortify(sequences, "peptide", treatment = "class")) +
   geom_logo(aes(x = class, y = bits, fill = Water, label = element), position="classic") + 
   facet_wrap(~position)
+}
 }
 \seealso{
 See \code{\link{geom_logo}} for

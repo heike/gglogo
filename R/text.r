@@ -12,9 +12,11 @@
 #' @importFrom grid grid.text
 #' @export
 #' @examples
+#' \donttest{
 #' plot(letterObject("g", fontfamily="Garamond", fontsize=400))
 #' plot(letterObject("q", fontsize=400))
 #' plot(letterObject("B"))
+#' }
 letterObject <- function(ch, fontfamily="Helvetica", fontsize=576, dim=c(480, 480)) {
   fname <- tempfile(pattern = "file", fileext=".jpg")
   jpeg(filename=fname, width=dim[1], height=dim[2])

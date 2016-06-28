@@ -1,5 +1,5 @@
 Package: gglogo
-Title: Geom for logo sequence plots
+Title: Geom for Logo Sequence Plots
 Version: 0.1.2
 Authors@R: c(
     person("Heike", "Hofmann", email = "hofmann@iastate.edu", role = "aut"),
@@ -23,8 +23,8 @@ Suggests:
     RColorBrewer
 Description: Visualize sequences in (modified) logo plots. The design choices
     used by these logo plots allow sequencing data to be more easily analyzed.
-    Because it is integrated into the ggplot geom framework, these logo plots
-    support native features such as facetting.
+    Because it is integrated into the 'ggplot2' geom framework, these logo plots
+    support native features such as faceting.
 Collate:
     'logos.r'
     'text.r'

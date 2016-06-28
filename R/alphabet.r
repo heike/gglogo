@@ -11,19 +11,20 @@
 #' @importFrom dplyr group_by
 #' @export
 #' @examples
+#' \donttest{
 #' # check that all letters and digits are nicely shaped:
 #' new_alphabet <- createPolygons(c("f", "g", "W", "*"), font="Garamond")
 #' 
 #' library(ggplot2)
 #' qplot(x,y, geom="polygon", data=new_alphabet, facets=~group)
+#' }
 createPolygons <- function(letters, font, fontsize = 400, dim = c(720, 720), scale = FALSE) {
     region <- group <- x <- y <- NULL
     
   scale_01 <- function(x) {
     (x - min(x, na.rm=TRUE))/diff(range(x, na.rm=TRUE))
   }
-  region <- x <- y <- group <- NULL # initialize values
-  
+
   new_alphabet <- letters %>% map_df(.f = letterToPolygon, fontfamily = font, 
                 fontsize = fontsize, dim=dim, .id="region")
 

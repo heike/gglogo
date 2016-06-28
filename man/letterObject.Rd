@@ -23,8 +23,10 @@ three dimensional matrix of dimension 480 x 480 x 3 of the pixel values, black b
 Convert a text element into an R object
 }
 \examples{
+\donttest{
 plot(letterObject("g", fontfamily="Garamond", fontsize=400))
 plot(letterObject("q", fontsize=400))
 plot(letterObject("B"))
+}
 }
 

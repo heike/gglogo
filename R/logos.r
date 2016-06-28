@@ -9,6 +9,7 @@
 #' @import plyr
 #' @export
 #' @examples 
+#' \donttest{
 #' library(ggplot2)
 #' data(sequences)
 #' 
@@ -20,6 +21,7 @@
 #'   geom_logo(aes(x = class, y = bits, fill = Polarity, label = element)) + 
 #'   facet_wrap(~position, ncol = 18) + 
 #'   theme(legend.position = "bottom")
+#'}
 ggfortify <- function(data, sequences, treatment = NULL, weight = NULL, method = "shannon") {
     aacids <- NULL
   dm2 <- splitSequence(data, sequences)
