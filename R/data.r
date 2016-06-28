@@ -20,6 +20,25 @@ NULL
 #' @usage data(alphabet)
 NULL
 
+#' @rdname alphabet
+#' @name alphabet_comic
+#' @docType data
+#' @usage data(alphabet_comic)
+NULL
+
+#' @rdname alphabet
+#' @name alphabet_xkcd
+#' @docType data
+#' @usage data(alphabet_xkcd)
+NULL
+
+#' @rdname alphabet
+#' @name alphabet_braille
+#' @docType data
+#' @usage data(alphabet_braille)
+NULL
+
+
 #' Amino acid properties
 #' 
 #' @name aacids
