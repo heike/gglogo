@@ -193,6 +193,12 @@ GeomLogo <- ggproto("GeomLogo", Geom,
   
   draw_panel = function(data, panel_scales, coord, alphabet = NULL) {
     if (is.null(alphabet)) data(alphabet, envir = environment())
+    if (is.character(alphabet)) {
+      if (length(grep(alphabet, extrafont::fonts())) != 1) stop(sprintf("%s is not a font. Use extrafont::fonts() for an overview of all available fonts.", alphabet))
+      
+      cat(paste0("creating polygons for font ", alphabet, "\n"))
+      alphabet <- createPolygons(c(LETTERS, letters, 0:9), font = alphabet)
+    }
 #    browser()
     #save(data, file = "testdata.RData")
     #save(panel_scales, file = "panelscales.RData")
