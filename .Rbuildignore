@@ -1,5 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^README.md$
+^README*$
 ^visual_test$
 ^\.travis\.yml$
