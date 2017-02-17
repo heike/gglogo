@@ -71,24 +71,6 @@ qplot(x,y, geom="polygon", data=alphabet_comic,  group="pathGroup") +
   facet_wrap(facets=~group, ncol=13)
 ```
 
-```{r, warning=FALSE}
-alphas <- c(LETTERS, letters, 0:9)
-alphabet_xkcd <- createPolygons(alphas, font="xkcd", scale=TRUE)
-alphabet_xkcd$group <- factor(alphabet_xkcd$group, levels=alphas)
-
-qplot(x,y, geom="polygon", data=alphabet_xkcd,  group="pathGroup") +
-  facet_wrap(facets=~group, ncol=13)
-```
-
-```{r, warning=FALSE}
-alphas <- c(LETTERS, letters, 0:9)
-alphabet_braille <- createPolygons(alphas, font="Swell Braille", scale=FALSE)
-alphabet_braille$group <- factor(alphabet_braille$group, levels=alphas)
-
-qplot(x,y, geom="polygon", data=alphabet_braille,  group="pathGroup") +
-  facet_wrap(facets=~group, ncol=13)
-```
-
 Logo plot of peptide sequences, first with the unscaled Helvetica alphabet:
 ```{r}
 data(sequences)
