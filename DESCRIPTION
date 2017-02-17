@@ -1,6 +1,6 @@
 Package: gglogo
 Title: Geom for Logo Sequence Plots
-Version: 0.1.2
+Version: 0.1.3
 Authors@R: c(
     person("Heike", "Hofmann", email = "hofmann@iastate.edu", role = "aut"),
     person("Eric", "Hare", email = "erichare@iastate.edu", role = c("aut", "cre")),
