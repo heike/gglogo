@@ -14,4 +14,3 @@ published in Wong, B. Nat Methods 7, 889 (2011)
 \details{
 Sequence data
 }
-

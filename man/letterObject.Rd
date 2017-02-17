@@ -29,4 +29,3 @@ plot(letterObject("q", fontsize=400))
 plot(letterObject("B"))
 }
 }
-

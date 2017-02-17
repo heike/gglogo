@@ -15,4 +15,3 @@ reordered version of data frame imdf consistent with an assumption of group 1 be
 \description{
 Set the orientation of a polygon
 }
-

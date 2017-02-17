@@ -18,4 +18,3 @@ prepare data set for plotting in a logo
 data(sequences)
 dm2 <- splitSequence(sequences, "peptide")
 }
-

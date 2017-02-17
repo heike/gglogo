@@ -23,4 +23,3 @@ point_line_dist(px, py, lx_1, ly_1, lx_2, ly_2)
 Compute distance between point given as (px, py) and line spanned by points (lx1, ly1) and (lx2, ly2).
 From http://mathworld.wolfram.com/Point-LineDistance2-Dimensional.html
 }
-

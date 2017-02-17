@@ -18,4 +18,3 @@ vector of indices for ordered traversion along border
 Greedy algorithm to connect points, with the idea that a point is connected by a line with the two points closest to each, that haven't yet been connected into the shape.
 Results depend on the starting point.
 }
-

@@ -2,10 +2,10 @@
 % Please edit documentation in R/position.r
 \docType{data}
 \name{position_logo}
-\alias{PositionClassic}
+\alias{position_logo}
 \alias{PositionLogo}
 \alias{position_classic}
-\alias{position_logo}
+\alias{PositionClassic}
 \title{Logo positioning for overlapping objects on top of one another.}
 \usage{
 position_logo()
@@ -40,4 +40,3 @@ See \code{\link{geom_logo}} for
   more examples.
 }
 \keyword{datasets}
-

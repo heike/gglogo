@@ -51,4 +51,3 @@ ggplot(data = ggfortify(sequences, "peptide")) +
             alpha=0.5)
 }
 \keyword{datasets}
-

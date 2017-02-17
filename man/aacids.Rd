@@ -13,4 +13,3 @@ properties of amino acids: polarity and water affiliation
 \details{
 Amino acid properties
 }
-

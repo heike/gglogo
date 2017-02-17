@@ -17,4 +17,3 @@ data frame group variable is added to the input data
 \description{
 Identify different parts of a polygon
 }
-

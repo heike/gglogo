@@ -15,4 +15,3 @@ simplifyPolygon(points, tol = 1)
 Implementation of the Douglas-Peucker algorithm for line thinning
 http://en.wikipedia.org/wiki/Ramer-Douglas-Peucker_algorithm
 }
-

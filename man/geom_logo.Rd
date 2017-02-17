@@ -71,4 +71,3 @@ ggplot(data = ggfortify(sequences, "peptide", treatment = "class")) +
 }
 }
 \keyword{datasets}
-

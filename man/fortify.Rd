@@ -29,4 +29,3 @@ data frame
 \description{
 S3 method to create a data frame from a 3d array.
 }
-

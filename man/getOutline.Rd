@@ -26,4 +26,3 @@ subset of data frame imdf consisting of just boundary points:
 \description{
 Determine boundary between foreground and background in an image
 }
-

@@ -39,4 +39,3 @@ ggplot(data = ggfortify(sequences, "peptide", treatment = "class")) +
   theme(legend.position = "bottom")
 }
 }
-

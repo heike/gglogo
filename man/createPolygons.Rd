@@ -33,4 +33,3 @@ library(ggplot2)
 qplot(x,y, geom="polygon", data=new_alphabet, facets=~group)
 }
 }
-
