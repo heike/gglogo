@@ -2,6 +2,7 @@
 Eric Hare, Heike Hofmann  
 `r format(Sys.time(), '%B %d, %Y')`  
 
+change just for the heck of it
 
 
 R package for creating sequence logo plots
