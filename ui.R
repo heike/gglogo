@@ -21,7 +21,7 @@ fluidPage(theme = shinytheme("cerulean"),
                 fileInput("data", "Upload Data (FASTA)")
             ),
             
-            #actionButton("confirm", "Build Logo Plot"),
+            actionButton("confirm", "Build Logo Plot"),
             
             conditionalPanel(condition = "output.plotbuilt == true",
                 downloadButton("download", "Download Logo Plot")

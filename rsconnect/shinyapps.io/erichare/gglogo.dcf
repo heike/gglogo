@@ -1,0 +1,12 @@
+name: gglogo
+title: gglogo
+username:
+account: erichare
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 33712
+bundleId: 1655907
+url: https://erichare.shinyapps.io/gglogo/
+when: 1540221377.9973
+asMultiple: FALSE
+asStatic: FALSE

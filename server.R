@@ -14,12 +14,13 @@ function(input, output, session) {
     values <- reactiveValues(seqs = "")
     
     observeEvent(input$confirm, {
-        values$seqs <<- input$sequence
+        x <- strsplit(input$sequence, "\n")[[1]]
+        values$seqs <- as.list(x)
     })
     
     ## The initial uploaded dataset
     seqs.initial <- reactive({
-        if (is.null(input$data)) return(NULL)
+        if (is.null(input$data)) return(values$seqs)
         else return(read.fasta(input$data$datapath))
     })
     
@@ -35,6 +36,9 @@ function(input, output, session) {
         mydf <- ldply(test, function(my.seq) {
             paste(toupper(as.character(my.seq)), collapse = "")
         })
+        
+        if (ncol(mydf) == 1) mydf <- cbind(factor = "a", mydf)
+        
         names(mydf) <- c("factor", "peptide")
         
         return(mydf)
