@@ -39,4 +39,5 @@ ggplot(data = ggfortify(sequences, "peptide", treatment = "class")) +
 See \code{\link{geom_logo}} for
   more examples.
 }
+\concept{position adjustments}
 \keyword{datasets}

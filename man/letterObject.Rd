@@ -4,8 +4,8 @@
 \alias{letterObject}
 \title{Convert a text element into an R object}
 \usage{
-letterObject(ch, fontfamily = "Helvetica", fontsize = 576, dim = c(480,
-  480))
+letterObject(ch, fontfamily = "Helvetica", fontsize = 576,
+  dim = c(480, 480))
 }
 \arguments{
 \item{ch}{text to be converted, usually just a single letter}

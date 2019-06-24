@@ -12,13 +12,11 @@ vignette: >
 ---
 
 
-  ```{r setup, echo=FALSE}
-
+```{r setup, echo=FALSE}
 knitr::opts_chunk$set(fig.width = 6,
                       fig.height = 4,
                       fig.align='center',
                       dev = "png")
-
 ```
 
 By default, the `gglogo` package uses polygons created from a Helvetica font to use for creating logo plots. These polygons are stored in the object `alphabet.rda`, and use the name of the letter or digits they describe as their group identifier:
@@ -31,8 +29,9 @@ head(alphabet)
 ```
 Each letter and digit is scaled to an area between 0 and 1 in y direction (which makes the lower case letter 'c' as tall as its upper case counterpart). In x direction the letter scaled proportionally to its extent in y direction. 
 ```{r}
-qplot(x, y, geom="polygon", data=alphabet) + 
-  facet_wrap(facets=~group, ncol=13) +
+ggplot(data = alphabet, aes(x = x, y = y)) +
+  geom_polygon() +
+  facet_wrap(~group, ncol = 13) +
   coord_equal()
 ```
 
@@ -40,15 +39,16 @@ In order to change the alphabet used, an alphabet object has to be created, and 
 
 # Creating a new alphabet
 
-The function `createPolygons` have parameters to choose the font family and the set of letters for which polygons are supposed to be created. 
-The parameters `dim` and `fontsize` are only needed, if some letters appear to be chopped off. In that case, the dimension of the image should be increased and/or fontsize should be decreased.
+The function `createPolygons` have parameters to choose the font family and the set of letters for which polygons are supposed to be created. The parameters `dim` and `fontsize` are only needed, if some letters appear to be chopped off. In that case, the dimension of the image should be increased and/or fontsize should be decreased.
+
 ```{r, warning=FALSE}
 alphas <- c(LETTERS, letters, 0:9)
 alphabet_garamond <- createPolygons(alphas, font="Garamond")
 alphabet_garamond$group <- factor(alphabet_garamond$group, levels=alphas)
 
-qplot(x,y, geom="polygon", data=alphabet_garamond,  group="pathGroup") +
-  facet_wrap(facets=~group, ncol=13)
+ggplot(alphabet_garamond, aes(x = x, y = y, group = pathGroup)) +
+  geom_polygon() +
+  facet_wrap(~group, ncol = 13)
 ```
 
 ```{r, warning=FALSE}
@@ -56,8 +56,9 @@ alphas <- c(LETTERS, letters, 0:9)
 alphabet_helvetica <- createPolygons(alphas, font="Helvetica")
 alphabet_helvetica$group <- factor(alphabet_helvetica$group, levels=alphas)
 
-qplot(x,y, geom="polygon", data=alphabet_helvetica) +
-  facet_wrap(facets=~group, ncol=13)
+ggplot(alphabet_helvetica, aes(x = x, y = y)) +
+  geom_polygon() +
+  facet_wrap(~group, ncol = 13)
 ```
 
 For use as alphabet in the logo geom, letters have to be scaled to fill the full extent in y-direction so as to fill the surrounding rectangles.
@@ -67,8 +68,9 @@ alphas <- c(LETTERS, letters, 0:9)
 alphabet_comic <- createPolygons(alphas, font="Comic Sans MS", scale=TRUE)
 alphabet_comic$group <- factor(alphabet_comic$group, levels=alphas)
 
-qplot(x,y, geom="polygon", data=alphabet_comic,  group="pathGroup") +
-  facet_wrap(facets=~group, ncol=13)
+ggplot(alphabet_comic, aes(x = x, y = y, group = pathGroup)) +
+  geom_polygon() +
+  facet_wrap(~group, ncol = 13)
 ```
 
 Logo plot of peptide sequences, first with the unscaled Helvetica alphabet:
@@ -81,6 +83,5 @@ ggplot(data=ggfortify(sequences, seq="peptide", treatment="class")) +
             alpha = 0.8) +
   facet_wrap(~position) +
   scale_fill_brewer(palette="Paired")
-
 ```
 

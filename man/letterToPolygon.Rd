@@ -4,8 +4,8 @@
 \alias{letterToPolygon}
 \title{Convert an image file to a polygon}
 \usage{
-letterToPolygon(ch, fontfamily = "Helvetica", fontsize = 576, tol = 1,
-  dim = c(480, 480), threshold = 0.5, var = "red")
+letterToPolygon(ch, fontfamily = "Helvetica", fontsize = 576,
+  tol = 1, dim = c(480, 480), threshold = 0.5, var = "red")
 }
 \arguments{
 \item{ch}{letter}

@@ -5,13 +5,13 @@
 \alias{GeomLogo}
 \alias{geom_logo}
 \title{Sequence logo plots.}
-\format{An object of class \code{GeomLogo} (inherits from \code{Geom}, \code{ggproto}) of length 6.}
+\format{An object of class \code{GeomLogo} (inherits from \code{Geom}, \code{ggproto}, \code{gg}) of length 6.}
 \usage{
 GeomLogo
 
-geom_logo(mapping = NULL, data = NULL, stat = "logo", position = "logo",
-  show.legend = NA, inherit.aes = TRUE, width = 0.9, alpha = 0.6,
-  na.rm = TRUE, alphabet = NULL, ...)
+geom_logo(mapping = NULL, data = NULL, stat = "logo",
+  position = "logo", show.legend = NA, inherit.aes = TRUE,
+  width = 0.9, alpha = 0.6, na.rm = TRUE, alphabet = NULL, ...)
 }
 \arguments{
 \item{mapping}{The aesthetic mapping, usually constructed with aes or aes_string. Only needs to be set at the layer level if you are overriding the plot defaults.}
