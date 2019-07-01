@@ -3,3 +3,4 @@
 ^README.*$
 ^visual_test$
 ^\.travis\.yml$
+^docs$
