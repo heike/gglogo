@@ -84,7 +84,7 @@
 </h1>
                         <h4 class="author">Heike Hofmann and Eric Hare</h4>
             
-            <h4 class="date">2019-07-01</h4>
+            <h4 class="date">2019-07-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/heike/gglogo/blob/master/vignettes/gglogo-alphabet.Rmd"><code>vignettes/gglogo-alphabet.Rmd</code></a></small>
       <div class="hidden name"><code>gglogo-alphabet.Rmd</code></div>
@@ -120,8 +120,8 @@
 <a class="sourceLine" id="cb4-2" title="2">alphabet_garamond &lt;-<span class="st"> </span><span class="kw"><a href="../reference/createPolygons.html">createPolygons</a></span>(alphas, <span class="dt">font=</span><span class="st">"Garamond"</span>)</a>
 <a class="sourceLine" id="cb4-3" title="3">alphabet_garamond<span class="op">$</span>group &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(alphabet_garamond<span class="op">$</span>group, <span class="dt">levels=</span>alphas)</a>
 <a class="sourceLine" id="cb4-4" title="4"></a>
-<a class="sourceLine" id="cb4-5" title="5"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(alphabet_garamond, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">group =</span> pathGroup)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-6" title="6"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_polygon.html">geom_polygon</a></span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(alphabet_garamond, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">group =</span> group)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_polygon.html">geom_polygon</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">subgroup=</span>pathGroup)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb4-7" title="7"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span>group, <span class="dt">ncol =</span> <span class="dv">13</span>)</a></code></pre></div>
 <p><img src="gglogo-alphabet_files/figure-html/unnamed-chunk-3-1.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">alphas &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(LETTERS, letters, <span class="dv">0</span><span class="op">:</span><span class="dv">9</span>)</a>
@@ -137,7 +137,7 @@
 <a class="sourceLine" id="cb6-2" title="2">alphabet_comic &lt;-<span class="st"> </span><span class="kw"><a href="../reference/createPolygons.html">createPolygons</a></span>(alphas, <span class="dt">font=</span><span class="st">"Comic Sans MS"</span>, <span class="dt">scale=</span><span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb6-3" title="3">alphabet_comic<span class="op">$</span>group &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(alphabet_comic<span class="op">$</span>group, <span class="dt">levels=</span>alphas)</a>
 <a class="sourceLine" id="cb6-4" title="4"></a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(alphabet_comic, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">group =</span> pathGroup)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(alphabet_comic, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb6-6" title="6"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_polygon.html">geom_polygon</a></span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb6-7" title="7"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span>group, <span class="dt">ncol =</span> <span class="dv">13</span>)</a></code></pre></div>
 <p><img src="gglogo-alphabet_files/figure-html/unnamed-chunk-5-1.png" width="576" style="display: block; margin: auto;"></p>
