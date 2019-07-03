@@ -45,10 +45,9 @@ The function `createPolygons` have parameters to choose the font family and the 
 alphas <- c(LETTERS, letters, 0:9)
 alphabet_garamond <- createPolygons(alphas, font="Garamond")
 alphabet_garamond$group <- factor(alphabet_garamond$group, levels=alphas)
-alphabet_garamond$subgroup <- readr::parse_number(alphabet_garamond$pathGroup)
 
-ggplot(alphabet_garamond, aes(x = x, y = y, group = pathGroup)) +
-  geom_polygon(aes(subgroup=subgroup)) +
+ggplot(alphabet_garamond, aes(x = x, y = y, group = group)) +
+  geom_polygon(aes(subgroup=pathGroup)) +
   facet_wrap(~group, ncol = 13)
 ```
 
@@ -69,7 +68,7 @@ alphas <- c(LETTERS, letters, 0:9)
 alphabet_comic <- createPolygons(alphas, font="Comic Sans MS", scale=TRUE)
 alphabet_comic$group <- factor(alphabet_comic$group, levels=alphas)
 
-ggplot(alphabet_comic, aes(x = x, y = y, group = pathGroup)) +
+ggplot(alphabet_comic, aes(x = x, y = y)) +
   geom_polygon() +
   facet_wrap(~group, ncol = 13)
 ```
