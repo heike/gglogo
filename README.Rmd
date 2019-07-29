@@ -19,11 +19,13 @@ R package for creating sequence logo plots
 ```{r warning = FALSE, message=FALSE}
 library(ggplot2)
 library(gglogo)
+
 data(sequences)
-ggplot(data = ggfortify(sequences, "peptide")) +      
-  geom_logo(aes(x=position, y=bits, group=element, 
-     label=element, fill=interaction(Polarity, Water)),
+
+ggplot(data = ggfortify(sequences, peptide)) +      
+  geom_logo(aes(x = position, y = bits, group = element, 
+     label = element, fill = interaction(Polarity, Water)),
      alpha = 0.6)  +
-  scale_fill_brewer(palette="Paired") +
+  scale_fill_brewer(palette = "Paired") +
   theme(legend.position = "bottom")
 ```
