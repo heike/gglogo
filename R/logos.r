@@ -6,33 +6,38 @@
 #' @param method either "shannon" or "frequency" for Shannon information or relative frequency of element by position.
 #' @param weight numeric variable of weights
 #' @return data frame with position, element and information value
-#' @import plyr
 #' @export
 #' @examples 
 #' \donttest{
 #' library(ggplot2)
 #' data(sequences)
 #' 
-#' ggplot(data = ggfortify(sequences, "peptide", treatment = "class")) +
+#' ggplot(data = ggfortify(sequences, peptide, treatment = "class")) +
 #'   geom_logo(aes(x = class, y = bits, fill = Water, label = element)) + 
 #'   facet_wrap(~position)
 #'   
-#' ggplot(data = ggfortify(sequences, "peptide", treatment = "class")) +
+#' ggplot(data = ggfortify(sequences, peptide, treatment = "class")) +
 #'   geom_logo(aes(x = class, y = bits, fill = Polarity, label = element)) + 
 #'   facet_wrap(~position, ncol = 18) + 
 #'   theme(legend.position = "bottom")
 #'}
 ggfortify <- function(data, sequences, treatment = NULL, weight = NULL, method = "shannon") {
-    aacids <- NULL
-  dm2 <- splitSequence(data, sequences)
+  aacids <- NULL
+  seqs <- enquo(sequences)
+  
+  dm2 <- splitSequence(data, !!seqs)
+  
   k <- 4
   if (length(unique(dm2$element))>5) k <- 21
+  
   dm3 <- calcInformation(dm2, pos="position", trt=treatment, weight = weight, elems="element", k=k, method = method)
+  
   data(aacids, envir = environment())
   
   if (k == 21) # add peptide informatio only for peptides
     dm3 <- merge(dm3, aacids[,-1], by.x="element", by.y="AA", all.x = TRUE)
-  dm3
+  
+  return(dm3)
 }
  
 #' Reshape data set according to elements in sequences
@@ -41,13 +46,15 @@ ggfortify <- function(data, sequences, treatment = NULL, weight = NULL, method =
 #' @param dframe data frame of peptide (or any other) sequences and some treatment factors
 #' @param sequences column containing the character vector of (peptide) sequence
 #' @export
-#' @importFrom plyr ldply
-#' @importFrom reshape2 melt
+#' @importFrom dplyr mutate
+#' @importFrom dplyr mutate_at
+#' @importFrom dplyr mutate_all
+#' @importFrom tidyr unnest
 #' @examples
 #' data(sequences)
 #' dm2 <- splitSequence(sequences, peptide)
 splitSequence <- function(dframe, sequences) {
-  seqs <- enquo(sequence)
+  seqs <- enquo(sequences)
   seqVars <- dframe %>%
     mutate_at(vars(!!seqs), as.character) %>%
     mutate(position = list(1:nchar(!!seqs)[1]),
@@ -67,6 +74,7 @@ splitSequence <- function(dframe, sequences) {
 #' @param method either "shannon" or "frequency" for Shannon information or relative frequency of element by position.
 #' @return extended data frame with additional information of shannon info in bits and each elements contribution to the total information
 #' @importFrom plyr ddply
+#' @importFrom plyr as.quoted
 #' @export
 #' @examples
 #' data(sequences)
@@ -126,7 +134,6 @@ logo <- function(sequences) {
 }
 
 #' @rdname stat_logo
-#' @import plyr 
 #' @return  proto object
 #' @export 
 #' 
@@ -171,7 +178,7 @@ StatLogo <- ggproto("StatLogo", Stat,
 #' data(sequences)
 #' library(ggplot2)
 #' 
-#' ggplot(data = ggfortify(sequences, "peptide")) + 
+#' ggplot(data = ggfortify(sequences, peptide)) + 
 #'   geom_logo(aes(x=position, y=bits, label=element, 
 #'                 group=interaction(position, element)), 
 #'             alpha=0.5)
@@ -187,6 +194,7 @@ stat_logo <- function(mapping = NULL, data = NULL, geom = "logo",
 #' @rdname geom_logo
 #' @export
 #' @importFrom grid grobTree
+#' @importFrom plyr adply
 GeomLogo <- ggproto("GeomLogo", Geom,
   required_aes = c("x", "y", "group", "label"),
   default_aes = aes(weight = 1, colour = "grey80", fill = "white", size = 0.1, alpha = 0.25, width = 0.9, shape = 16, linetype = "solid"),
@@ -257,24 +265,24 @@ GeomLogo <- ggproto("GeomLogo", Geom,
 #' \donttest{
 #' library(ggplot2)
 #' data(sequences)
-#' ggplot(data = ggfortify(sequences, "peptide")) +      
+#' ggplot(data = ggfortify(sequences, peptide)) +      
 #'   geom_logo(aes(x=position, y=bits, group=element, 
 #'      label=element, fill=interaction(Polarity, Water)),
 #'      alpha = 0.6)  +
 #'   scale_fill_brewer(palette="Paired") +
 #'   theme(legend.position = "bottom")
 #'   
-#' ggplot(data = ggfortify(sequences, "peptide", treatment = "class")) + 
+#' ggplot(data = ggfortify(sequences, peptide, treatment = "class")) + 
 #'   geom_logo(aes(x=class, y=bits, group=element, 
 #'      label=element, fill=element)) + 
 #'   facet_wrap(~position, ncol=18) +
 #'   theme(legend.position = "bottom")
 #'   
-#' ggplot(data = ggfortify(sequences, "peptide", treatment = "class")) + 
+#' ggplot(data = ggfortify(sequences, peptide, treatment = "class")) + 
 #'   geom_logo(aes(x=position, y=bits, group=element, label=element, fill=element)) + 
 #'   facet_wrap(~class, ncol=1) + theme_bw()
 #'   
-#' ggplot(data = ggfortify(sequences, "peptide", treatment = "class")) + 
+#' ggplot(data = ggfortify(sequences, peptide, treatment = "class")) + 
 #'   geom_logo(aes(x=class, y=bits, group=element, 
 #'                 label=element, fill=interaction(Polarity, Water))) + 
 #'   scale_fill_brewer("Amino-acids properties", palette="Paired") + 

@@ -74,10 +74,11 @@ ggplot(alphabet_comic, aes(x = x, y = y)) +
 ```
 
 Logo plot of peptide sequences, first with the unscaled Helvetica alphabet:
+
 ```{r}
 data(sequences)
-ggplot(data=ggfortify(sequences, seq="peptide", treatment="class")) +
-  geom_logo(aes(x = class, y = bits, label=element, group=element, 
+ggplot(data = ggfortify(sequences, peptide, treatment = "class")) +
+  geom_logo( aes(x = class, y = bits, label=element, group=element, 
                 fill = interaction(Polarity, Water)), 
             alphabet = alphabet_braille, 
             alpha = 0.8) +
