@@ -39,20 +39,21 @@ ggfortify <- function(data, sequences, treatment = NULL, weight = NULL, method =
 #' 
 #' prepare data set for plotting in a logo
 #' @param dframe data frame of peptide (or any other) sequences and some treatment factors
-#' @param sequences character string or index for the character vector of (peptide) sequence
+#' @param sequences column containing the character vector of (peptide) sequence
 #' @export
 #' @importFrom plyr ldply
 #' @importFrom reshape2 melt
 #' @examples
 #' data(sequences)
-#' dm2 <- splitSequence(sequences, "peptide")
+#' dm2 <- splitSequence(sequences, peptide)
 splitSequence <- function(dframe, sequences) {
-  seqs <- as.character(dframe[,sequences])
-  seqVars <-  data.frame(dframe, ldply(seqs, function(x) unlist(strsplit(x, split=""))))
-  dm <- melt(seqVars, id.vars=names(dframe))
-  names(dm) <- c(names(dframe), "position", "element")
-  levels(dm$position) <- gsub("V"," ", levels(dm$position))
-  dm
+  seqs <- enquo(sequence)
+  seqVars <- dframe %>%
+    mutate_at(vars(!!seqs), as.character) %>%
+    mutate(position = list(1:nchar(!!seqs)[1]),
+           element = strsplit(!!seqs, split = ""))  %>%
+    unnest() %>%
+    mutate_all(as.factor)
 }
 
 #' Compute shannon information based on position and treatment
@@ -69,7 +70,7 @@ splitSequence <- function(dframe, sequences) {
 #' @export
 #' @examples
 #' data(sequences)
-#' dm2 <- splitSequence(sequences, "peptide")
+#' dm2 <- splitSequence(sequences, peptide)
 #' dm3 <- calcInformation(dm2, pos="position", trt="class", elems="element", k=21)
 #' # precursor to a logo plot:
 #' library(ggplot2)
@@ -119,7 +120,7 @@ logo <- function(sequences) {
   element <- NA
   
   dframe <- data.frame(seq=sequences)
-  dm2 <- splitSequence(dframe, "seq")
+  dm2 <- splitSequence(dframe, seq)
   dm3 <- calcInformation(dm2, pos="position", elems="element", k=length(unique(dm2$element)))
   ggplot(dm3, aes(x=position, y=bits, group=element, label=element)) + geom_logo() 
 }

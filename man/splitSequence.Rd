@@ -9,12 +9,12 @@ splitSequence(dframe, sequences)
 \arguments{
 \item{dframe}{data frame of peptide (or any other) sequences and some treatment factors}
 
-\item{sequences}{character string or index for the character vector of (peptide) sequence}
+\item{sequences}{column containing the character vector of (peptide) sequence}
 }
 \description{
 prepare data set for plotting in a logo
 }
 \examples{
 data(sequences)
-dm2 <- splitSequence(sequences, "peptide")
+dm2 <- splitSequence(sequences, peptide)
 }
