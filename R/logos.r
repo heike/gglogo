@@ -55,12 +55,12 @@ ggfortify <- function(data, sequences, treatment = NULL, weight = NULL, method =
 #' dm2 <- splitSequence(sequences, peptide)
 splitSequence <- function(dframe, sequences) {
   seqs <- enquo(sequences)
-  seqVars <- dframe %>%
+  dframe %>%
     mutate_at(vars(!!seqs), as.character) %>%
     mutate(position = list(1:nchar(!!seqs)[1]),
            element = strsplit(!!seqs, split = ""))  %>%
     unnest() %>%
-    mutate_all(as.factor)
+    mutate_at(vars(position, element), as.factor)
 }
 
 #' Compute shannon information based on position and treatment
