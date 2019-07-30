@@ -1,8 +1,12 @@
-# gglogo
-Eric Hare, Heike Hofmann  
-`r format(Sys.time(), '%B %d, %Y')`  
+---
+title: "gglogo"
+author: "Eric Hare, Heike Hofmann"
+date: "July 29, 2019"
+output: 
+  html_document:
+    keep_md: true
+---
 
-change just for the heck of it
 
 
 R package for creating sequence logo plots
@@ -14,12 +18,14 @@ R package for creating sequence logo plots
 ```r
 library(ggplot2)
 library(gglogo)
+
 data(sequences)
-ggplot(data = ggfortify(sequences, "peptide")) +      
-  geom_logo(aes(x=position, y=bits, group=element, 
-     label=element, fill=interaction(Polarity, Water)),
+
+ggplot(data = ggfortify(sequences, peptide)) +      
+  geom_logo(aes(x = position, y = bits, group = element, 
+     label = element, fill = interaction(Polarity, Water)),
      alpha = 0.6)  +
-  scale_fill_brewer(palette="Paired") +
+  scale_fill_brewer(palette = "Paired") +
   theme(legend.position = "bottom")
 ```
 

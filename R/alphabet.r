@@ -9,6 +9,7 @@
 #' @importFrom magrittr %>%
 #' @importFrom purrr map_df
 #' @importFrom dplyr group_by
+#' @importFrom dplyr select
 #' @export
 #' @examples
 #' \donttest{
@@ -19,7 +20,7 @@
 #' qplot(x,y, geom="polygon", data=new_alphabet, facets=~group)
 #' }
 createPolygons <- function(letters, font, fontsize = 400, dim = c(720, 720), scale = FALSE) {
-    region <- group <- x <- y <- NULL
+    region <- group <- x <- y <- pathGroup <- NULL
     
   scale_01 <- function(x) {
     (x - min(x, na.rm=TRUE))/diff(range(x, na.rm=TRUE))
@@ -28,14 +29,14 @@ createPolygons <- function(letters, font, fontsize = 400, dim = c(720, 720), sca
   new_alphabet <- letters %>% map_df(.f = letterToPolygon, fontfamily = font, 
                 fontsize = fontsize, dim=dim, .id="region")
 
-  new_alphabet$region <- letters[as.numeric(new_alphabet$region)]
+  new_alphabet$group <- letters[as.numeric(new_alphabet$region)]
   new_alphabet$pathGroup <- with(new_alphabet, paste(region, group, sep="."))
-  new_alphabet <- dplyr::rename(new_alphabet, group=region)
-  
+
   if (scale) 
     new_alphabet <- new_alphabet %>% group_by(group) %>% mutate(x = scale_01(x), y=scale_01(y))
   else  
     new_alphabet <- new_alphabet %>% mutate(x = scale_01(x), y=scale_01(y))
   
-  new_alphabet[, c("x", "y", "order", "group", "pathGroup")]
+  new_alphabet %>%
+    select(x, y, order, group, pathGroup)
 }

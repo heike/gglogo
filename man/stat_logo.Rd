@@ -46,7 +46,7 @@ Calculation of all pieces necessary to plot a logo sequence plot
 data(sequences)
 library(ggplot2)
 
-ggplot(data = ggfortify(sequences, "peptide")) + 
+ggplot(data = ggfortify(sequences, peptide)) + 
   geom_logo(aes(x=position, y=bits, label=element, 
                 group=interaction(position, element)), 
             alpha=0.5)

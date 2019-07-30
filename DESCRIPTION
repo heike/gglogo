@@ -16,6 +16,7 @@ Imports:
     jpeg,
     plyr,
     dplyr,
+    tidyr,
     magrittr,
     purrr,
     reshape2,

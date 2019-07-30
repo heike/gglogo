@@ -78,6 +78,7 @@ fortify.default <- function(model, data, ...) {
 #' \item blue number vector in (0,1) describing the amount of blue of the pixel in an RGB model
 #' }
 #' @importFrom stats na.omit
+#' @importFrom plyr .
 #' @export
 getOutline <- function(imdf, var="red", threshold=0.5) {
   stopifnot(c("x", "y") %in% names(imdf))
@@ -203,6 +204,7 @@ completePolygon <- function(polygon) {
 #' Set the orientation of a polygon
 #' 
 #' @param imdf dataframe describing a pixellated image in x and y. Has to have columns x, y, and group
+#' @importFrom plyr llply
 #' @return reordered version of data frame imdf consistent with an assumption of group 1 being the main outline and any other groups being cutouts
 #' @export
 mainPlusIslands <- function(imdf) {
