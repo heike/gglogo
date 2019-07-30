@@ -1,6 +1,6 @@
 Package: gglogo
 Title: Geom for Logo Sequence Plots
-Version: 0.1.4
+Version: 0.1.9000
 Authors@R: c(
     person("Heike", "Hofmann", email = "hofmann@iastate.edu", role = "aut"),
     person("Eric", "Hare", email = "eric@oaiti.org", role = c("aut", "cre")),
@@ -20,7 +20,8 @@ Imports:
     magrittr,
     purrr,
     reshape2,
-    knitr
+    knitr,
+    rlang
 Suggests:
     RColorBrewer
 Description: Visualize sequences in (modified) logo plots. The design choices
