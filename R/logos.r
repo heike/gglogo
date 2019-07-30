@@ -30,7 +30,7 @@ ggfortify <- function(data, sequences, treatment = NULL, weight = NULL, method =
   k <- 4
   if (length(unique(dm2$element))>5) k <- 21
   
-  dm3 <- calcInformation(dm2, pos="position", trt=treatment, weight = weight, elems="element", k=k, method = method)
+  dm3 <- calcInformation(dm2, pos = position, trt = treatment, weight = weight, elems = element, k = k, method = method)
   
   data(aacids, envir = environment())
   
@@ -67,46 +67,53 @@ splitSequence <- function(dframe, sequences) {
 #' 
 #' @param dframe data frame of peptide (or any other) sequences and some treatment factors
 #' @param trt (vector of) character string(s) of treatment information
-#' @param pos character string of position
-#' @param elems character string of elements
+#' @param pos variable containing position
+#' @param elems variable containing elements
 #' @param k alphabet size: 4 for DNA/RNA sequences, 21 for standard amino acids
-#' @param weight number of times each sequence is observed, defaults to 1 in case no weight is given
+#' @param weight variable containing number of times each sequence is observed, defaults to 1 in case no weight is given
 #' @param method either "shannon" or "frequency" for Shannon information or relative frequency of element by position.
 #' @return extended data frame with additional information of shannon info in bits and each elements contribution to the total information
-#' @importFrom plyr ddply
-#' @importFrom plyr as.quoted
+#' @importFrom dplyr mutate
 #' @export
 #' @examples
 #' data(sequences)
 #' dm2 <- splitSequence(sequences, peptide)
-#' dm3 <- calcInformation(dm2, pos="position", trt="class", elems="element", k=21)
+#' dm3 <- calcInformation(dm2, pos = position, trt = class, elems = element, k = 21)
 #' # precursor to a logo plot:
 #' library(ggplot2)
 #' # library(biovizBase)
 #' 
-calcInformation <- function(dframe, trt=NULL, pos, elems, k=4, weight = NULL, method="shannon") {
-  if (is.null(weight)) dframe$wt <- 1
-  else dframe$wt <- dframe[,weight]
-  trt <- as.quoted(trt)
-  pos <- as.quoted(pos)
-  elems <- as.quoted(elems)
-  freqs <- ddply(dframe, c(trt, pos, elems), function(x) sum(x$wt))
-## define implicit bindings for variables - not necessary though, since all of the variables do exist
-  freq <- NA
-  total <- NA
+calcInformation <- function(dframe, trt = NULL, pos, elems, k = 4, weight = NULL, method = "shannon") {
+  if (is.null(weight))  {
+    dframe$`_wt` <- 1
+  } else {
+    dframe$`_wt` <- dframe[[weight]]
+  }
   
-  names(freqs)[ncol(freqs)] <- "freq"
-  freqByPos <- ddply(freqs, c(trt, pos), transform, total=sum(freq))
+  trtqo <- enquo(trt)
+  posqo <- enquo(pos)
+  elemqo <- enquo(elems)
+  
+  freqs <- dframe %>%
+    group_by(!!trtqo, !!posqo, !!elemqo) %>%
+    summarise(freq = sum(`_wt`))
+  
+  freqByPos <- freqs %>%
+    group_by(!!trtqo, !!posqo) %>%
+    mutate(total = sum(freq))
+  
   if (method == "shannon") {
-    freqByPos <- ddply(freqByPos, c(trt, pos), transform, info=-sum((freq/total*log(freq/total, base=2))[freq>0]))
-    freqByPos$info <- -log(1/k, base=2) - with(freqByPos, info)
-    freqByPos$bits <- with(freqByPos, freq/total*info) # why bits and not info?
-    freqByPos$info <- freqByPos$bits
-  }  
+    freqByPos <- freqByPos %>%
+      group_by(!!trtqo, !!posqo) %>%
+      mutate(info = -sum((freq/total * log(freq/total, base=2))[freq>0])) %>%
+      mutate(info = -log(1/k, base = 2) - info, bits = freq/total * info) %>%
+      mutate(info = bits) # why bits and not info?
+  }
   if (method == "frequency")
     freqByPos$info <- with(freqByPos, freq/total)
   
-  freqByPos
+  freqByPos %>%
+    ungroup()
 }
 
 #' Logo plot
@@ -129,7 +136,7 @@ logo <- function(sequences) {
   
   dframe <- data.frame(seq=sequences)
   dm2 <- splitSequence(dframe, seq)
-  dm3 <- calcInformation(dm2, pos="position", elems="element", k=length(unique(dm2$element)))
+  dm3 <- calcInformation(dm2, pos = position, elems = element, k = length(unique(dm2$element)))
   ggplot(dm3, aes(x=position, y=bits, group=element, label=element)) + geom_logo() 
 }
 
