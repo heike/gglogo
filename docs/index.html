@@ -88,16 +88,36 @@
     
 <p>R package for creating sequence logo plots</p>
 <p><a href="https://cran.r-project.org/package=gglogo"><img src="http://www.r-pkg.org/badges/version/gglogo" alt="CRAN Status"></a> <a href="http://www.r-pkg.org/pkg/gglogo"><img src="http://cranlogs.r-pkg.org/badges/gglogo" alt="CRAN RStudio mirror downloads"></a> <a href="https://travis-ci.org/heike/gglogo"><img src="https://travis-ci.org/heike/gglogo.svg?branch=master" alt="Travis-CI Build Status"></a></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gglogo)</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(sequences)</a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="dt">data =</span> <span class="kw"><a href="reference/ggfortify.html">ggfortify</a></span>(sequences, <span class="st">"peptide"</span>)) <span class="op">+</span><span class="st">      </span></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="st">  </span><span class="kw"><a href="reference/geom_logo.html">geom_logo</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x=</span>position, <span class="dt">y=</span>bits, <span class="dt">group=</span>element, </a>
-<a class="sourceLine" id="cb1-6" title="6">     <span class="dt">label=</span>element, <span class="dt">fill=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/interaction">interaction</a></span>(Polarity, Water)),</a>
-<a class="sourceLine" id="cb1-7" title="7">     <span class="dt">alpha =</span> <span class="fl">0.6</span>)  <span class="op">+</span></a>
-<a class="sourceLine" id="cb1-8" title="8"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer</a></span>(<span class="dt">palette=</span><span class="st">"Paired"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb1-9" title="9"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
+<div id="installation" class="section level1">
+<div class="page-header"><h1 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h1></div>
+<p><code>gglogo</code> is available from CRAN (version 0.0.2):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"gglogo"</span>)</a></code></pre></div>
+<p>The development version is available from Github:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># install.packages("devtools")</span></a>
+<a class="sourceLine" id="cb2-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"heike/gglogo"</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+</div>
+<div id="getting-started" class="section level1">
+<h1 class="hasAnchor">
+<a href="#getting-started" class="anchor"></a>Getting Started</h1>
+<p>Load the library</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gglogo)</a></code></pre></div>
+<p>Load a dataset</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(sequences)</a></code></pre></div>
+<div id="a-first-sequence-logo-plot" class="section level2">
+<h2 class="hasAnchor">
+<a href="#a-first-sequence-logo-plot" class="anchor"></a>A first sequence logo plot</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
+<a class="sourceLine" id="cb5-2" title="2"></a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="dt">data =</span> <span class="kw"><a href="reference/ggfortify.html">ggfortify</a></span>(sequences, peptide)) <span class="op">+</span><span class="st">      </span></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="st">  </span><span class="kw"><a href="reference/geom_logo.html">geom_logo</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> position, <span class="dt">y =</span> bits, <span class="dt">group =</span> element, </a>
+<a class="sourceLine" id="cb5-5" title="5">     <span class="dt">label =</span> element, <span class="dt">fill =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/interaction">interaction</a></span>(Polarity, Water)),</a>
+<a class="sourceLine" id="cb5-6" title="6">     <span class="dt">alpha =</span> <span class="fl">0.6</span>)  <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-7" title="7"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer</a></span>(<span class="dt">palette =</span> <span class="st">"Paired"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-8" title="8"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
