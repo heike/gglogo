@@ -12,27 +12,33 @@
 #' library(ggplot2)
 #' data(sequences)
 #' 
-#' ggplot(data = ggfortify(sequences, peptide, treatment = "class")) +
+#' ggplot(data = ggfortify(sequences, peptide, treatment = class)) +
 #'   geom_logo(aes(x = class, y = bits, fill = Water, label = element)) + 
 #'   facet_wrap(~position)
 #'   
-#' ggplot(data = ggfortify(sequences, peptide, treatment = "class")) +
+#' ggplot(data = ggfortify(sequences, peptide, treatment = class)) +
 #'   geom_logo(aes(x = class, y = bits, fill = Polarity, label = element)) + 
 #'   facet_wrap(~position, ncol = 18) + 
 #'   theme(legend.position = "bottom")
 #'}
 ggfortify <- function(data, sequences, treatment = NULL, weight = NULL, method = "shannon") {
   aacids <- NULL
+  position <- NULL
+  element <- NULL
+  
+  data(aacids, envir = environment())
+  
   seqs <- enquo(sequences)
+  treatment <- enquo(treatment)
+  weight <- enquo(weight)
   
   dm2 <- splitSequence(data, !!seqs)
   
   k <- 4
-  if (length(unique(dm2$element))>5) k <- 21
+  if (length(unique(dm2$element)) > 5) k <- 21
   
-  dm3 <- calcInformation(dm2, pos="position", trt=treatment, weight = weight, elems="element", k=k, method = method)
-  
-  data(aacids, envir = environment())
+  dm3 <- calcInformation(dm2, pos = position, elems = element, trt = !!treatment, 
+                         weight = !!weight, k = k, method = method)
   
   if (k == 21) # add peptide informatio only for peptides
     dm3 <- merge(dm3, aacids[,-1], by.x="element", by.y="AA", all.x = TRUE)
@@ -54,7 +60,11 @@ ggfortify <- function(data, sequences, treatment = NULL, weight = NULL, method =
 #' data(sequences)
 #' dm2 <- splitSequence(sequences, peptide)
 splitSequence <- function(dframe, sequences) {
+  position <- NULL
+  element <- NULL
+  
   seqs <- enquo(sequences)
+  
   dframe %>%
     mutate_at(vars(!!seqs), as.character) %>%
     mutate(position = list(1:nchar(!!seqs)[1]),
@@ -67,46 +77,67 @@ splitSequence <- function(dframe, sequences) {
 #' 
 #' @param dframe data frame of peptide (or any other) sequences and some treatment factors
 #' @param trt (vector of) character string(s) of treatment information
-#' @param pos character string of position
-#' @param elems character string of elements
+#' @param pos variable containing position
+#' @param elems variable containing elements
 #' @param k alphabet size: 4 for DNA/RNA sequences, 21 for standard amino acids
-#' @param weight number of times each sequence is observed, defaults to 1 in case no weight is given
+#' @param weight variable containing number of times each sequence is observed, defaults to 1 in case no weight is given
 #' @param method either "shannon" or "frequency" for Shannon information or relative frequency of element by position.
 #' @return extended data frame with additional information of shannon info in bits and each elements contribution to the total information
-#' @importFrom plyr ddply
-#' @importFrom plyr as.quoted
+#' @importFrom dplyr mutate
+#' @importFrom dplyr summarise
+#' @importFrom dplyr ungroup
+#' @importFrom dplyr select
+#' @importFrom rlang quo_is_null
 #' @export
 #' @examples
 #' data(sequences)
 #' dm2 <- splitSequence(sequences, peptide)
-#' dm3 <- calcInformation(dm2, pos="position", trt="class", elems="element", k=21)
+#' dm3 <- calcInformation(dm2, pos = position, elems = element, trt = class, k = 21)
 #' # precursor to a logo plot:
 #' library(ggplot2)
 #' # library(biovizBase)
 #' 
-calcInformation <- function(dframe, trt=NULL, pos, elems, k=4, weight = NULL, method="shannon") {
-  if (is.null(weight)) dframe$wt <- 1
-  else dframe$wt <- dframe[,weight]
-  trt <- as.quoted(trt)
-  pos <- as.quoted(pos)
-  elems <- as.quoted(elems)
-  freqs <- ddply(dframe, c(trt, pos, elems), function(x) sum(x$wt))
-## define implicit bindings for variables - not necessary though, since all of the variables do exist
-  freq <- NA
-  total <- NA
+calcInformation <- function(dframe, pos, elems, trt = NULL, weight = NULL, k = 4, method = "shannon") {
+  `_default` <- NULL
+  freq <- NULL
+  total <- NULL
+  info <- NULL
+  bits <- NULL
   
-  names(freqs)[ncol(freqs)] <- "freq"
-  freqByPos <- ddply(freqs, c(trt, pos), transform, total=sum(freq))
+  weightqo <- enquo(weight)
+  if (quo_is_null(enquo(weight))) weightqo <- quo(`_default`)
+  
+  trtqo <- enquo(trt)
+  if (quo_is_null(enquo(trt))) trtqo <- quo(`_default`)
+  
+  posqo <- enquo(pos)
+  elemqo <- enquo(elems)
+  
+  freqs <- dframe %>%
+    mutate(`_default` = 1) %>%
+    group_by(!!trtqo, !!posqo, !!elemqo) %>%
+    summarise(freq = sum(!!weightqo))
+  
+  freqByPos <- freqs %>%
+    group_by(!!trtqo, !!posqo) %>%
+    mutate(total = sum(freq))
+  
   if (method == "shannon") {
-    freqByPos <- ddply(freqByPos, c(trt, pos), transform, info=-sum((freq/total*log(freq/total, base=2))[freq>0]))
-    freqByPos$info <- -log(1/k, base=2) - with(freqByPos, info)
-    freqByPos$bits <- with(freqByPos, freq/total*info) # why bits and not info?
-    freqByPos$info <- freqByPos$bits
-  }  
-  if (method == "frequency")
+    freqByPos <- freqByPos %>%
+      group_by(!!trtqo, !!posqo) %>%
+      mutate(info = -sum((freq/total * log(freq/total, base=2))[freq>0])) %>%
+      mutate(info = -log(1/k, base = 2) - info, bits = freq/total * info) %>%
+      mutate(info = bits) # why bits and not info?
+  } else if (method == "frequency") {
     freqByPos$info <- with(freqByPos, freq/total)
+  }
   
-  freqByPos
+  final <- freqByPos %>%
+    ungroup()
+  
+  if (quo_is_null(enquo(trt))) final <- final %>% select(-`_default`)
+  
+  return(final)
 }
 
 #' Logo plot
@@ -129,7 +160,7 @@ logo <- function(sequences) {
   
   dframe <- data.frame(seq=sequences)
   dm2 <- splitSequence(dframe, seq)
-  dm3 <- calcInformation(dm2, pos="position", elems="element", k=length(unique(dm2$element)))
+  dm3 <- calcInformation(dm2, pos = position, elems = element, k = length(unique(dm2$element)))
   ggplot(dm3, aes(x=position, y=bits, group=element, label=element)) + geom_logo() 
 }
 
@@ -272,17 +303,17 @@ GeomLogo <- ggproto("GeomLogo", Geom,
 #'   scale_fill_brewer(palette="Paired") +
 #'   theme(legend.position = "bottom")
 #'   
-#' ggplot(data = ggfortify(sequences, peptide, treatment = "class")) + 
+#' ggplot(data = ggfortify(sequences, peptide, treatment = class)) + 
 #'   geom_logo(aes(x=class, y=bits, group=element, 
 #'      label=element, fill=element)) + 
 #'   facet_wrap(~position, ncol=18) +
 #'   theme(legend.position = "bottom")
 #'   
-#' ggplot(data = ggfortify(sequences, peptide, treatment = "class")) + 
+#' ggplot(data = ggfortify(sequences, peptide, treatment = class)) + 
 #'   geom_logo(aes(x=position, y=bits, group=element, label=element, fill=element)) + 
 #'   facet_wrap(~class, ncol=1) + theme_bw()
 #'   
-#' ggplot(data = ggfortify(sequences, peptide, treatment = "class")) + 
+#' ggplot(data = ggfortify(sequences, peptide, treatment = class)) + 
 #'   geom_logo(aes(x=class, y=bits, group=element, 
 #'                 label=element, fill=interaction(Polarity, Water))) + 
 #'   scale_fill_brewer("Amino-acids properties", palette="Paired") + 

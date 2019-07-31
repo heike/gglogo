@@ -79,6 +79,7 @@ fortify.default <- function(model, data, ...) {
 #' }
 #' @importFrom stats na.omit
 #' @importFrom plyr .
+#' @importFrom plyr ddply
 #' @export
 getOutline <- function(imdf, var="red", threshold=0.5) {
   stopifnot(c("x", "y") %in% names(imdf))

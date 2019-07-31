@@ -4,21 +4,21 @@
 \alias{calcInformation}
 \title{Compute shannon information based on position and treatment}
 \usage{
-calcInformation(dframe, trt = NULL, pos, elems, k = 4, weight = NULL,
+calcInformation(dframe, pos, elems, trt = NULL, weight = NULL, k = 4,
   method = "shannon")
 }
 \arguments{
 \item{dframe}{data frame of peptide (or any other) sequences and some treatment factors}
 
+\item{pos}{variable containing position}
+
+\item{elems}{variable containing elements}
+
 \item{trt}{(vector of) character string(s) of treatment information}
 
-\item{pos}{character string of position}
-
-\item{elems}{character string of elements}
+\item{weight}{variable containing number of times each sequence is observed, defaults to 1 in case no weight is given}
 
 \item{k}{alphabet size: 4 for DNA/RNA sequences, 21 for standard amino acids}
-
-\item{weight}{number of times each sequence is observed, defaults to 1 in case no weight is given}
 
 \item{method}{either "shannon" or "frequency" for Shannon information or relative frequency of element by position.}
 }
@@ -31,7 +31,7 @@ Compute shannon information based on position and treatment
 \examples{
 data(sequences)
 dm2 <- splitSequence(sequences, peptide)
-dm3 <- calcInformation(dm2, pos="position", trt="class", elems="element", k=21)
+dm3 <- calcInformation(dm2, pos = position, elems = element, trt = class, k = 21)
 # precursor to a logo plot:
 library(ggplot2)
 # library(biovizBase)

@@ -16,14 +16,14 @@ R package for creating sequence logo plots
 
 # Installation
 
-`gglogo` is available from CRAN (version 0.0.2):
+`gglogo` is available from CRAN (version 0.1.4):
 
 ```r
 install.packages("gglogo")
 ```
 
 
-The development version is available from Github:
+The development version is available from Github (0.1.9000):
 
 
 ```r
@@ -62,4 +62,3 @@ ggplot(data = ggfortify(sequences, peptide)) +
 ```
 
 ![](README_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
-

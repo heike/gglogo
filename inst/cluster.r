@@ -7,7 +7,7 @@
 #' @examples
 #' dseq <- seqtree(subset(sequences, class=="gram +")$peptide, pos=c(4,7,24,27), k=4)
 #' dm2 <- splitSequence(dseq, subseq)
-#' dm3 <- calcInformation(dm2, pos="position", trt="cl", elems="element", k=21, weight="Freq")
+#' dm3 <- calcInformation(dm2, pos = position, trt = cl, elems = element, k = 21, weight ="Freq")
 #' library(RColorBrewer)
 #' cols <- brewer.pal(10,"Paired")[c(1,2,7,8)]
 #' data(aacids)
