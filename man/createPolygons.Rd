@@ -4,8 +4,7 @@
 \alias{createPolygons}
 \title{Create a data set of polygons for a set of letters from a specified fontfamily}
 \usage{
-createPolygons(letters, font, fontsize = 400, dim = c(720, 720),
-  scale = FALSE)
+createPolygons(letters, font, fontsize = 400, dim = c(720, 720), scale = FALSE)
 }
 \arguments{
 \item{letters}{set of characters for which polygons are to be created}

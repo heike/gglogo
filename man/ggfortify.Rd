@@ -4,8 +4,7 @@
 \alias{ggfortify}
 \title{Convert sequence data to a format suitable for logo plots}
 \usage{
-ggfortify(data, sequences, treatment = NULL, weight = NULL,
-  method = "shannon")
+ggfortify(data, sequences, treatment = NULL, weight = NULL, method = "shannon")
 }
 \arguments{
 \item{data}{data frame with the sequences}

@@ -1,6 +1,6 @@
 Package: gglogo
 Title: Geom for Logo Sequence Plots
-Version: 0.1.9000
+Version: 0.1.5
 Authors@R: c(
     person("Heike", "Hofmann", email = "hofmann@iastate.edu", role = "aut"),
     person("Eric", "Hare", email = "eric@oaiti.org", role = c("aut", "cre")),
@@ -35,6 +35,7 @@ Collate:
     'data.r'
     'alphabet.r'
     'position.r'
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
+Encoding: UTF-8
 VignetteBuilder: knitr
 LazyData: true

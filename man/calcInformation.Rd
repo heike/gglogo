@@ -4,8 +4,15 @@
 \alias{calcInformation}
 \title{Compute shannon information based on position and treatment}
 \usage{
-calcInformation(dframe, pos, elems, trt = NULL, weight = NULL, k = 4,
-  method = "shannon")
+calcInformation(
+  dframe,
+  pos,
+  elems,
+  trt = NULL,
+  weight = NULL,
+  k = 4,
+  method = "shannon"
+)
 }
 \arguments{
 \item{dframe}{data frame of peptide (or any other) sequences and some treatment factors}
