@@ -14,7 +14,6 @@ R package for creating sequence logo plots
 <!-- badges: start -->
 [![CRAN Status](http://www.r-pkg.org/badges/version/gglogo)](https://cran.r-project.org/package=gglogo) [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/last-month/gglogo?color=blue)](https://r-pkg.org/pkg/gglogo)
 [![Last-changedate](https://img.shields.io/badge/last%20change-2024--01--30-yellowgreen.svg)](https://github.com/heike/gglogo/commits/main)
-[![codecov test coverage](https://codecov.io/gh/heike/gglogo/graph/badge.svg?token=zfeqffIjxY)](https://codecov.io/gh/heike/gglogo)
 [![R-CMD-check](https://github.com/heike/gglogo/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/heike/gglogo/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/heike/gglogo/branch/main/graph/badge.svg)](https://app.codecov.io/gh/heike/gglogo?branch=main)
 <!-- badges: end -->
@@ -77,7 +76,7 @@ ggplot(data = ggfortify(sequences, peptide, method="shannon")) +
   theme(legend.position = "bottom") 
 ```
 
-![](README_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+![](man/figures/unnamed-chunk-5-1.png)<!-- -->
 
 (Sequence) Logo plots ([Schneider & Stephens 1990](https://academic.oup.com/nar/article-abstract/18/20/6097/1141316)) are typically used in bioinformatics as a way to visually demonstrate how well a sequence of nucleotides or amino acids are preserved in a certain region.
 
@@ -93,7 +92,7 @@ ggplot(data = ggfortify(sequences, peptide, method="shannon")) +
   theme(legend.position = "bottom") 
 ```
 
-![](README_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](man/figures/unnamed-chunk-6-1.png)<!-- -->
 
 ## Other variants
 
@@ -109,7 +108,7 @@ ggplot(data = ggfortify(sequences, peptide, method="shannon")) +
   theme(legend.position = "bottom") 
 ```
 
-![](README_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+![](man/figures/unnamed-chunk-7-1.png)<!-- -->
 
 Using the classic variant of alignment results in a stacked barchart of amino acids by position:
 
@@ -123,7 +122,7 @@ ggplot(data = ggfortify(sequences, peptide, method="shannon")) +
   theme(legend.position = "bottom") 
 ```
 
-![](README_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![](man/figures/unnamed-chunk-8-1.png)<!-- -->
 
 
 ## Implementation details 
@@ -183,7 +182,7 @@ seq_info %>%
   facet_wrap(~position, ncol = 12)
 ```
 
-![](README_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+![](man/figures/unnamed-chunk-11-1.png)<!-- -->
 
 
 ## Available alphabets
@@ -199,7 +198,7 @@ alphabet %>%
   theme(aspect.ratio = 1)
 ```
 
-![](README_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+![](man/figures/unnamed-chunk-12-1.png)<!-- -->
 
 Besides the default alphabet, the fonts  Comic Sans, xkcd, and braille (for 3d printing) are implemented:
 
@@ -212,7 +211,7 @@ alphabet_comic %>%
   ggtitle("Comic Sans")
 ```
 
-![](README_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+![](man/figures/unnamed-chunk-13-1.png)<!-- -->
 
 ```r
 alphabet_xkcd %>% 
@@ -222,7 +221,7 @@ alphabet_xkcd %>%
   ggtitle("xkcd font")
 ```
 
-![](README_files/figure-html/unnamed-chunk-13-2.png)<!-- -->
+![](man/figures/unnamed-chunk-13-2.png)<!-- -->
 
 ```r
 alphabet_braille %>% 
@@ -232,7 +231,7 @@ alphabet_braille %>%
   ggtitle("Braille (use in 3d prints)")
 ```
 
-![](README_files/figure-html/unnamed-chunk-13-3.png)<!-- -->
+![](man/figures/unnamed-chunk-13-3.png)<!-- -->
 
 
 ## References
