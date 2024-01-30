@@ -30,7 +30,7 @@ calcInformation(
 \item{method}{either "shannon" or "frequency" for Shannon information or relative frequency of element by position.}
 }
 \value{
-extended data frame with additional information of shannon info in bits and each elements contribution to the total information
+extended data frame with frequency and (Shanon) bits. The results for the requested method are found in variable `info`.
 }
 \description{
 Compute shannon information based on position and treatment

@@ -4,7 +4,14 @@
 \alias{ggfortify}
 \title{Convert sequence data to a format suitable for logo plots}
 \usage{
-ggfortify(data, sequences, treatment = NULL, weight = NULL, method = "shannon")
+ggfortify(
+  data,
+  sequences,
+  treatment = NULL,
+  weight = NULL,
+  method = "shannon",
+  missing_encode = c(".")
+)
 }
 \arguments{
 \item{data}{data frame with the sequences}
@@ -16,6 +23,8 @@ ggfortify(data, sequences, treatment = NULL, weight = NULL, method = "shannon")
 \item{weight}{numeric variable of weights}
 
 \item{method}{either "shannon" or "frequency" for Shannon information or relative frequency of element by position.}
+
+\item{missing_encode}{which character value(s) signifies a missing element in a sequence? defaults to `.`.}
 }
 \value{
 data frame with position, element and information value
@@ -29,12 +38,12 @@ library(ggplot2)
 data(sequences)
 
 ggplot(data = ggfortify(sequences, peptide, treatment = class)) +
-  geom_logo(aes(x = class, y = bits, fill = Water, label = element)) + 
+  geom_logo(aes(x = class, y = bits, fill = Water, label = element)) +
   facet_wrap(~position)
-  
+
 ggplot(data = ggfortify(sequences, peptide, treatment = class)) +
-  geom_logo(aes(x = class, y = bits, fill = Polarity, label = element)) + 
-  facet_wrap(~position, ncol = 18) + 
+  geom_logo(aes(x = class, y = bits, fill = Polarity, label = element)) +
+  facet_wrap(~position, ncol = 18) +
   theme(legend.position = "bottom")
 }
 }

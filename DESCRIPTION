@@ -19,11 +19,10 @@ Imports:
     tidyr,
     magrittr,
     purrr,
-    reshape2,
-    knitr,
     rlang
 Suggests:
-    RColorBrewer
+    RColorBrewer,
+    knitr
 Description: Visualize sequences in (modified) logo plots. The design choices
     used by these logo plots allow sequencing data to be more easily analyzed.
     Because it is integrated into the 'ggplot2' geom framework, these logo plots
@@ -37,5 +36,4 @@ Collate:
     'position.r'
 RoxygenNote: 7.2.3
 Encoding: UTF-8
-VignetteBuilder: knitr
 LazyData: true

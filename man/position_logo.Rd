@@ -26,12 +26,12 @@ data(sequences)
 # to make the most of comparisons, largest letters ar aligned along their minimum to
 # work out the main sequence.
 ggplot(data = ggfortify(sequences, peptide, treatment = class)) +
-  geom_logo(aes(x = class, y = bits, fill = Water, label = element), position="logo") + 
+  geom_logo(aes(x = class, y = bits, fill = Water, label = element), position="logo") +
   facet_wrap(~position)
 
 # in the classic logo plots letters are stacked in an ordered fasahion on top of each other
 ggplot(data = ggfortify(sequences, peptide, treatment = class)) +
-  geom_logo(aes(x = class, y = bits, fill = Water, label = element), position="classic") + 
+  geom_logo(aes(x = class, y = bits, fill = Water, label = element), position="classic") +
   facet_wrap(~position)
 }
 }

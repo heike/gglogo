@@ -9,7 +9,8 @@ createPolygons(letters, font, fontsize = 400, dim = c(720, 720), scale = FALSE)
 \arguments{
 \item{letters}{set of characters for which polygons are to be created}
 
-\item{font}{character describing the name of a font - use fonts() from package extrafont to check on available fonts}
+\item{font}{character describing the name of a font - use e.g the command `extrafont::fonts()`
+to check on available fonts and installing other fonts.}
 
 \item{fontsize}{size of letter to be created - larger means higher resolution, but also bigger result sets}
 
