@@ -5,7 +5,9 @@
 \alias{StatLogo}
 \alias{stat_logo}
 \title{Calculation of all pieces necessary to plot a logo sequence plot}
-\format{An object of class \code{StatLogo} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 4.}
+\format{
+An object of class \code{StatLogo} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 4.
+}
 \usage{
 StatLogo
 

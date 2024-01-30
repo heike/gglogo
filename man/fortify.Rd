@@ -17,7 +17,7 @@ fortify(model, data, ...)
 \item{...}{not used by this method}
 }
 \value{
-data frame 
+data frame
 \itemize{
 \item x x coordinate in pixels
 \item y y coordinate in pixels (usually negative)

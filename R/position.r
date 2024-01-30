@@ -13,16 +13,16 @@
 #' \donttest{
 #' library(ggplot2)
 #' data(sequences)
-#' 
+#'
 #' # to make the most of comparisons, largest letters ar aligned along their minimum to
 #' # work out the main sequence.
 #' ggplot(data = ggfortify(sequences, peptide, treatment = class)) +
-#'   geom_logo(aes(x = class, y = bits, fill = Water, label = element), position="logo") + 
+#'   geom_logo(aes(x = class, y = bits, fill = Water, label = element), position="logo") +
 #'   facet_wrap(~position)
 #'
 #' # in the classic logo plots letters are stacked in an ordered fasahion on top of each other
 #' ggplot(data = ggfortify(sequences, peptide, treatment = class)) +
-#'   geom_logo(aes(x = class, y = bits, fill = Water, label = element), position="classic") + 
+#'   geom_logo(aes(x = class, y = bits, fill = Water, label = element), position="classic") +
 #'   facet_wrap(~position)
 #' }
 position_logo <- function() {
@@ -36,38 +36,38 @@ position_logo <- function() {
 PositionLogo <- ggproto(
   "PositionLogo", Position,
   # requires one of c("ymax", "y"),
-  
+
   setup_data = function(self, data, params) {
 #    browser()
-    
+
 #    cat("setup_data in position logo\n")
     data = remove_missing(data, FALSE,
-                          c("x", "y", "ymin", "ymax", "xmin", "xmax"), 
+                          c("x", "y", "ymin", "ymax", "xmin", "xmax"),
                           name = "position_logo")
-    
+
     if (is.null(data$ymax) && is.null(data$y)) {
       message("Missing y and ymax in position = 'stack'. ",
               "Maybe you want position = 'identity'?")
       return(data)
     }
-    
+
     if (!is.null(data$ymin) && !all(data$ymin == 0))
       warning("Stacking not well defined when ymin != 0", call. = FALSE)
-    
+
     data
   },
-  
+
   compute_panel = function(data, params, scales) {
 #    browser()
-    data <- data[with(data, order(PANEL, x, y)),]   
-    data <- ddply(data, .(PANEL, x), transform, 
+    data <- data[with(data, order(PANEL, x, y)),]
+    data <- ddply(data, .(PANEL, x), transform,
                   ymax = cumsum(y))
     data$ymin <- with(data, ymax-y)
-    data <- ddply(data, .(PANEL, x), transform, 
+    data <- ddply(data, .(PANEL, x), transform,
                   ybase = max(ymin))
     data$ymin <- with(data, ymin-ybase)
     data$ymax <- with(data, ymax-ybase)
-    
+
     #ggplot2:::collide(data, NULL, "position_logo", pos_logo)
     data
   }
@@ -86,31 +86,51 @@ position_classic <- function() {
 PositionClassic <- ggproto(
   "PositionClassic", Position,
   # requires one of c("ymax", "y"),
-  
+  reverse = FALSE,
+  vjust = 0,
+
+  setup_params = function(self, data) {
+#    flipped_aes <- has_flipped_aes(data)
+#    data <- flip_data(data, flipped_aes)
+
+    list(
+  #    var = self$var %||% stack_var(data),
+  #    fill = self$fill,
+      vjust = self$vjust,
+      reverse = self$reverse#,
+  #    flipped_aes = flipped_aes
+    )
+  },
+
   setup_data = function(self, data, params) {
 #    browser()
-    
+
 #    cat("setup_data in position logo\n")
     data = remove_missing(data, FALSE,
-                          c("x", "y", "ymin", "ymax", "xmin", "xmax"), 
+                          c("x", "y", "ymin", "ymax", "xmin", "xmax"),
                           name = "position_classic")
-    
+
     if (is.null(data$ymax) && is.null(data$y)) {
       message("Missing y and ymax in position = 'classic'. ",
               "Maybe you want position = 'identity'?")
       return(data)
     }
-    
+
     if (!is.null(data$ymin) && !all(data$ymin == 0))
       warning("Stacking not well defined when ymin != 0", call. = FALSE)
-    
+
     data
   },
-  
+
   compute_panel = function(data, params, scales) {
-#    browser()
-    data <- data[with(data, order(PANEL, x, y)),]   
-    data <- ddply(data, .(PANEL, x), transform, 
+
+    if (params$reverse) {
+      data <- data[with(data, order(PANEL, x, y)),]
+    } else {
+      data <- data[with(data, order(PANEL, x, -y)),]
+    }
+
+    data <- ddply(data, .(PANEL, x), transform,
                   ymin = sum(y) - cumsum(y))
     data$ymax <- with(data, ymin+y)
 

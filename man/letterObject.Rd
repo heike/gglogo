@@ -4,7 +4,13 @@
 \alias{letterObject}
 \title{Convert a text element into an R object}
 \usage{
-letterObject(ch, fontfamily = "Helvetica", fontsize = 576, dim = c(480, 480))
+letterObject(
+  ch,
+  fontfamily = "Helvetica",
+  fontsize = 576,
+  fontface = "plain",
+  dim = c(480, 480)
+)
 }
 \arguments{
 \item{ch}{text to be converted, usually just a single letter}
@@ -12,6 +18,8 @@ letterObject(ch, fontfamily = "Helvetica", fontsize = 576, dim = c(480, 480))
 \item{fontfamily}{R has a few default fonts that are always available, such as e.g. Helvetica, Arial, Courier New, and Garamond. Other fonts might be available depending on the platform used.}
 
 \item{fontsize}{by default 576. If the resulting string exceeds the boundary of the matrix returned, reduced font size}
+
+\item{fontface}{character value. Defaults to 'plain'. Other standard options are 'bold', 'italic', 'bold italic'. Some font families supports additional font faces.}
 
 \item{dim}{vector of length two specifying width and height (in pixels) of the temporary jpg file created for the letter. Defaults to 480 x 480 pixels.}
 }
@@ -23,7 +31,7 @@ Convert a text element into an R object
 }
 \examples{
 \donttest{
-plot(letterObject("g", fontfamily="Garamond", fontsize=400))
+plot(letterObject("g", fontfamily="Times New Roman", fontsize=400))
 plot(letterObject("q", fontsize=400))
 plot(letterObject("B"))
 }

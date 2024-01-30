@@ -5,7 +5,9 @@
 \alias{GeomLogo}
 \alias{geom_logo}
 \title{Sequence logo plots.}
-\format{An object of class \code{GeomLogo} (inherits from \code{Geom}, \code{ggproto}, \code{gg}) of length 6.}
+\format{
+An object of class \code{GeomLogo} (inherits from \code{Geom}, \code{ggproto}, \code{gg}) of length 6.
+}
 \usage{
 GeomLogo
 

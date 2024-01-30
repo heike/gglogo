@@ -35,7 +35,7 @@ Collate:
     'data.r'
     'alphabet.r'
     'position.r'
-RoxygenNote: 7.0.2
+RoxygenNote: 7.2.3
 Encoding: UTF-8
 VignetteBuilder: knitr
 LazyData: true

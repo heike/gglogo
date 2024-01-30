@@ -39,11 +39,11 @@ In order to change the alphabet used, an alphabet object has to be created, and 
 
 # Creating a new alphabet
 
-The function `createPolygons` have parameters to choose the font family and the set of letters for which polygons are supposed to be created. The parameters `dim` and `fontsize` are only needed, if some letters appear to be chopped off. In that case, the dimension of the image should be increased and/or fontsize should be decreased.
+The function `createPolygons` has parameters to choose the font and the set of letters for which polygons are supposed to be created. The parameters `dim` and `fontsize` are only needed, if some letters appear to be chopped off. In that case, the dimension of the image should be increased and/or fontsize should be decreased.
 
 ```{r, warning=FALSE}
 alphas <- c(LETTERS, letters, 0:9)
-alphabet_garamond <- createPolygons(alphas, font="Garamond")
+alphabet_garamond <- createPolygons(alphas, font="Inconsolata")
 alphabet_garamond$group <- factor(alphabet_garamond$group, levels=alphas)
 
 ggplot(alphabet_garamond, aes(x = x, y = y, group = group)) +
