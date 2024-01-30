@@ -6,3 +6,6 @@
 ^vignettes$
 ^dont-build-vignettes$
 ^\.github$
+^_pkgdown\.yml$
+^pkgdown$
+^codecov\.yml$
