@@ -16,6 +16,7 @@ R package for creating sequence logo plots
 [![Last-changedate](https://img.shields.io/badge/last%20change-2024--01--30-yellowgreen.svg)](https://github.com/heike/gglogo/commits/main)
 [![codecov test coverage](https://codecov.io/gh/heike/gglogo/graph/badge.svg?token=zfeqffIjxY)](https://codecov.io/gh/heike/gglogo)
 [![R-CMD-check](https://github.com/heike/gglogo/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/heike/gglogo/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/heike/gglogo/branch/main/graph/badge.svg)](https://app.codecov.io/gh/heike/gglogo?branch=main)
 <!-- badges: end -->
 
 
