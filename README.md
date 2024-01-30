@@ -11,8 +11,13 @@ output:
 
 R package for creating sequence logo plots
 
-[![CRAN Status](http://www.r-pkg.org/badges/version/gglogo)](https://cran.r-project.org/package=gglogo) [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/gglogo)](http://www.r-pkg.org/pkg/gglogo) 
-[![Travis-CI Build Status](https://travis-ci.org/heike/gglogo.svg?branch=master)](https://travis-ci.org/heike/gglogo)
+<!-- badges: start -->
+[![CRAN Status](http://www.r-pkg.org/badges/version/gglogo)](https://cran.r-project.org/package=gglogo) [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/last-month/gglogo?color=blue)](https://r-pkg.org/pkg/gglogo)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2024--01--30-yellowgreen.svg)](https://github.com/heike/gglogo/commits/main)
+[![codecov test coverage](https://codecov.io/gh/heike/gglogo/graph/badge.svg?token=zfeqffIjxY)](https://codecov.io/gh/heike/gglogo)
+[![R-CMD-check](https://github.com/heike/gglogo/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/heike/gglogo/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
 
 # Installation
 

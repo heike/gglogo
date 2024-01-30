@@ -4,3 +4,5 @@
 ^visual_test$
 ^docs$
 ^vignettes$
+^dont-build-vignettes$
+^\.github$
