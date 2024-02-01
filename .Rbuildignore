@@ -3,8 +3,7 @@
 ^README.*$
 ^visual_test$
 ^docs$
-^vignettes$
-^dont-build-vignettes$
+^don't-build-vignettes$
 ^\.github$
 ^_pkgdown\.yml$
 ^pkgdown$

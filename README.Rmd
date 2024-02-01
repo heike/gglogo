@@ -132,7 +132,7 @@ seq_info %>%
   ggplot() + 
   geom_logo(aes(x = class, y = info, group = element, 
      label = element, fill = interaction(Polarity, Water)),
-     alpha = 0.6, position="classic")  +
+     alpha = 0.6)  +
   scale_fill_brewer("Amino Acid\nproperties", palette = "Paired") +
   theme(legend.position = "bottom") +
   facet_wrap(~position, ncol = 12)

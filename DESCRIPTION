@@ -24,7 +24,8 @@ Imports:
     rlang
 Suggests:
     RColorBrewer,
-    knitr
+    knitr,
+    rmarkdown
 Description: Visualize sequences in (modified) logo plots. The design choices
     used by these logo plots allow sequencing data to be more easily analyzed.
     Because it is integrated into the 'ggplot2' geom framework, these logo plots
@@ -39,3 +40,4 @@ Collate:
 RoxygenNote: 7.2.3
 Encoding: UTF-8
 LazyData: true
+VignetteBuilder: knitr

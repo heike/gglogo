@@ -1,0 +1,58 @@
+---
+title: "Considerations for re-designing the traditional logo sequence plot"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Design considerations}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+In a traditional logo sequence plot [@logo], sequences of nucleotides or amino acids are summarized by 
+creating a frequency break-down of letters used in each position across the sequences (using the assumption that the sequences are aligned, and have all the same length $L$).
+
+The Shannon information $I$ [@shannon] is used as a measure of entropy (in bits) to describe the amount of mixture in each position. 
+
+Let all sequences have length $L$, with an alphabet $A$ of size $K$. The alphabet is the set of all symbols/characters in a sequence. For nucleotides, the alphabet $A$ has $K=4$ elements, and generally consists of the set of letters {A, C, G, T} (standing for **A**denine, **C**ystosine, **T**hymine) for DNA or the letters {A, C, G, U}, for RNA (**U**racil replaces thymine).
+
+In the case of peptide sequences, each letter represents one of 21 amino acids (see e.g. [Wikipedia's codon chart](https://en.wikipedia.org/wiki/DNA_and_RNA_codon_tables#/media/File:Aminoacids_table.svg)). 
+
+Let $f_a(p)$ be the (relative) frequency, with which letter $a \in A$ is observed in position $p$, $1 \le p \le L$ of a set of sequences of length $L$. 
+
+The **Shannon conservation index** $I$  in position $p$ is defined as
+\[
+I(p) := \log_2 (K) - \sum_{a \ \in \ A} f_{a}(p) \log_2\left(f_{a}(p)\right).
+\]
+By defining the expression $f \log_2 (f) := 0$ for $f = 0$, $I(p)$ is well defined for all frequencies $f \in [0,1]$. The measures reaches a minimum of 0 when $f_a = 1/K$ for all $a \in A$, while a maximum of $\log_2 (K)$ is reached when all frequencies $f_a$ are 0 except for one $a_0$ with $f_{a_0}=1$. (Note that the second term is a measure of information/entropy - depending on the choice of the base of the logarithm result in differently named entropy measures: base $e$ results in the natural entropy measured in  'nats', while base 10 is measured in 'dits').
+
+For 21 amino acids, the maximal conservation is $-\log_2 (1/21) = 4.39$ bits, which is reached, if only a single amino acid is observed in the position, while perfect diversity/minimal conservation of 0 bits is reached, when all 21 amino acids are observed with the same frequency. 
+
+In the traditional logo sequence plot, a set of sequences is summarised, by scaling the heights of the letters corresponding to each amino acids (letter in the alphabet) by their contribution to a position's total conservation. The letters are then stacked by size, with the amino acid of the largest contribution on top.
+
+
+## Shortcomings of the traditional logo plot
+
+
+
+
+The **color choice** for representing the letters of amino acids is related to water solubility and polarity (e.g.\ hydrophobic, non-polar amino acids are shown in red) but this is not explicitly stated in a legend. Further, the use of letters to represent amino acids results in shapes of different visual dominance; the letter `I` is much less visually pronounced than for example `W`.
+
+\hh{This has also the potential of leading to ambiguity in the representation: e.g.\ using the standard Helvetica representation, the letter F over a T is not (easily) distinguishable from a letter E over an I.}
+
+**Non identified amino acids** are being ignored in the original plot -- it is of importance to keep track of at least the position  and the frequency of these occurrences, as it might indicate a problem with the sequencing.
+
+The plotting of **sequences of subfamilies** in separate logo plots does not facilitate a comparison of them. Researchers are in particular interested in differences in the conservation of amino acids between subfamilies.
+
+The **number of sequences** in each of the subfamilies is not shown directly. This influences  the inherent variability. It is therefore important to keep track of these numbers to be able to assess how and whether the size of each subfamily affects conservation.
+
+
+
+```{r setup}
+library(gglogo)
+```
