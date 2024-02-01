@@ -1,8 +1,9 @@
 pandoc: 2.19.2
 pkgdown: 2.0.7
 pkgdown_sha: ~
-articles: {}
-last_built: 2024-01-30T22:25Z
+articles:
+  Design_considerations: Design_considerations.html
+last_built: 2024-02-01T16:18Z
 urls:
   reference: http://heike.github.io/gglogo/reference
   article: http://heike.github.io/gglogo/articles
